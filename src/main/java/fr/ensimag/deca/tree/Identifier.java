@@ -21,8 +21,8 @@ import org.apache.log4j.Logger;
 /**
  * Deca Identifier
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl36
+ * @date 01/01/2026
  */
 public class Identifier extends AbstractIdentifier {
     

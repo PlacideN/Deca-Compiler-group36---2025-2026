@@ -11,8 +11,8 @@ import fr.ensimag.deca.tree.Location;
  * Environment containing types. Initially contains predefined identifiers, more
  * classes can be added with declareClass().
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl36
+ * @date 01/01/2026
  */
 public class EnvironmentType {
     public EnvironmentType(DecacCompiler compiler) {

@@ -14,8 +14,8 @@ import org.apache.commons.lang.Validate;
 /**
  * Expression, i.e. anything that has a value.
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl36
+ * @date 01/01/2026
  */
 public abstract class AbstractExpr extends AbstractInst {
     /**

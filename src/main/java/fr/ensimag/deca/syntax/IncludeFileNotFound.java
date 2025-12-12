@@ -5,8 +5,8 @@ import org.antlr.v4.runtime.IntStream;
 /**
  * Exception raised when a #include is found for a file that cannot be found or opened.
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl36
+ * @date 01/01/2026
  */
 public class IncludeFileNotFound extends DecaRecognitionException {
     private final String name;

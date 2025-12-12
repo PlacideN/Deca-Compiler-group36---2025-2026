@@ -5,8 +5,8 @@ import java.io.PrintStream;
 /**
  * Exception corresponding to an error at a particular location in a file.
  *
- * @author @AUTHOR@
- * @date @DATE@
+ * @author gl36
+ * @date 01/01/2026
  */
 public class LocationException extends Exception {
     public Location getLocation() {
