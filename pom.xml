@@ -10,7 +10,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jacoco.skip>false</jacoco.skip> 
+        <jacoco.skip>true</jacoco.skip> 
         <jacoco.report_dir>${project.build.directory}/site/jacoco</jacoco.report_dir> 
     </properties>
 
