@@ -75,13 +75,13 @@ INT : '0' | POSITIVE_DIGIT DIGIT*;
 
 //Littéraux flottants
 fragment NUM : DIGIT+;
-fragment SIGN : '+' | '-' | ;
-fragment EXP : ('E' | 'e') SIGN NUM;
+fragment SIGN : '+' | '-';
+fragment EXP : ('E' | 'e') SIGN? NUM;
 fragment DEC : NUM '.' NUM;
-fragment FLOATDEC : (DEC | DEC EXP) ('F' | 'f' | );
+fragment FLOATDEC : (DEC | DEC EXP) ('F' | 'f')?;
 fragment DIGITHEX : ('0' .. '9') | ('A' .. 'F') | ('a' .. 'f');
-fragment NUMHEX : DIGITHEX;
-fragment FLOATHEX : ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN NUM ('F' | 'f' | );
+fragment NUMHEX : DIGITHEX+;
+fragment FLOATHEX : ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN NUM ('F' | 'f')?;
 FLOAT : FLOATDEC | FLOATHEX;
 
 // Chaines de caractères
