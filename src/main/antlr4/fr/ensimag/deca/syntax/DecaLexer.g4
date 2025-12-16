@@ -16,7 +16,7 @@ options {
 
 // Espaces blancs
 fragment EOL : '\n' | '\r' | '\r\n';
-WS : (EOL | ' ' | '\t') { skip() };
+WS : (EOL | ' ' | '\t') { skip(); };
 
 // Mots réservés
 IF : 'if';
