@@ -89,7 +89,7 @@ fragment STRING_CAR : ~( '"' | '\\' | '\r' | '\n');
 STRING : '"' (STRING_CAR | '\\"' | '\\\\')* '"';
 MULTI_LINE_STRING : '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
 
+// Commentaires
+COMMENT : ('/*' .*? '*/' {skip();}) | ('//' ~[\r\n]* {skip();});
 
-DUMMY_TOKEN: .; // A FAIRE : Règle bidon qui reconnait tous les caractères.
-
-// A faire : commentaires + inclusion de fichier + séparateur
+// A faire : inclusion de fichier + séparateur
