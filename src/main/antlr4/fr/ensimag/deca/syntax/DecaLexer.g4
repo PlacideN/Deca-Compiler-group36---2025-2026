@@ -11,6 +11,69 @@ options {
 @members {
 }
 
+
 // Deca lexer rules.
+
+// Espaces blancs
+fragment EOL : '\n' | '\r' | '\r\n';
+WS : (EOL | ' ' | '\t') { skip() };
+
+// Mots réservés
+IF : 'if';
+PRINTLNX : 'printlnx';
+PRINTLN : 'println';
+PRINTX : 'printx';
+PRINT : 'print';
+WHILE : 'while';
+ASM : 'asm';
+CLASS : 'class';
+EXTENDS : 'extends';
+ELSE : 'else';
+FALSE : 'false';
+INSTANCEOF : 'instanceof';
+NEW : 'new';
+NULL : 'null';
+READINT : 'readInt';
+READFLOAT : 'readFloat';
+PROTECTED : 'protected';
+RETURN : 'return';
+THIS : 'this';
+TRUE : 'true';
+
+// Identificateurs
+fragment LETTER : 'a' .. 'z' | 'A' .. 'Z';
+fragment DIGIT : '0' .. '9';
+IDENT : (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
+
+// Symboles spéciaux
+OPARENT : '(';
+CPARENT : ')';
+COMMA : ',';
+OBRACE : '{';
+CBRACE : '}';
+SEMI : ';';
+NEQ : '!=';
+EQEQ : '==';
+EQUALS : '=';
+DOT : '.';
+LEQ : '<=';
+LT : '<';
+GEQ : '>=';
+GT : '>';
+SLASH : '/';
+AND : '&&';
+OR : '||';
+EXCLAM : '!';
+TIMES : '*';
+PERCENT : '%';
+PLUS : '+';
+MINUS : '-';
+
+// Chaines de caractères
+fragment STRING_CAR : ~( '"' | '\\' | '\r' | '\n');
+STRING : '"' (STRING_CAR | '\\"' | '\\\\')* '"';
+MULTI_LINE_STRING : '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
+
+
 DUMMY_TOKEN: .; // A FAIRE : Règle bidon qui reconnait tous les caractères.
-                // A FAIRE : Il faut la supprimer et la remplacer par les vraies règles.
+
