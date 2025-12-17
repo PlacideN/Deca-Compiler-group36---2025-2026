@@ -1,6 +1,8 @@
 package fr.ensimag.deca.context;
 
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Dictionary associating identifier's ExpDefinition to their names.
@@ -23,7 +25,7 @@ public class EnvironmentExp {
 
     EnvironmentExp parentEnvironment;
     // On crée un dictionnaire pour contenir le symbole de l'environnement courant à laquelle on associe son environnement parent
-    Private Map<Symbol, ExpDefinition> environment;
+    private Map<Symbol, ExpDefinition> environment;
     
     public EnvironmentExp(EnvironmentExp parentEnvironment) {
         this.parentEnvironment = parentEnvironment;
@@ -42,7 +44,7 @@ public class EnvironmentExp {
         if (environment.containsKey(key)) {
             return environment.get(key);
         }
-        if (environment.parentEnvironment != null) {
+        if (this.parentEnvironment != null) {
             // Appel récursif sur le parent de l'environnement 
             return parentEnvironment.get(key);
         }
