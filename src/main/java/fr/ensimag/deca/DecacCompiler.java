@@ -188,9 +188,19 @@ public class DecacCompiler {
         }
         assert(prog.checkAllLocations());
 
+        // -p option: print the program after parsing
+        if (compilerOptions.getParse()) {
+            prog.decompile(out);
+            return false;
+        }
 
         prog.verifyProgram(this);
         assert(prog.checkAllDecorations());
+
+        // -v option: print the program after verification
+        if (compilerOptions.getVerification()) {
+            return false;   
+        }
 
         addComment("start main program");
         prog.codeGenProgram(this);

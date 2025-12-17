@@ -32,6 +32,14 @@ public class CompilerOptions {
         return printBanner;
     }
     
+    public boolean getParse() {
+        return parse;
+    }
+
+    public boolean getVerification() {
+        return verification;
+    }
+
     public List<File> getSourceFiles() {
         return Collections.unmodifiableList(sourceFiles);
     }
@@ -39,6 +47,8 @@ public class CompilerOptions {
     private int debug = 0;
     private boolean parallel = false;
     private boolean printBanner = false;
+    private boolean parse = false;
+    private boolean verification = false;
     private List<File> sourceFiles = new ArrayList<File>();
 
     
@@ -48,17 +58,35 @@ public class CompilerOptions {
             System.exit(1);
         }
 
-        // TODO: add the rest of the options' logic
-        for (String arg : args) {
-            switch (arg) {
-            case "-b":
-                printBanner = true;
-                break;
-            case "-p": // parse only
-                break;
-            default:
-                sourceFiles.add(new File(arg));
-                break;
+        // TODO: add missing -n -r X -w and -P
+        for (int i = 0; i < args.length; i++) {
+            String arg = args[i];
+            if (arg.startsWith("-")) {
+                switch (arg) {
+                case "-b": // print banner
+                    printBanner = true;
+                    break;
+                case "-p": // parse only
+                    parse = true;
+                    break;
+                case "-v": // verify only
+                    verification = true;
+                    break;
+                case "-P": // parallel compilation
+                    parallel = true;
+                    break;
+                case "-d": // increase debug level
+                    debug++;
+                    break;
+                default:
+                    throw new CLIException("Unknown option: " + arg);
+                }
+            } else {
+                if (arg.endsWith(".deca")){
+                    sourceFiles.add(new File(arg));
+                } else {
+                    throw new CLIException("Invalid file extension: " + arg + " (expected .deca)");
+                }
             }
         }
         Logger logger = Logger.getRootLogger();
@@ -84,11 +112,28 @@ public class CompilerOptions {
             logger.info("Java assertions disabled");
         }
 
+        if (verification && parse) {
+            throw new CLIException("Options -p and -v are cannot be used together.");
+        }
+
         // throw new UnsupportedOperationException("not yet implemented");
     }
 
     protected void displayUsage() {
-        System.err.println("Usage: decac [[-p | -v] [-n] [-r X] [-d]* [-P] [-w] <fichier deca>...] | [-b]");
-        // TODO: Add option descriptions.
+        PrintStream err = System.err;
+        err.println("Usage: decac [[-p | -v] [-d]* <.deca source files>] | [-b]");
+        err.println("");
+        err.println("OPTIONS:");
+        err.println("  -b          : Display team banner.");
+        err.println("  -p          : Run lexer and parser and stop.");
+        err.println("                (Print decompiled program if program is syntactically valid).");
+        err.println("  -v          : Run lexer, parser, and contextual verification and stop.");
+        err.println("                (No output if program is valid).");
+        err.println("  -d          : Enable debug. ");
+        err.println("                Repeat option for more traces (INFO, DEBUG, TRACE, ALL).");
+        err.println("");
+        err.println("  Options '-p' and '-v' cannot be used together.");
+
+        // TODO: Add the missing options when implemented
     }
 }
