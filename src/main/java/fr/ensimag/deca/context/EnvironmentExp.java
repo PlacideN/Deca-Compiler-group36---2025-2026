@@ -20,14 +20,14 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
  * @date 01/01/2026
  */
 public class EnvironmentExp {
-    // A FAIRE : implémenter la structure de donnée représentant un
-    // environnement (association nom -> définition, avec possibilité
-    // d'empilement).
 
     EnvironmentExp parentEnvironment;
+    // On crée un dictionnaire pour contenir le symbole de l'environnement courant à laquelle on associe son environnement parent
+    Private Map<Symbol, ExpDefinition> environment;
     
     public EnvironmentExp(EnvironmentExp parentEnvironment) {
         this.parentEnvironment = parentEnvironment;
+        this.environment = new HashMap<>();
     }
 
     public static class DoubleDefException extends Exception {
@@ -39,7 +39,15 @@ public class EnvironmentExp {
      * symbol is undefined.
      */
     public ExpDefinition get(Symbol key) {
-        throw new UnsupportedOperationException("not yet implemented");
+        if (environment.containsKey(key)) {
+            return environment.get(key);
+        }
+        if (environment.parentEnvironment != null) {
+            // Appel récursif sur le parent de l'environnement 
+            return parentEnvironment.get(key);
+        }
+        // si ni l'environnement contient la clef, ni tous ses parents, on renvoie null
+        return null;
     }
 
     /**
@@ -58,7 +66,10 @@ public class EnvironmentExp {
      *
      */
     public void declare(Symbol name, ExpDefinition def) throws DoubleDefException {
-        throw new UnsupportedOperationException("not yet implemented");
+        if (environment.containsKey(name)) {
+            throw new DoubleDefException();
+        }
+        environment.put(name, def);
     }
 
 }
