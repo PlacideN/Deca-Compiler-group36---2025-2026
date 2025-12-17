@@ -1,0 +1,13 @@
+// Description:
+//      Programme minimaliste qui appelle print avec un type d'expression invalide
+//
+// Resultats:
+//      Ligne 12 : Erreur contextuelle (Règle 3.31) : le type de l'expression 
+//      doit être int, float ou string.
+//
+// Historique:
+//      cree le 17/12/2025
+
+{
+    print(true);
+}
