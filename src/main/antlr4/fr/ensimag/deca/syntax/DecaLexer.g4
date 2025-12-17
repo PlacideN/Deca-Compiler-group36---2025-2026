@@ -46,7 +46,7 @@ fragment DIGIT : '0' .. '9';
 IDENT : (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
 
 // Symboles spéciaux
-OPARENT : '(';
+OPARENT : '('; // exemple : numéro 23 car c'est le 23 ème déclaré
 CPARENT : ')';
 COMMA : ',';
 OBRACE : '{';
@@ -93,3 +93,4 @@ MULTI_LINE_STRING : '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
 COMMENT : ('/*' .*? '*/' {skip();}) | ('//' ~[\r\n]* {skip();});
 
 // A faire : inclusion de fichier + séparateur
+// les numéros des tokens sont numérotés dans l'ordre de la déclaration
