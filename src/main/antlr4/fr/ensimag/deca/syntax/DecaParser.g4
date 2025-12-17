@@ -47,6 +47,7 @@ prog returns[AbstractProgram tree]
 main returns[AbstractMain tree]
     : /* epsilon */ {
             $tree = new EmptyMain();
+            setLocation($tree, $start);
         }
     | block {
             assert($block.decls != null);
@@ -78,20 +79,31 @@ decl_var_set[ListDeclVar l]
 
 list_decl_var[ListDeclVar l, AbstractIdentifier t]
     : dv1=decl_var[$t] {
-        $l.add($dv1.tree);
+            $l.add($dv1.tree);
         } (COMMA dv2=decl_var[$t] {
+            $l.add($dv2.tree);
         }
       )*
     ;
 
 decl_var[AbstractIdentifier t] returns[AbstractDeclVar tree]
 @init   {
+    AbstractInitialization init = null;
         }
     : i=ident {
         }
       (EQUALS e=expr {
+            init = new Initialization($e.tree);
+            setLocation(init, $e.start);
         }
       )? {
+            if (init == null) {
+                init = new NoInitialization();
+                setLocation(init, $i.start);
+            }
+
+            $tree = new DeclVar($t, $i.tree, init);
+            setLocation($tree, $i.start);
         }
     ;
 
@@ -101,6 +113,7 @@ list_inst returns[ListInst tree]
 }
     : (inst {
             $tree.add($inst.tree);
+            setLocation($inst.tree, $inst.start);
         }
       )*
     ;
@@ -108,8 +121,11 @@ list_inst returns[ListInst tree]
 inst returns[AbstractInst tree]
     : e1=expr SEMI {
             assert($e1.tree != null);
+            $tree = $e1.tree;
         }
     | SEMI {
+            $tree = new NoOperation();
+            setLocation($tree, $SEMI);
         }
     | PRINT OPARENT list_expr CPARENT SEMI {
             assert($list_expr.tree != null);
@@ -131,30 +147,55 @@ inst returns[AbstractInst tree]
             $tree = new Println(true, $list_expr.tree);
             setLocation($tree, $PRINTLNX);
         }
+    ;
+
+    /* TODO: Implement Return.java and the if_then_else rule
+     * These branches are not required for the Hello World deca sub-language.
+     * It was commented out to prevent the rules from returning null, which
+     * is ANTLR's default behavior for empty rules {}. The other branches had the
+     * required java classes already implemented or were easier to implement.
+     */
+    /* 
     | if_then_else {
             assert($if_then_else.tree != null);
+            $tree = $if_then_else.tree;
+
         }
+    
     | WHILE OPARENT condition=expr CPARENT OBRACE body=list_inst CBRACE {
             assert($condition.tree != null);
             assert($body.tree != null);
+            $tree = new While($condition.tree, $body.tree);
+            setLocation($tree, $WHILE);
         }
+    
     | RETURN expr SEMI {
             assert($expr.tree != null);
+            $tree = new Return($expr.tree);
+            setLocation($tree, $RETURN);
         }
     ;
+    */
 
+/*
 if_then_else returns[IfThenElse tree]
 @init {
+    ListInst elseInstances = new ListInst();
 }
     : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
+            assert($condition.tree != null);
+            assert($li_if.tree != null);
         }
       (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
+            assert($elsif_cond.tree != null);
+            assert($elsif_li.tree != null);
         }
       )*
       (ELSE OBRACE li_else=list_inst CBRACE {
         }
       )?
     ;
+*/
 
 list_expr returns[ListExpr tree]
 @init   {
@@ -162,9 +203,11 @@ list_expr returns[ListExpr tree]
         }
     : (e1=expr {
             $tree.add($e1.tree);
+            setLocation($e1.tree, $e1.start);
         }
        (COMMA e2=expr {
             $tree.add($e2.tree);
+            setLocation($e2.tree, $e2.start);
         }
        )* )?
     ;
@@ -172,6 +215,7 @@ list_expr returns[ListExpr tree]
 expr returns[AbstractExpr tree]
     : assign_expr {
             assert($assign_expr.tree != null);
+            $tree = $assign_expr.tree;
         }
     ;
 
@@ -185,9 +229,11 @@ assign_expr returns[AbstractExpr tree]
         EQUALS e2=assign_expr {
             assert($e.tree != null);
             assert($e2.tree != null);
+            $tree = new Assign((AbstractLValue)$e.tree, $e2.tree);
         }
       | /* epsilon */ {
             assert($e.tree != null);
+            $tree = $e.tree;
         }
       )
     ;
@@ -195,140 +241,194 @@ assign_expr returns[AbstractExpr tree]
 or_expr returns[AbstractExpr tree]
     : e=and_expr {
             assert($e.tree != null);
+            $tree = $e.tree;
         }
     | e1=or_expr OR e2=and_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Or($e1.tree, $e2.tree);
        }
     ;
 
 and_expr returns[AbstractExpr tree]
     : e=eq_neq_expr {
             assert($e.tree != null);
+            $tree = $e.tree;
         }
     |  e1=and_expr AND e2=eq_neq_expr {
             assert($e1.tree != null);                         
             assert($e2.tree != null);
+            $tree = new And($e1.tree, $e2.tree);
         }
     ;
 
 eq_neq_expr returns[AbstractExpr tree]
     : e=inequality_expr {
             assert($e.tree != null);
+            $tree = $e.tree;
         }
     | e1=eq_neq_expr EQEQ e2=inequality_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Equals($e1.tree, $e2.tree);
         }
     | e1=eq_neq_expr NEQ e2=inequality_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new NotEquals($e1.tree, $e2.tree);
         }
     ;
 
 inequality_expr returns[AbstractExpr tree]
     : e=sum_expr {
             assert($e.tree != null);
+            $tree = $e.tree;
         }
     | e1=inequality_expr LEQ e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new LowerOrEqual($e1.tree, $e2.tree);
         }
     | e1=inequality_expr GEQ e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new GreaterOrEqual($e1.tree, $e2.tree);
         }
     | e1=inequality_expr GT e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Greater($e1.tree, $e2.tree);
         }
     | e1=inequality_expr LT e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Lower($e1.tree, $e2.tree);
         }
+    ;
+    /* TODO: Implement InstanceOf() class to handle this branch
+     * Not required for the Hello World deca sub-language. 
+    */
+    /* 
     | e1=inequality_expr INSTANCEOF type {
             assert($e1.tree != null);
             assert($type.tree != null);
         }
     ;
+    */
 
 
 sum_expr returns[AbstractExpr tree]
     : e=mult_expr {
             assert($e.tree != null);
+            $tree = $e.tree;
         }
     | e1=sum_expr PLUS e2=mult_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Plus($e1.tree, $e2.tree);
         }
     | e1=sum_expr MINUS e2=mult_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
+            $tree = new Minus($e1.tree, $e2.tree);
         }
     ;
 
 mult_expr returns[AbstractExpr tree]
     : e=unary_expr {
             assert($e.tree != null);
+            $tree = $e.tree;
         }
     | e1=mult_expr TIMES e2=unary_expr {
             assert($e1.tree != null);                                         
             assert($e2.tree != null);
+            $tree = new Multiply($e1.tree, $e2.tree);
         }
     | e1=mult_expr SLASH e2=unary_expr {
             assert($e1.tree != null);                                         
             assert($e2.tree != null);
+            $tree = new Divide($e1.tree, $e2.tree);
         }
     | e1=mult_expr PERCENT e2=unary_expr {
             assert($e1.tree != null);                                                                          
             assert($e2.tree != null);
+            $tree = new Modulo($e1.tree, $e2.tree);
         }
     ;
 
 unary_expr returns[AbstractExpr tree]
     : op=MINUS e=unary_expr {
             assert($e.tree != null);
+            $tree = new UnaryMinus($e.tree);
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
+            $tree = new Not($e.tree);
         }
     | select_expr {
             assert($select_expr.tree != null);
+            $tree = $select_expr.tree;
         }
     ;
+    
+
 
 select_expr returns[AbstractExpr tree]
     : e=primary_expr {
             assert($e.tree != null);
+            $tree = $e.tree;
         }
+    ;
+    /* TODO: Implement a java class to handle selection
+     * to use in the rule specification below
+     */
+    /*
     | e1=select_expr DOT i=ident {
             assert($e1.tree != null);
             assert($i.tree != null);
+
         }
         (o=OPARENT args=list_expr CPARENT {
             // we matched "e1.i(args)"
             assert($args.tree != null);
         }
-        | /* epsilon */ {
+        | /* epsilon */ /*{
             // we matched "e.i"
         }
         )
     ;
+*/
 
 primary_expr returns[AbstractExpr tree]
     : ident {
             assert($ident.tree != null);
-        }
-    | m=ident OPARENT args=list_expr CPARENT {
-            assert($args.tree != null);
-            assert($m.tree != null);
+            $tree = $ident.tree;
         }
     | OPARENT expr CPARENT {
             assert($expr.tree != null);
+            $tree = $expr.tree;
         }
     | READINT OPARENT CPARENT {
+            $tree = new ReadInt();  
+            setLocation($tree, $READINT);   
         }
     | READFLOAT OPARENT CPARENT {
+            $tree = new ReadFloat();
+            setLocation($tree, $READFLOAT);
+        }
+    | literal {
+            assert($literal.tree != null);  
+            $tree = $literal.tree;
+        }
+    ;
+    /* TODO: Implment method call, object instance creation 
+     * and cast classes to handle the branches below.
+     * Not required for the Hello World deca sub-language.
+     */
+    /*
+    | m=ident OPARENT args=list_expr CPARENT {
+            assert($args.tree != null);
+            assert($m.tree != null);
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
@@ -337,21 +437,26 @@ primary_expr returns[AbstractExpr tree]
             assert($type.tree != null);
             assert($expr.tree != null);
         }
-    | literal {
-            assert($literal.tree != null);
-        }
     ;
+    */
 
 type returns[AbstractIdentifier tree]
     : ident {
             assert($ident.tree != null);
+            $tree = $ident.tree;
         }
     ;
 
 literal returns[AbstractExpr tree]
-    : INT {
+    : INT { 
+            int value = Integer.parseInt($INT.getText());
+            $tree = new IntLiteral(value);
+            setLocation($tree, $INT);
         }
     | fd=FLOAT {
+            float value = Float.parseFloat($fd.getText());
+            $tree = new FloatLiteral(value);
+            setLocation($tree, $fd);
         }
     | s=STRING {
             String noQuotes = $s.getText().substring(1, $s.getText().length() - 1);
@@ -359,31 +464,65 @@ literal returns[AbstractExpr tree]
             setLocation($tree, $s);
         }
     | TRUE {
+            $tree = new BooleanLiteral(true);
+            setLocation($tree, $TRUE);
         }
     | FALSE {
+            $tree = new BooleanLiteral(false);
+            setLocation($tree, $FALSE);
         }
+    ;
+    /* TODO: Implement NullLiteral and This classes to handle these branches
+     * Not required for the Hello World deca sub-language.
+     */
+    /*
     | THIS {
         }
     | NULL {
         }
     ;
+    */
 
 ident returns[AbstractIdentifier tree]
     : IDENT {
+            $tree = new Identifier(getDecacCompiler().createSymbol($IDENT.getText()));
+            setLocation($tree, $IDENT);
         }
     ;
 
 /****     Class related rules     ****/
 
 list_classes returns[ListDeclClass tree]
+@init {
+    $tree = new ListDeclClass();
+}
     :
-      (c1=class_decl {
+    (c1=class_decl {
+            if ($c1.tree != null) {
+                $tree.add($c1.tree);
+                setLocation($c1.tree, $c1.start);
+            }
         }
       )*
+    /* The Hello World sublanguage doesn't use classes. 
+     * To prevent any assertion errros we initialize an empty list 
+     * and don't add the null classes. 
+     * TODO: Uncomment the version below when implementing the full language.
+     */
+    /*
+      (c1=class_decl {
+            assert($c1.tree != null);
+            $tree.add($c1.tree);
+            setLocation($c1.tree, $c1.start);
+        }
+      )*
+    */
     ;
 
-class_decl
+/* TODO: Replace the null initialization with actual implementation when implementing the full language */
+class_decl returns[AbstractDeclClass tree]
     : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
+            $tree = null;
         }
     ;
 
