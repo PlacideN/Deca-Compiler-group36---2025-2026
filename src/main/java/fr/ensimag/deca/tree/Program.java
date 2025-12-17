@@ -35,8 +35,17 @@ public class Program extends AbstractProgram {
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         LOG.debug("verify program: start");
-        throw new UnsupportedOperationException("not yet implemented");
-        // LOG.debug("verify program: end");
+        
+        // Passe 1, on vérifie que les classes ont été bien déclarées
+        this.classes.verifyListClass(compiler);
+
+        // Passe 2, on vérifie les déclarations de champs et les signatures des méthodes
+        this.classes.verifyClassMembers(compiler);
+
+        // Passe 3, on vérifie le corps des méthodes, les expressions d’initialisation des champs, et le programme principal
+        this.classes.verifyClassBody(compiler);
+        
+        LOG.debug("verify program: end");
     }
 
     @Override
