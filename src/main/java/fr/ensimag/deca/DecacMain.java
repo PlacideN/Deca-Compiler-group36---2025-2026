@@ -26,7 +26,10 @@ public class DecacMain {
             System.exit(1);
         }
         if (options.getPrintBanner()) {
-            throw new UnsupportedOperationException("decac -b not yet implemented");
+            System.out.println("--------------------------------------------------");
+            System.out.println("            Projet GL - Équipe n°36               ");
+            System.out.println("--------------------------------------------------");
+            System.exit(0);
         }
         if (options.getSourceFiles().isEmpty()) {
             System.err.println("No source file provided");
