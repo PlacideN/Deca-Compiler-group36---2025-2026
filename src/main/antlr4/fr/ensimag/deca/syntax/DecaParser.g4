@@ -147,15 +147,7 @@ inst returns[AbstractInst tree]
             $tree = new Println(true, $list_expr.tree);
             setLocation($tree, $PRINTLNX);
         }
-    ;
-
-    /* TODO: Implement Return.java and the if_then_else rule
-     * These branches are not required for the Hello World deca sub-language.
-     * It was commented out to prevent the rules from returning null, which
-     * is ANTLR's default behavior for empty rules {}. The other branches had the
-     * required java classes already implemented or were easier to implement.
-     */
-    /* 
+    
     | if_then_else {
             assert($if_then_else.tree != null);
             $tree = $if_then_else.tree;
@@ -168,34 +160,41 @@ inst returns[AbstractInst tree]
             $tree = new While($condition.tree, $body.tree);
             setLocation($tree, $WHILE);
         }
-    
+    ;
+    /*
     | RETURN expr SEMI {
             assert($expr.tree != null);
             $tree = new Return($expr.tree);
             setLocation($tree, $RETURN);
         }
-    ;
     */
+    
+    
 
-/*
 if_then_else returns[IfThenElse tree]
 @init {
-    ListInst elseInstances = new ListInst();
+    // On initialise une liste vide pour la branche "else", on doit prendre en compte les else if qui ne sont que des if mais à un niveau plus bas
+    ListInst elseBlock = new ListInst();
 }
-    : if1=IF OPARENT condition=expr CPARENT OBRACE li_if=list_inst CBRACE {
-            assert($condition.tree != null);
-            assert($li_if.tree != null);
-        }
-      (ELSE elsif=IF OPARENT elsif_cond=expr CPARENT OBRACE elsif_li=list_inst CBRACE {
-            assert($elsif_cond.tree != null);
-            assert($elsif_li.tree != null);
-        }
-      )*
-      (ELSE OBRACE li_else=list_inst CBRACE {
-        }
+    : if1=IF OPARENT condition=expr CPARENT thenBlock=block
+    
+      ( ELSE
+      
+        ( childIf=if_then_else { // Soit c'est "Else if" alors on appelle récursivement la règle if_then_else
+             elseBlock.add($childIf.tree);
+          }
+        | finalElse=block { // Soit c'est un simple "Else"
+             elseBlock = $finalElse.insts;
+          }
+        )
       )?
+      {
+         $tree = new IfThenElse($condition.tree, $thenBlock.insts, elseBlock);
+         setLocation($tree, $if1);
+      }
     ;
-*/
+
+
 
 list_expr returns[ListExpr tree]
 @init   {
@@ -219,6 +218,7 @@ expr returns[AbstractExpr tree]
         }
     ;
 
+
 assign_expr returns[AbstractExpr tree]
     : e=or_expr (
         /* condition: expression e must be a "LVALUE" */ {
@@ -230,6 +230,7 @@ assign_expr returns[AbstractExpr tree]
             assert($e.tree != null);
             assert($e2.tree != null);
             $tree = new Assign((AbstractLValue)$e.tree, $e2.tree);
+            setLocation($tree, $EQUALS);
         }
       | /* epsilon */ {
             assert($e.tree != null);
@@ -237,6 +238,7 @@ assign_expr returns[AbstractExpr tree]
         }
       )
     ;
+
 
 or_expr returns[AbstractExpr tree]
     : e=and_expr {
@@ -247,6 +249,7 @@ or_expr returns[AbstractExpr tree]
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Or($e1.tree, $e2.tree);
+            setLocation($tree, $OR);
        }
     ;
 
@@ -259,6 +262,7 @@ and_expr returns[AbstractExpr tree]
             assert($e1.tree != null);                         
             assert($e2.tree != null);
             $tree = new And($e1.tree, $e2.tree);
+            setLocation($tree, $AND);
         }
     ;
 
@@ -271,11 +275,13 @@ eq_neq_expr returns[AbstractExpr tree]
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Equals($e1.tree, $e2.tree);
+            setLocation($tree, $EQEQ);
         }
     | e1=eq_neq_expr NEQ e2=inequality_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new NotEquals($e1.tree, $e2.tree);
+            setLocation($tree, $NEQ); 
         }
     ;
 
@@ -288,21 +294,25 @@ inequality_expr returns[AbstractExpr tree]
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new LowerOrEqual($e1.tree, $e2.tree);
+            setLocation($tree, $LEQ); 
         }
     | e1=inequality_expr GEQ e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new GreaterOrEqual($e1.tree, $e2.tree);
+            setLocation($tree, $GEQ);
         }
     | e1=inequality_expr GT e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Greater($e1.tree, $e2.tree);
+            setLocation($tree, $GT);
         }
     | e1=inequality_expr LT e2=sum_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Lower($e1.tree, $e2.tree);
+            setLocation($tree, $LT);
         }
     ;
     /* TODO: Implement InstanceOf() class to handle this branch
@@ -326,11 +336,13 @@ sum_expr returns[AbstractExpr tree]
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Plus($e1.tree, $e2.tree);
+            setLocation($tree, $PLUS);
         }
     | e1=sum_expr MINUS e2=mult_expr {
             assert($e1.tree != null);
             assert($e2.tree != null);
             $tree = new Minus($e1.tree, $e2.tree);
+            setLocation($tree, $MINUS);
         }
     ;
 
@@ -343,16 +355,19 @@ mult_expr returns[AbstractExpr tree]
             assert($e1.tree != null);                                         
             assert($e2.tree != null);
             $tree = new Multiply($e1.tree, $e2.tree);
+            setLocation($tree, $TIMES);
         }
     | e1=mult_expr SLASH e2=unary_expr {
             assert($e1.tree != null);                                         
             assert($e2.tree != null);
             $tree = new Divide($e1.tree, $e2.tree);
+            setLocation($tree, $SLASH);
         }
     | e1=mult_expr PERCENT e2=unary_expr {
             assert($e1.tree != null);                                                                          
             assert($e2.tree != null);
             $tree = new Modulo($e1.tree, $e2.tree);
+            setLocation($tree, $PERCENT);
         }
     ;
 
@@ -360,10 +375,12 @@ unary_expr returns[AbstractExpr tree]
     : op=MINUS e=unary_expr {
             assert($e.tree != null);
             $tree = new UnaryMinus($e.tree);
+            setLocation($tree, $op); //(Note: on utilise $op ici)
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
             $tree = new Not($e.tree);
+            setLocation($tree, $op);
         }
     | select_expr {
             assert($select_expr.tree != null);
