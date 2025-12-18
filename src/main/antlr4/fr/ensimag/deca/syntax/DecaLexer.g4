@@ -14,7 +14,7 @@ options {
 
 // Deca lexer rules.
 
-// Espaces blancs
+// Séparateurs
 fragment EOL : '\n' | '\r' | '\r\n';
 WS : (EOL | ' ' | '\t') { skip(); };
 
@@ -92,5 +92,10 @@ MULTI_LINE_STRING : '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
 // Commentaires
 COMMENT : ('/*' .*? '*/' {skip();}) | ('//' ~[\r\n]* {skip();});
 
-// A faire : inclusion de fichier + séparateur
+// Inclusions de fichiers
+fragment FILENAME : (LETTER | DIGIT | '.' | '-' | '_')+;
+INCLUDE : '#include' (' ')* '"' FILENAME '"'; 
+
+
+
 // les numéros des tokens sont numérotés dans l'ordre de la déclaration
