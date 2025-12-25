@@ -1,5 +1,9 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ContextualError;
+
 
 /**
  *
@@ -12,5 +16,15 @@ public abstract class AbstractOpExactCmp extends AbstractOpCmp {
         super(leftOperand, rightOperand);
     }
 
+    @Override
+    protected Type verifyExtraTypes(fr.ensimag.deca.DecacCompiler compiler, Type t1, Type t2) 
+            throws ContextualError {
+        if (t1.isBoolean() && t2.isBoolean()) {
+            return compiler.environmentType.BOOLEAN;
+        }
 
+        // TODO: Check for class types compatibility
+
+        return null;
+    }
 }

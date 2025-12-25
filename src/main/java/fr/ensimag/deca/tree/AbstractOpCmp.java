@@ -20,7 +20,40 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type type2 = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+
+        // Exact comparison (==, !=) operators support boolean and class types
+        Type resultType = verifyExtraTypes(compiler, type1, type2);
+
+        if (resultType != null) {
+            this.setType(resultType);
+            return this.getType();
+        }
+
+        // Default behavior for comparison operators (only numeric types)
+        Type arithType = compiler.environmentType.typeArithOp(type1, type2);
+        if (arithType == null) {
+            throw new ContextualError("Incompatible types for comparison: " 
+                    + type1 + " and " + type2, this.getLocation());
+        }
+        if(arithType.isFloat()) {
+            wrapWithConvFloat(compiler, localEnv, currentClass, type1, type2);
+        }
+
+        this.setType(compiler.environmentType.BOOLEAN);
+        return this.getType();
+    }
+
+    /** Implements default behavior for comparison operators (<, <=, >, >=). 
+     *  @param compiler DecacCompiler instance
+     *  @param t1 Type of the left operand
+     *  @param t2 Type of the right operand 
+     *  @return null because these operators only accept numeric types.
+     */
+    protected Type verifyExtraTypes(DecacCompiler compiler, Type t1, Type t2) 
+            throws ContextualError {
+        return null;
     }
 
 
