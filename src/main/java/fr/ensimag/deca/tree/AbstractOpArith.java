@@ -21,6 +21,18 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+
+        Type type1 = this.getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type type2 = this.getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+        Type arithType = compiler.environmentType.typeArithOp(type1, type2);
+        if (arithType == null) {
+            throw new ContextualError("Incompatible types for arithmetic operation: " 
+                    + type1 + " and " + type2, this.getLocation());
+        }
+        if(arithType.isFloat()) {
+            wrapWithConvFloat(compiler, localEnv, currentClass, type1, type2);
+        }
+        this.setType(arithType);
+        return this.getType();              
     }
 }

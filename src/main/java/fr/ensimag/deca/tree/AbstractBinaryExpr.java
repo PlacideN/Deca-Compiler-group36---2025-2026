@@ -1,6 +1,11 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.Type;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -42,7 +47,6 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         this.rightOperand = rightOperand;
     }
 
-
     @Override
     public void decompile(IndentPrintStream s) {
         s.print("(");
@@ -52,6 +56,21 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
         s.print(")");
     }
 
+    /** 
+     * Promotes int operands to float operands by wrapping them in ConvFloat nodes 
+     * in the AST during the contextual verification phase.
+     */
+    protected void wrapWithConvFloat(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type t1, Type t2) throws ContextualError {
+        if (t1.isInt()) {
+            setLeftOperand(new ConvFloat(getLeftOperand()));
+            getLeftOperand().verifyExpr(compiler, localEnv, currentClass);
+        }
+        if (t2.isInt()) {
+            setRightOperand(new ConvFloat(getRightOperand()));
+            getRightOperand().verifyExpr(compiler, localEnv, currentClass);
+        }
+    }
+    
     abstract protected String getOperatorName();
 
     @Override
