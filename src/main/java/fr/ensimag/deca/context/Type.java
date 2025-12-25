@@ -48,6 +48,10 @@ public abstract class Type {
         return false;
     }
 
+    public boolean isNumeric() {
+        return isFloat() || isInt();
+    }
+
     public boolean isBoolean() {
         return false;
     }
