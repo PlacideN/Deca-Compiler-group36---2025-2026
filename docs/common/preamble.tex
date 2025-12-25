@@ -1,0 +1,128 @@
+% =====================================================
+%
+% This file was initially inspired by the one provided 
+% for the APMAN project in SEOC, but was adapted 
+% for the Projet GL (in Java) and adapted
+% to be used in the different types of required reports.
+%
+% Original authors:
+%   - François CAYRE
+%   - Auguste OLIVRY
+%
+% =====================================================
+
+
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amssymb} 
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{setspace}
+\usepackage{abstract}
+\usepackage[T1]{fontenc}
+\usepackage[top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{subfig}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{varwidth}
+\usepackage{enumitem}
+
+\usepackage{xcolor}
+\usepackage{csquotes}
+\usepackage{fancybox}
+\usepackage{booktabs}  
+
+\newfloat{code}{htbp}{lop}
+\floatname{code}{Code}
+\DeclareCaptionSubType{code}
+
+\renewcommand{\arraystretch}{1.4}  
+\setlength{\tabcolsep}{0.6em}  
+
+\makeatletter
+\lst@Key{matchrangestart}{f}{\lstKV@SetIf{#1}\lst@ifmatchrangestart}
+\def\lst@SkipToFirst{%
+    \lst@ifmatchrangestart\c@lstnumber=\numexpr-1+\lst@firstline\fi
+    \ifnum \lst@lineno<\lst@firstline
+        \def\lst@next{\lst@BeginDropInput\lst@Pmode
+        \lst@Let{13}\lst@MSkipToFirst
+        \lst@Let{10}\lst@MSkipToFirst}%
+        \expandafter\lst@next
+    \else
+        \expandafter\lst@BOLGobble
+    \fi}
+\makeatother
+
+\usepackage[
+    backend=biber,
+    style=numeric,
+    sortcites,
+    natbib=true,
+    sorting=none,
+    url=false, 
+    doi=true,
+    eprint=false
+]{biblatex}
+\addbibresource{../biblio.bib}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{1,1,1}
+\definecolor{codered}{HTML}{CC0000}
+\definecolor{codegray}{HTML}{666666}
+\definecolor{codebrown}{HTML}{663300}
+\definecolor{codeorange}{HTML}{CD6622}
+\definecolor{codeblue}{HTML}{221A54}
+
+\lstdefinestyle{common}{
+  basicstyle=\footnotesize\ttfamily
+}
+
+\lstdefinestyle{boxed}{
+  style=common,
+  frame=single,
+  keywordstyle=\color{codered},
+  keywordstyle={[2]\color{codeorange}},
+  backgroundcolor=\color{backcolour},   
+  commentstyle=\color{codegray},       
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codebrown},
+  breaklines=true,
+  keepspaces=true,
+  tabsize=2,
+  numbers=left,
+  numberstyle=\tiny,
+  numbersep=10pt,
+  matchrangestart=t
+}
+
+\lstdefinestyle{asciiart}{
+  style=common,
+  columns=fixed,
+  fontadjust=true,
+  basewidth=0.5em
+}
+
+\lstdefinestyle{Java}{
+  language=Java,
+  style=boxed,
+  title=\texttt{\lstname},
+  captionpos=t,
+}
+
+\makeatletter
+\newenvironment{asciiart}{
+\lstset{style=asciiart}\begin{Sbox}}{
+\end{Sbox}\centerline{\parbox{\wd\@Sbox}{\TheSbox}}}
+\makeatother
+
+
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{1}
+
+
+\setlength{\parskip}{5pt plus2pt}
