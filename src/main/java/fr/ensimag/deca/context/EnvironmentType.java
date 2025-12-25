@@ -47,6 +47,28 @@ public class EnvironmentType {
         return envTypes.get(s);
     }
 
+    /**
+     * Implements the type_arith_op(T1, T2) rule.
+     * <pre>
+     * (int, int)     -> int
+     * (int, float)   -> float
+     * (float, int)   -> float
+     * (float, float) -> float
+     * </pre>
+     * @param t1 Type of the left operand
+     * @param t2 Type of the right operand
+     * @return The resulting numeric Type, or null if types are not numeric.
+     */
+    public Type typeArithOp(Type t1, Type t2) {
+        if (t1.isInt() && t2.isInt()) {
+            return INT;
+        }
+        if (t1.isNumeric() && t2.isNumeric()) {
+            return FLOAT;
+        }
+        return null;
+    }
+
     public final VoidType    VOID;
     public final IntType     INT;
     public final FloatType   FLOAT;
