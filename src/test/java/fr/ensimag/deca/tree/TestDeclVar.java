@@ -66,8 +66,13 @@ public class TestDeclVar {
     }
     
     @Test
-    public void testDoubleDeclaration() throws ContextualError, DoubleDefException {
-        doThrow(new DoubleDefException()).when(env).declare(symbol, null);
+    public void testDoubleDeclaration() throws DoubleDefException {
+
+        // Simulate double declaration by mocking env.declare to throw DoubleDefException 
+        // using doThrow instead of when(...).thenThrow() because declare is a void method.
+        // Use matchers for VariableDefinition def argument because the definition instance 
+        // is created inside the method and the reference to it is not accessible here
+        doThrow(new DoubleDefException()).when(env).declare(eq(symbol), any(VariableDefinition.class));
 
         assertThrows(
             ContextualError.class, 
