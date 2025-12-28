@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,11 +37,12 @@ public class TestListInst {
         listInst.add(inst1);
         listInst.add(inst2);
 
-        listInst.verifyListInst(compiler, env, null, compiler.environmentType.VOID);
+        Type expectedType = compiler.environmentType.INT;
+        listInst.verifyListInst(compiler, env, null, expectedType);
 
         // Check is all the instructions were verified
-        verify(inst1).verifyInst(compiler, env, null, compiler.environmentType.VOID);
-        verify(inst2).verifyInst(compiler, env, null, compiler.environmentType.VOID);
+        verify(inst1).verifyInst(compiler, env, null, expectedType);
+        verify(inst2).verifyInst(compiler, env, null, expectedType);
     }
 
     @Test
