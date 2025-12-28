@@ -82,9 +82,21 @@ public abstract class AbstractExpr extends AbstractInst {
             EnvironmentExp localEnv, ClassDefinition currentClass, 
             Type expectedType)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Type actualType = this.verifyExpr(compiler, localEnv, currentClass);
+
+        if (!compiler.environmentType.assignCompatible(expectedType, actualType)) {
+            throw new ContextualError("Incompatible types in Rvalue " + this.decompile() + ": cannot assign " + actualType + " to " + expectedType, this.getLocation());
+        }
+
+        // Float promotion if expression is int and expected type is float
+        if (expectedType.isFloat() && actualType.isInt()) {
+            ConvFloat conv = new ConvFloat(this);
+            conv.verifyExpr(compiler, localEnv, currentClass);
+            return conv;
+        }
+
+        return this; // no conversion needed return original expression
     }
-    
     
     @Override
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,

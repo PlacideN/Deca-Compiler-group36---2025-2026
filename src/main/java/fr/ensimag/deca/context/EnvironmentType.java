@@ -69,6 +69,28 @@ public class EnvironmentType {
         return null;
     }
 
+    /**
+     * Implements assign_compatible(T1, T2) rule.
+     * Check if a value of type T2 can be assigned to a variable of type T1 
+     * (either float promotion or subtype).
+     */
+    public boolean assignCompatible(Type t1, Type t2) {
+        if (t1.isFloat() && t2.isInt()) { // Float promotion
+            return true;
+        }
+
+        return subtype(t2, t1);
+    }
+
+    /**
+     * Implements the subtype(T1, T2) rule.
+     * Check if T1 is a subtype of T2.
+     */   
+    public boolean subtype(Type t1, Type t2) {
+        // Add other rules when classes are implemented
+        return t1.sameType(t2);
+    }
+
     public final VoidType    VOID;
     public final IntType     INT;
     public final FloatType   FLOAT;
