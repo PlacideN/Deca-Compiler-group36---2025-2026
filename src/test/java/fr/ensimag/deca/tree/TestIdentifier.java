@@ -23,9 +23,8 @@ public class TestIdentifier {
     VariableDefinition varDef;
     TypeDefinition typeDef;
     DecacCompiler compiler;
-
-    @Mock
     Symbol symbol;
+    
     @Mock
     EnvironmentExp env;
     
@@ -34,10 +33,12 @@ public class TestIdentifier {
         MockitoAnnotations.openMocks(this);
         compiler = new DecacCompiler(null, null);
 
+        symbol = compiler.createSymbol("int"); 
         id = new Identifier(symbol);
+        
+        typeDef = compiler.environmentType.defOfType(symbol);
+        
         varDef = new VariableDefinition(compiler.environmentType.INT, id.getLocation());
-        typeDef = new TypeDefinition(compiler.environmentType.INT, id.getLocation());
-
         when(env.get(symbol)).thenReturn(varDef);
     }
     
@@ -46,8 +47,7 @@ public class TestIdentifier {
         Type idType = id.verifyType(compiler);
         
         assertTrue(idType.isInt());
-        assertNotNull(id.getDefinition());
-        assertEquals(id.getDefinition().getType(), compiler.environmentType.INT);
+        assertEquals(id.getDefinition(), typeDef);
     }
 
     @Test
@@ -60,6 +60,7 @@ public class TestIdentifier {
 
         // Check that the node has been decorated with the correct varDefinition
         assertEquals(varDef, lookupDef);
+        verify(env).get(symbol);
     }
 
     @Test
