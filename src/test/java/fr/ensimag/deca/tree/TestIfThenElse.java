@@ -26,22 +26,33 @@ public class TestIfThenElse {
         ListInst thenBranch = new ListInst();
         ListInst elseBranch = new ListInst();
         
-        IfThenElse loop = new IfThenElse(cond, thenBranch, elseBranch);
-        loop.verifyInst(compiler, env, null, compiler.environmentType.VOID);
+        IfThenElse block = new IfThenElse(cond, thenBranch, elseBranch);
+        block.verifyInst(compiler, env, null, compiler.environmentType.VOID);
+    }
+
+    @Test
+    public void testIfWithComparisonCondition() throws ContextualError {
+        // if (1 < 2) { }
+        AbstractExpr left = new IntLiteral(1);
+        AbstractExpr right = new IntLiteral(2);
+        
+        AbstractExpr cond = new Lower(left, right);
+        
+        IfThenElse block = new IfThenElse(cond, new ListInst(), new ListInst());
+        block.verifyInst(compiler, env, null, compiler.environmentType.VOID);
     }
 
     @Test
     public void testIncorrectIfCondition() {
         // if (1) { }
         AbstractExpr cond = new IntLiteral(1);
-        IfThenElse loop = new IfThenElse(cond, new ListInst(), new ListInst());
+        IfThenElse block = new IfThenElse(cond, new ListInst(), new ListInst());
 
         assertThrows(
             ContextualError.class, 
-            () -> loop.verifyInst(compiler, env, null, compiler.environmentType.VOID),
+            () -> block.verifyInst(compiler, env, null, compiler.environmentType.VOID),
             "Should throw ContextualError because 1 is not a valid condition for an if statement (expected boolean)."
         );
     }
-
 
 }
