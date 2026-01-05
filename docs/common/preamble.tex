@@ -34,7 +34,8 @@
 \usepackage{xcolor}
 \usepackage{csquotes}
 \usepackage{fancybox}
-\usepackage{booktabs}  
+\usepackage{booktabs} 
+\usepackage[most, listings]{tcolorbox} 
 
 \newfloat{code}{htbp}{lop}
 \floatname{code}{Code}
@@ -112,6 +113,25 @@
   style=boxed,
   title=\texttt{\lstname},
   captionpos=t,
+}
+
+\newtcblisting{command}{
+  enhanced,
+  listing only,
+  colback=gray!10,
+  colframe=gray!40,
+  fontupper=\ttfamily,
+  boxrule=0.5pt,
+  arc=3pt,
+  top=3pt,bottom=3pt,left=14pt,right=4pt,
+  overlay={
+    \node[
+      anchor=north west,
+      font=\ttfamily
+    ] 
+    at ([xshift=4pt,yshift=-4pt]interior.north west)
+      {\scalebox{0.8}{\$}};
+  }
 }
 
 \makeatletter
