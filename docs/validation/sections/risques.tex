@@ -1,0 +1,76 @@
+\section{Gestion des risques et des rendus}
+
+\noindent
+Afin d'évaluer et de prévenir au mieux les risques du projet, nous avons identifié les dangers susceptibles d'affecter la qualité ou le bon fonctionnement du projet. Ces risques ont été classés par ordre décroissant selon leur rapport coût-bénéfice (du plus critique au moins critique), conformément aux recommandations des enseignants.
+
+
+\subsection{Analyse des dangers critiques}
+\noindent
+Pour chaque danger identifié, nous avons défini une ou plusieurs actions facilement vérifiables, permettant d'éviter ce risque ou d'en limiter l'impact. Ces dangers sont, à ce stade, centrés sur le sous-langage <<sans objet>>, mais s'appliquent également à la version complète du langage ainsi qu'au développement de l'extension. Une réévaluation des risques sera donc réalisée après le rendu
+intermédiaire.
+
+
+\begin{itemize}[label=$\circ$]
+    \item \textbf{Validité fonctionnelle} : Pour le rendu intermédiaire, il est impératif que l'intégralité de la chaîne de compilation du sous-langage <<sans objet>> soit fonctionnelle (conception, vérifications contextuelles et génération de code).
+    \\ $\Rightarrow$ À partir de l'exemple fourni dans le polycopié, nous avons identifié les points critiques, notamment l'ajout de la classe \texttt{ConvFloat} à l'arbre abstrait lors de certaines opérations arithmétiques ou d'assignations, ou encore l'appel à \texttt{ReadInt}. Ces points ont été ajoutés aux tests unitaires de l'étape d'analyse contextuelle en plus des règles données par la spécification du langage Deca.
+
+    \item \textbf{Conformité de l'interface et automatisation} : Le non-respect des spécifications de la commande \texttt{decac} (options \texttt{-p}, \texttt{-v}, \texttt{-r} etc.) ou une sortie interactive lors de \texttt{mvn test} rendrait le compilateur incompatible avec les scripts d'évaluation automatique des enseignants.
+    \\ $\Rightarrow$ Nous avons mis en place un script de test d'interface dédié vérifiant le code de
+    retour (\textit{exit status} 0 ou 1) ainsi que le format de sortie pour chaque option. Les tests exécutés automatiquement par \texttt{Maven} sont strictement non-interactifs. Les programmes nécessitant une interaction utilisateur (\texttt{readInt}, \texttt{readFloat} par exemple) ou les scripts utilisés lors des démos en séance de suivi, sont isolés dans des sous-répertoires \texttt{/interactive} et exclus de l'exécution automatique.
+
+    \item \textbf{Validité des oracles} : Il existe un risque que nos tests passent alors que le compilateur produit des résultats incorrects (acceptation de programmes invalides, rejet de programmes valides, AST incohérent ou exceptions Java non-rattrapées).  
+    \\ $\Rightarrow$ Pour y pallier nous utilisons des oracles automatiques, c'est-à-dire des critères qui déterminent automatiquement si un test a réussi ou échoué. Par exemple la vérification de l'idempotence de la décompilation, la cohérence des numéros de lignes d'erreur ou encore l'absence d'exceptions Java non-rattrapées. Ces oracles sont inspirés des exemples fournis dans le polycopié.
+
+    \item \textbf{Erreurs de régression} : Le développement de la génération de code pourrait, à travers certaines erreurs, rendre le compilateur invalide sur des étapes précédentes pourtant fonctionnelles.
+    \\ $\Rightarrow$ Intégration du script \texttt{common-tests.sh} dans notre cycle de développement. L'exécution de la commande \texttt{mvn clean test} doit être réalisée avant chaque \textit{push} sur le dépôt afin de garantir que les nouvelles fonctionnalités ne cassent pas les fonctionnalités déjà implémentées.
+
+    \item \textbf{Risque de synchronisation Git} : L'oubli d'un fichier source ou l'ajout accidentel de fichiers binaires/auxiliaires (\texttt{.class}, etc.) pourrait créer des conflits ou empêcher la compilation correcte sur une autre machine.
+    \\ $\Rightarrow$ Nous avons séparé les fichiers générés dans des répertoires spécifiques (\texttt{target/} et \texttt{/docs/build}) pour minimiser les erreurs d'oubli dans le \texttt{.gitignore}. Avant chaque rendu, un \texttt{git clone} est réalisé dans un répertoire vierge pour vérifier que la compilation (\texttt{mvn test-compile}) et les tests (\texttt{mvn test}) fonctionnent sans dépendances locales (cf.~\ref{subsec:proc-validation-rendu})
+\end{itemize}
+
+\subsection{Gestion des rendus et calendrier}
+\noindent
+La réussite du projet repose aussi sur la gestion du calendrier et des livrables. Nous avons identifié deux dangers organisationnels majeurs : le dépassement des échéances et la livraison d'une version instable du projet.
+
+\begin{itemize}[label=$\circ$]
+    \item \textbf{Respect des échéances} : L'oubli d'une date de rendu, de suivi, de soutenance ainsi qu'un des documents qui nous sont demandés pour ces écheances n'est pas souhaitable.
+    \\ $\Rightarrow$ Nous avons ajouté à notre planning des jalons anticipés, fixés 24 heures avant chaque rendu officiel, passé lesquels aucune nouvelle fonctionnalité ne doit être ajoutée. Ces deux jours sont réservés exclusivement à la vérification et la validation de rendu. Le planning partagé récapitule les dates clés du projet ainsi que les jalons internes.
+
+    \item \textbf{Gestion des versions} : Le danger est de livrer une version instable suite à l'intégration de dernière minute d'une fonctionnalité complexe.
+    \\ $\Rightarrow$ Pour le rendu intermédiaire, la priorité est donnée au compilateur <<sans objet>> sur la branche \texttt{main}. Toute autre fonctionnalité (extensions, partie objet) est développée sur des branches séparées et ne sera fusionnée qu'après validation.
+\end{itemize}
+
+\subsection{Procédure de validation de rendu}\label{subsec:proc-validation-rendu}
+\noindent
+Pour reproduire notre validation, voici la liste des tâches exécutées avant chaque rendu.
+
+\begin{itemize}
+        \item[$\square$] Lancer \texttt{mvn test} pour exécuter l'ensemble des tests (unitaires et fonctionnels). Cette commande exécute aussi le script \texttt{common-tests.sh} : aucune erreur ne doit survenir.
+        \item[$\square$] Vérifier que les tests interactifs (utilisant \texttt{readInt} ou \texttt{readFloat}) sont tous situés dans des sous-répertoires \texttt{/interactive}.
+        \item[$\square$] Vérifier le format des en-têtes \texttt{// Description} et \texttt{// Resultats} de chaque fichier de test \texttt{.deca} et s'assurer que la ligne d'erreur attendue pour les tests \texttt{invalid} correspond à la sortie du compilateur.
+        \item[$\square$] Exécuter la procédure de simulation de rendu ci-dessous.
+\end{itemize}  
+
+\noindent \textbf{Simulation de rendu :}
+L'usage du répertoire \texttt{/tmp/} garantit que ce dernier sera nettoyé au redémarrage de l'ordinateur et évite ainsi de polluer les dossiers de travail personnels avec des versions dupliquées du projet, mais le choix d'un autre dossier de destination n'importe pas.
+
+\begin{enumerate}
+    \item 
+    Clonage du dépôt dans un répertoire temporaire :
+    \begin{command}
+git clone https://gitlab.ensimag.fr/gl2026/gr6/gl36.git /tmp/Projet_GL_Rendu
+cd /tmp/Projet_GL_Rendu
+    \end{command}
+
+    \item Vérification de la compilation et des tests : 
+    \begin{command}
+mvn test
+    \end{command}
+
+    \item Vérification de l'exécutable : 
+    \begin{command}
+./bin/decac -p src/test/deca/syntax/valid/hello.deca
+    \end{command}
+\end{enumerate}
+
+
