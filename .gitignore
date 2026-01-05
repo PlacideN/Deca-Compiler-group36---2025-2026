@@ -1,5 +1,6 @@
 # Do not version generated files.
 /target
+**/build/
 
 # These are IDE-specific files. We version pom.xml, and rely on IDE
 # integration with maven (or with maven's generation of IDE files like
@@ -8,3 +9,7 @@
 .project
 .metadata
 .settings
+**/.vscode/
+
+# ANTLR generated files
+src/main/antlr4/fr/ensimag/deca/syntax/.antlr/
