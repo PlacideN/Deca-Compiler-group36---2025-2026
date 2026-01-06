@@ -1,5 +1,5 @@
 // Description:
-//      Sauvegarde et charge une variable unique.
+//      Déclare une variable entière unique puis l'affiche.
 //
 // Resultats:
 //    42
