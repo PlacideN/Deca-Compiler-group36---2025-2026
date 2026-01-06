@@ -95,7 +95,12 @@ COMMENT : ('/*' .*? '*/' {skip();}) | ('//' ~[\r\n]* {skip();});
 // Inclusions de fichiers
 fragment FILENAME : (LETTER | DIGIT | '.' | '-' | '_')+;
 INCLUDE : '#include' (' ')* '"' FILENAME '"' {
-   doInclude(FILENAME.getText());
+   String text = getText();
+   // on cherche entre les guillemets
+   int first = text.indexOf('"');
+   int last = text.lastIndexOf('"');
+   String name = text.substring(first + 1, last);
+   doInclude(name);
    };
    
 
