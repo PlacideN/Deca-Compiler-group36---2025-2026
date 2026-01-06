@@ -27,14 +27,9 @@ public class Main extends AbstractMain {
 
     @Override
     protected void verifyMain(DecacCompiler compiler) throws ContextualError {
-        LOG.debug("verify Main: start");
-
         EnvironmentExp localEnv = new EnvironmentExp(null);
         this.declVariables.verifyListDeclVariable(compiler, localEnv, null);
         this.insts.verifyListInst(compiler, localEnv, null, compiler.environmentType.VOID);
-        
-        LOG.debug("verify Main: end");
-        // throw new UnsupportedOperationException("not yet implemented");
     }
 
     @Override
