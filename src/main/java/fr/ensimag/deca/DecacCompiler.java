@@ -114,13 +114,27 @@ public class DecacCompiler {
     public String displayIMAProgram() {
         return program.display();
     }
+
+    /**
+     * Get the current IMA program.
+     */
+    public IMAProgram getProgram() {
+        return this.program;
+    }
+
+    /**
+     * Set the current IMA program. Used for late addition of ADDSP or TSTO.
+     */
+    public void setProgram(IMAProgram program) {
+        this.program = program;
+    }
     
     private final CompilerOptions compilerOptions;
     private final File source;
     /**
      * The main program. Every instruction generated will eventually end up here.
      */
-    private final IMAProgram program = new IMAProgram();
+    private IMAProgram program = new IMAProgram();
  
 
     /** The global environment for types (and the symbolTable) */

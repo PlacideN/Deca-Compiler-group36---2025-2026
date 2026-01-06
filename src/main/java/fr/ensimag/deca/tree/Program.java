@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.instructions.*;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -40,10 +41,24 @@ public class Program extends AbstractProgram {
 
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
-        // A FAIRE: compléter ce squelette très rudimentaire de code
+        IMAProgram body = new IMAProgram();
+        IMAProgram init = compiler.getProgram();
+        compiler.setProgram(body);
+
         compiler.addComment("Main program");
         main.codeGenMain(compiler);
         compiler.addInstruction(new HALT());
+
+        compiler.setProgram(init);
+
+        int stackSize = compiler.getStackManager().getStackSize();
+        if (stackSize > 0) {
+            compiler.addInstruction(new ADDSP(stackSize));
+        }
+
+        // TODO: add TSTO stack overflow
+
+        init.append(body);
     }
 
     @Override
