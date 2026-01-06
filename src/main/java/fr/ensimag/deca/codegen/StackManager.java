@@ -16,7 +16,16 @@ public class StackManager {
      * @return the word offset of the allocated GB
      */
     public int allocate() {
-        return currentGBOffset++;
+        currentGBOffset++; // Stack starts at GB + 1
+        return currentGBOffset;
+    }
+
+    /**
+     * Get the total number of slots (global variables) allocated on the stack.
+     * @return the total number of slots allocated
+     */
+    public int getStackSize() {
+        return currentGBOffset;
     }
 
     // No deallocation needed for GB as they live for the entire duration of the program
