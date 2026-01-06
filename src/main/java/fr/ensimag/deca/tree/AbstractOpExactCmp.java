@@ -27,4 +27,9 @@ public abstract class AbstractOpExactCmp extends AbstractOpCmp {
 
         return null;
     }
+
+    @Override
+    public Priority getPriority() {
+        return Priority.EQ;
+    }
 }

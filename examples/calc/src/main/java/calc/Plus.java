@@ -19,4 +19,9 @@ public class Plus extends AbstractExpr {
         return left.toString() + " + " + right.toString();
     }
 
+    @Override
+    public Priority getPriority() {
+        return Priority.SUM;
+    }
+
 }

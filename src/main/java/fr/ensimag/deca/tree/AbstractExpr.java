@@ -102,7 +102,7 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        this.verifyExpr(compiler, localEnv, currentClass);
     }
 
     /**
@@ -139,6 +139,22 @@ public abstract class AbstractExpr extends AbstractInst {
     protected void decompileInst(IndentPrintStream s) {
         decompile(s);
         s.print(";");
+    }
+
+    public enum Priority {
+        ASSIGN,
+        OR,
+        AND,
+        EQ,
+        CMP,
+        SUM,
+        PRODUCT,
+        UNARY,
+        ATOMIC // identifiers, literals, etc.
+    }
+
+    public Priority getPriority(){
+        return Priority.ATOMIC;
     }
 
     @Override

@@ -15,5 +15,10 @@ public class Minus extends AbstractOpArith {
     protected String getOperatorName() {
         return "-";
     }
+
+    @Override
+    public Priority getPriority() {
+        return Priority.SUM;
+    }
     
 }

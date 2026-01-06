@@ -17,4 +17,9 @@ public class Multiply extends AbstractOpArith {
         return "*";
     }
 
+    @Override
+    public Priority getPriority() {
+        return Priority.PRODUCT;
+    }
+
 }

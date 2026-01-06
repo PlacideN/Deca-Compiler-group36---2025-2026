@@ -44,4 +44,9 @@ public class Assign extends AbstractBinaryExpr {
         return "=";
     }
 
+    @Override
+    public Priority getPriority() {
+        return Priority.ASSIGN;
+    }
+
 }

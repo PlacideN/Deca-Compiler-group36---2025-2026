@@ -49,11 +49,23 @@ public abstract class AbstractBinaryExpr extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("(");
-        getLeftOperand().decompile(s);
+        if (leftOperand.getPriority().ordinal() < this.getPriority().ordinal()) {
+            s.print("(");
+            leftOperand.decompile(s);
+            s.print(")");
+        } else {
+            leftOperand.decompile(s);
+        }
+
         s.print(" " + getOperatorName() + " ");
-        getRightOperand().decompile(s);
-        s.print(")");
+
+        if (rightOperand.getPriority().ordinal() <= this.getPriority().ordinal()) {
+            s.print("(");
+            rightOperand.decompile(s);
+            s.print(")");
+        } else {
+            rightOperand.decompile(s);
+        }
     }
 
     /** 

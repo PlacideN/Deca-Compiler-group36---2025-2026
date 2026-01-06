@@ -17,5 +17,9 @@ public class Or extends AbstractOpBool {
         return "||";
     }
 
+    @Override
+    public Priority getPriority() {
+        return Priority.OR;
+    }
 
 }

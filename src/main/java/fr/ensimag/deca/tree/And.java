@@ -17,5 +17,9 @@ public class And extends AbstractOpBool {
         return "&&";
     }
 
+    @Override
+    public Priority getPriority() {
+        return Priority.AND;
+    }
 
 }

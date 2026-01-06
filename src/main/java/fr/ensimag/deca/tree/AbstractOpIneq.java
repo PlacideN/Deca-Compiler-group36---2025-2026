@@ -12,5 +12,10 @@ public abstract class AbstractOpIneq extends AbstractOpCmp {
         super(leftOperand, rightOperand);
     }
 
+    @Override
+    public Priority getPriority() {
+        return Priority.CMP;
+    }
+
 
 }
