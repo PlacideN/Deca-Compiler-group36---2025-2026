@@ -1,0 +1,15 @@
+// Description:
+//      Affichage en flottant de la moitié du carré d'un entier
+//      Exemple tiré du polycopié : [ExempleSansObjet]
+//
+// Resultats:
+//      OK, affiche le bon résultat.
+// 
+// Historique:
+//      cree le 06/01/2025
+
+{
+    int x;
+    x = readInt();
+    println(0.5 * (x * x));
+}
