@@ -1,0 +1,13 @@
+// Description:
+//      Sauvegarde et charge une variable unique.
+//
+// Resultats:
+//    42
+//
+// Historique:
+//    cree le 06/01/2026
+
+{
+   int x = 42;
+   println(x);
+}
