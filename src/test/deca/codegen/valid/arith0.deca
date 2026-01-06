@@ -1,0 +1,12 @@
+// Description:
+//    Effectue une somme et en affiche le résultat
+//
+// Resultats:
+//    3
+//
+// Historique:
+//    cree le 06/01/2026
+
+{
+   println(1 + 2);
+}
