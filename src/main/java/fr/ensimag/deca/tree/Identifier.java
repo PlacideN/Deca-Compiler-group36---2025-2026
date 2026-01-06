@@ -15,6 +15,8 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.DAddr;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -210,7 +212,8 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        throw new UnsupportedOperationException("Not yet implemented");
+        DAddr addr = this.getExpDefinition().getOperand();
+        compiler.addInstruction(new LOAD(addr, target));
     }
 
     @Override

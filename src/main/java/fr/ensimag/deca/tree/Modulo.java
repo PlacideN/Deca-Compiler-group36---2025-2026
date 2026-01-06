@@ -39,8 +39,8 @@ public class Modulo extends AbstractOpArith {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        throw new UnsupportedOperationException("Not yet implemented");
+    protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src) {
+        throw new UnsupportedOperationException("Modulo operation not yet implemented");
     }
 
 }

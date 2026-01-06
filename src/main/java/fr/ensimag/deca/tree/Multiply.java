@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
-
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.MUL;
 
 /**
  * @author gl36
@@ -20,6 +22,11 @@ public class Multiply extends AbstractOpArith {
     @Override
     public Priority getPriority() {
         return Priority.PRODUCT;
+    }
+
+    @Override
+    protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src){
+        compiler.addInstruction(new MUL(src, dest));
     }
 
 }

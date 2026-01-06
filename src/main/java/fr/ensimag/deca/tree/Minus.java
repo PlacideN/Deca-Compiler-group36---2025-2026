@@ -1,5 +1,8 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.SUB;
 
 /**
  * @author gl36
@@ -19,6 +22,11 @@ public class Minus extends AbstractOpArith {
     @Override
     public Priority getPriority() {
         return Priority.SUM;
+    }
+
+    @Override
+    protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src){
+        compiler.addInstruction(new SUB(src, dest));
     }
     
 }

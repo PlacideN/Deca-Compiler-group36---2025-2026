@@ -37,8 +37,20 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
         return this.getType();              
     }
 
+    /**
+     * Generate code for the arithmetic operation.
+     * @param compiler
+     * @param dest destination register. Contains left operand at entry, result after operation.
+     * @param src source register. Contains right operand.
+     */
+    protected abstract void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src);
+
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.getLeftOperand().codeGenExpr(compiler, target);
+        GPRegister temp = compiler.getRegisterManager().allocateRegister();
+        this.getRightOperand().codeGenExpr(compiler, temp);
+        this.codeGenOpArith(compiler, target, temp);
+        compiler.getRegisterManager().freeRegister();
     }
 }
