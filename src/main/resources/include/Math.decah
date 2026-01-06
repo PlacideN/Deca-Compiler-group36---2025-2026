@@ -3,8 +3,19 @@
 
 class Math {
     float sin(float f) {
-        println("sin(f) not yet implemented");
+    
+    float x2 = f * f;
+
+    float r = -0.0000000250521084;
+    r =  0.00000275573192  + x2 * r;
+    r = -0.0001984126984   + x2 * r;
+    r =  0.00833333333    + x2 * r;
+    r = -0.166666667      + x2 * r;
+    r =  1.0               + x2 * r;
+
+    return f * r;
     }
+
     float cos(float f) {
         println("cos(f) not yet implemented");
     }
