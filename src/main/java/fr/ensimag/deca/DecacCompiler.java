@@ -1,5 +1,7 @@
 package fr.ensimag.deca;
 
+import fr.ensimag.deca.codegen.RegisterManager;
+import fr.ensimag.deca.codegen.StackManager;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
@@ -127,6 +129,23 @@ public class DecacCompiler {
 
     public Symbol createSymbol(String name) {
         return symbolTable.create(name);
+    }
+
+    private final RegisterManager registerManager = new RegisterManager();
+    private final StackManager stackManager = new StackManager();
+
+    /**
+     * Get the register manager.
+     */
+    public RegisterManager getRegisterManager() {
+        return this.registerManager;
+    }
+
+    /**
+     * Get the stack manager.
+     */
+    public StackManager getStackManager() {
+        return this.stackManager;
     }
 
     /**
