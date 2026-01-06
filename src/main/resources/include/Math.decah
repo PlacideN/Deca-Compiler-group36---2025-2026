@@ -2,18 +2,53 @@
 // Library for class Math of Deca, coded in Deca
 
 class Math {
+    float _PI() {
+        return 3.14159265358979323846f;
+    }
+
+        float _TWO_PI() {
+        return 6.28318530717958647692f;
+    }
+
+    float _reduce_angle(float f) {
+        float PI = _PI();
+        float TWO_PI = _TWO_PI();
+        float signe = 1.0f;
+
+        if (f < 0.0) {
+            f = -f;
+            signe = -1.0f;
+        }
+
+        while (f > PI) {
+            f = f - TWO_PI;
+        }
+
+        if (f > PI / 2.0f) {
+            f = PI - f;
+        }
+
+        if (f > PI / 2.0f) {
+            f = PI - f; 
+        } else if (f < -PI / 2.0f) {
+            f = -PI - f;    
+        }
+
+        return signe * f;
+}
+
     float sin(float f) {
-    
-    float x2 = f * f;
+        f = _reduce_angle(f);
+        float x2 = f * f;
+        float r = -0.0000000250521084f;
+        r =  0.00000275573192f + x2 * r;
+        r = -0.0001984126984f + x2 * r;
+        r =  0.00833333333f + x2 * r;
+        r = -0.166666667f + x2 * r;
+        r =  1.0f + x2 * r;
 
-    float r = -0.0000000250521084;
-    r =  0.00000275573192  + x2 * r;
-    r = -0.0001984126984   + x2 * r;
-    r =  0.00833333333    + x2 * r;
-    r = -0.166666667      + x2 * r;
-    r =  1.0               + x2 * r;
-
-    return f * r;
+        return f * r;
+        }
     }
 
     float cos(float f) {
