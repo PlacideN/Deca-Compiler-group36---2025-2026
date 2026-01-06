@@ -143,11 +143,9 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-        GPRegister reg = compiler.getRegisterManager().allocateRegister();
-        this.codeGenExpr(compiler, reg);
-
         // WINT, WFLOAT, etc. instructions fetch the value from R1
-        compiler.addInstruction(new LOAD(reg, Register.R1)); 
+        this.codeGenExpr(compiler, Register.R1);
+
         if (this.getType().isInt()) {
             compiler.addInstruction(new WINT());
         } else if (this.getType().isFloat()) {
@@ -158,7 +156,6 @@ public abstract class AbstractExpr extends AbstractInst {
             // => Should never happen if contextual verification is correct
             throw new DecacInternalError("Type " + this.getType() + " should have been handled by a specific override or caught in contextual verification.");
         }
-        compiler.getRegisterManager().freeRegister();
     }
 
     @Override
