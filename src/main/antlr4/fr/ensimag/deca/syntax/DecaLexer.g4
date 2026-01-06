@@ -94,8 +94,10 @@ COMMENT : ('/*' .*? '*/' {skip();}) | ('//' ~[\r\n]* {skip();});
 
 // Inclusions de fichiers
 fragment FILENAME : (LETTER | DIGIT | '.' | '-' | '_')+;
-INCLUDE : '#include' (' ')* '"' FILENAME '"'; 
-
+INCLUDE : '#include' (' ')* '"' FILENAME '"' {
+   doInclude(FILENAME.getText());
+   };
+   
 
 
 // les numéros des tokens sont numérotés dans l'ordre de la déclaration
