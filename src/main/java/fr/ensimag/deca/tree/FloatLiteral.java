@@ -6,6 +6,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -66,8 +67,8 @@ public class FloatLiteral extends AbstractExpr {
     }
 
     @Override
-    protected void codeGenPrint(DecacCompiler compiler) {
-        compiler.addInstruction(new LOAD(new ImmediateFloat(value), Register.R1));
-        compiler.addInstruction(new WFLOAT());
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
+        throw new UnsupportedOperationException("Not yet implemented");
     }
+    
 }

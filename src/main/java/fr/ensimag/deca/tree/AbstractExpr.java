@@ -7,9 +7,18 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
+
+import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.WSTR;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.WINT;
+
 
 /**
  * Expression, i.e. anything that has a value.
@@ -121,12 +130,35 @@ public abstract class AbstractExpr extends AbstractInst {
     }
 
     /**
+     * Generate code to evaluate the expression and store the result.
+     * 
+     * @param compiler
+     * @param target general purpose register where to store the result
+     */
+    protected abstract void codeGenExpr(DecacCompiler compiler, GPRegister target);
+
+    /**
      * Generate code to print the expression
      *
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+        GPRegister reg = compiler.getRegisterManager().allocateRegister();
+        this.codeGenExpr(compiler, reg);
+
+        // WINT, WFLOAT, etc. instructions fetch the value from R1
+        compiler.addInstruction(new LOAD(reg, Register.R1)); 
+        if (this.getType().isInt()) {
+            compiler.addInstruction(new WINT());
+        } else if (this.getType().isFloat()) {
+            compiler.addInstruction(new WFLOAT());
+        } else {
+            // String type doesn't have an expression to evaluate 
+            // It is managed by StringLiteral directly
+            // => Should never happen if contextual verification is correct
+            throw new DecacInternalError("Type " + this.getType() + " should have been handled by a specific override or caught in contextual verification.");
+        }
+        compiler.getRegisterManager().freeRegister();
     }
 
     @Override

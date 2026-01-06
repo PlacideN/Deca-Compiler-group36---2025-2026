@@ -6,6 +6,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateString;
 import fr.ensimag.ima.pseudocode.instructions.WSTR;
 import java.io.PrintStream;
@@ -43,6 +44,11 @@ public class StringLiteral extends AbstractStringLiteral {
     @Override
     protected void codeGenPrint(DecacCompiler compiler) {
         compiler.addInstruction(new WSTR(new ImmediateString(value)));
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
+        throw new UnsupportedOperationException("StringLiteral cannot be evaluated into a register.");
     }
 
     @Override

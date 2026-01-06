@@ -1,5 +1,7 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
 
 /**
  *
@@ -20,6 +22,11 @@ public class Divide extends AbstractOpArith {
     @Override
     public Priority getPriority() {
         return Priority.PRODUCT;
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
 }

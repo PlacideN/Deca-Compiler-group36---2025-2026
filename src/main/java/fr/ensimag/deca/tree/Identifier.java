@@ -14,6 +14,8 @@ import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.GPRegister;
+
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -204,6 +206,11 @@ public class Identifier extends AbstractIdentifier {
     @Override
     protected void prettyPrintChildren(PrintStream s, String prefix) {
         // leaf node => nothing to do
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override

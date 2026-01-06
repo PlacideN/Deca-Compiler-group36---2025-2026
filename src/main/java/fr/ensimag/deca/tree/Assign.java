@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -47,6 +48,11 @@ public class Assign extends AbstractBinaryExpr {
     @Override
     public Priority getPriority() {
         return Priority.ASSIGN;
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
 }

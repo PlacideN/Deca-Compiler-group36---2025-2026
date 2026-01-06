@@ -6,6 +6,8 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.GPRegister;
+
 import java.io.PrintStream;
 
 /**
@@ -33,6 +35,10 @@ public class BooleanLiteral extends AbstractExpr {
                 return type;
     }
 
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
 
     @Override
     public void decompile(IndentPrintStream s) {
