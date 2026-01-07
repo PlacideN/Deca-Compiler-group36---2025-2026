@@ -2,7 +2,7 @@
 //    Programme lexicalement incorrect
 //
 // Resultats:
-// Ligne 10: Erreur UNTERMINATED COMMENT
+// Ligne 10: Erreur "Unterminated comment"
 //
 // Historique:
 //    cree le 07/01/2026
