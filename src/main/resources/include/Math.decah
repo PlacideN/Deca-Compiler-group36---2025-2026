@@ -48,7 +48,7 @@ class Math {
         r =  1.0f + x2 * r;
 
         return f * r;
-        }
+        
     }
 
     float cos(float f) {
@@ -60,8 +60,28 @@ class Math {
     float atan(float f) {
         println("atan(f) not yet implemented");
     }
-    float ulp(float f) {
-        println("ulp(f) not yet implemented");
+
+    float ulp(float x) {
+
+        float e = 1.1920929E-7f; 
+
+        x = abs(x);
+
+        if (x < 1.17549435E-38f) { 
+             return 1.4E-45f; 
+        }
+
+        while (x >= 2.0f) {
+            x = x / 2.0f;
+            e = e * 2.0f;
+        }
+
+        while (x < 1.0f) {
+             x = x * 2.0f;
+             e = e / 2.0f;
+        }
+
+        return e;
     }
 }
 
