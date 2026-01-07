@@ -1,0 +1,13 @@
+// Description:
+//    Tests d'instruction lexicalement correct
+//
+// Resultats:
+//    Ligne 11 : Erreur de syntaxe. Point virgule manquant en fin d'instruction.
+//    test_lex ne doit pas donner d'erreur.
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+    int x = 3
+}

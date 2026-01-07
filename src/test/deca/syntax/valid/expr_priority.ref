@@ -1,0 +1,18 @@
+`> [11, 0] Program
+   +> ListDeclClass [List with 0 elements]
+   `> [11, 0] Main
+      +> ListDeclVar [List with 0 elements]
+      `> ListInst [List with 1 elements]
+         []> [12, 4] Assign
+             +> [12, 4] Identifier (a)
+             `> [12, 28] Minus
+                +> [12, 10] Plus
+                |  +> [12, 8] Identifier (b)
+                |  `> [12, 18] Divide
+                |     +> [12, 14] Multiply
+                |     |  +> [12, 12] Identifier (c)
+                |     |  `> [12, 16] Identifier (d)
+                |     `> [12, 23] Modulo
+                |        +> [12, 21] Identifier (e)
+                |        `> [12, 25] Identifier (f)
+                `> [12, 30] Identifier (g)

@@ -15,7 +15,7 @@
         } 
         else {
             if (x == 3) {
-                print("trouvé");
+                // empty
             }
             x = x + 1;
         }
