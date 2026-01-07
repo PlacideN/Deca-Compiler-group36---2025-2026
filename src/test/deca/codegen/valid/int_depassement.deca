@@ -1,0 +1,12 @@
+// Description:
+//  Contient un int qui ne peut pas être stocké sur 32 bits
+//
+// Resultats:
+//    "Integer literal out of bounds", this.getLocation()
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+   int trop_gros = 3000000000;
+}

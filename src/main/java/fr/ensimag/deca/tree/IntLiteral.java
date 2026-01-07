@@ -34,6 +34,9 @@ public class IntLiteral extends AbstractExpr {
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
+                if (this.getValue() > Integer.MAX_VALUE || this.getValue() < Integer.MIN_VALUE) {
+                    throw new ContextualError("Integer literal out of bounds", this.getLocation());
+                }
                 Type type = compiler.environmentType.INT;
                 this.setType(type);
                 return type;
