@@ -22,6 +22,9 @@ CONTEXT="src/test/deca/context/valid/provided"
 clear
 section "Syntax analysis functional tests (.deca)"
 sh "$ROOT_DIR/src/test/script/test-lex.sh"
+sh "$ROOT_DIR/src/test/script/test-synt.sh"
+
+pause
 
 printf "\n"
 section "Context analysis unit tests (JUnit)"
@@ -116,9 +119,39 @@ sed -E 's/\[[0-9]+, [0-9]+\]/\[LINE, COL\]/g' "$CONTEXT/moitie-context.ref" > "$
 if diff -b -B -u "$CODEGEN/moitie-context-lis.temp" "$CODEGEN/moitie-context-ref.temp"; then
     success "Context analysis matches the reference."
     rm "$CODEGEN/moitie.lis" "$CODEGEN/moitie-synt.lis" "$CODEGEN/moitie-context-lis.temp" "$CODEGEN/moitie-context-ref.temp"
-    printf "\n${GREEN}${BOLD}===== All tests for moitie.deca PASSED =====${NC}\n"
 else
     failure "Context analysis does not match the reference."
     rm "$CODEGEN/moitie-context-lis.temp" "$CODEGEN/moitie-context-ref.temp"
     exit 1
 fi
+
+
+# ---------------------------------------------------------
+pause
+
+step "Step 4: Code Generation Verification (Register Allocation & Expression Evaluation)"
+info "Testing register allocation and expression evaluation..."
+
+DEMO_FILES="var0.deca arith0.deca arith1.deca arith2.deca"
+CODEGEN_DEMO_PATH="src/test/deca/codegen/valid/"
+
+for filename in $DEMO_FILES; do
+    f="$CODEGEN_DEMO_PATH/$filename"
+    [ -f "$f" ] || continue # Skip if file doesn't exist
+    
+    info "File: $filename"
+    
+    decac "$f"
+    ass_file=$(printf "%s" "$f" | sed 's/\.deca/.ass/') # save a copy of the modified filepath
+
+    result=$(ima "$ass_file")
+    expected_res=$(sed -n '/Resultats:/,/Historique:/p' "$f" | grep -vE 'Resultats:|Historique:' | sed 's/\/\/\s*//g; s/[[:space:]\r]//g') # extract only result from .deca file
+    
+    if [ "$result" = "$expected_res" ]; then
+        success "Execution result: $result is correct"
+    else
+        failure "Execution result: $result (Expected $expected_res)"
+    fi
+done
+
+printf "\n${GREEN}${BOLD}===== All tests for moitie.deca PASSED =====${NC}\n"
