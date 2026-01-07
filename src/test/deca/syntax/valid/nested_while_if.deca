@@ -1,0 +1,23 @@
+// Description:
+//    Test d'imbrication de while et de if/else. 
+//    Vérifie que le parser garde l'ordre correct des structures.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+    while(x > 0) {
+        if (x % 2 == 0){
+            println("x est pair");
+        } 
+        else {
+            if (x == 3) {
+                print("trouvé");
+            }
+            x = x + 1;
+        }
+    }
+}

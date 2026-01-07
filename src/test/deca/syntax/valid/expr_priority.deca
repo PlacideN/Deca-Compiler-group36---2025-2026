@@ -1,0 +1,13 @@
+// Description:
+//    Test des priorités des opérateurs.
+//    Vérifie que le parser reconnait les priorités naturelles et manuelles.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+    a = b + c * d / (e % f) - g;
+}
