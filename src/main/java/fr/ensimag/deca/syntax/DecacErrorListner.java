@@ -31,6 +31,14 @@ public class DecacErrorListner implements ANTLRErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+        // Handle comments
+        if (offendingSymbol instanceof Token) {
+            Token token = (Token) offendingSymbol;
+            if (token.getType() == DecaLexer.UNTERMINATED_COMMENT) {
+                msg = "Unterminated comment";
+            }
+        }
+        
         // When trying to recover from an error, e can actually be null
         // (eg. "println(;")
         Token offendingToken = null;

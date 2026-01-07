@@ -1,0 +1,10 @@
+// Description:
+//    Programme lexicalement incorrect
+//
+// Resultats:
+// Ligne 10: Erreur UNTERMINATED COMMENT
+//
+// Historique:
+//    cree le 07/01/2026
+
+/* Commentaire non ferme
