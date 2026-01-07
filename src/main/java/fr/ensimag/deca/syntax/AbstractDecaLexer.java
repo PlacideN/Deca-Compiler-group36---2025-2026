@@ -85,6 +85,16 @@ public abstract class AbstractDecaLexer extends Lexer {
                         new LocationException("Unterminated comment", loc)
                     );
                 }
+                if (t.getType() == DecaLexer.INVALID_IDENT) {
+                    Location loc = new Location(
+                        t.getLine(),
+                        t.getCharPositionInLine(),
+                        t.getTokenSource().getSourceName()
+                    );
+                    throw new ParseCancellationException(
+                        new LocationException("Invalid identifier", loc)
+                    );
+                }
                 System.out.println(getVocabulary().getSymbolicName(t.getType()) + ": " + t);
             }
         } catch (ParseCancellationException e) {

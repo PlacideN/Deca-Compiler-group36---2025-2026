@@ -1,0 +1,29 @@
+// Description:
+//    Test de la reconnaissance des mots réservés
+//
+// Resultats:
+//    Syntaxiquement correct uniquement
+//
+// Historique:
+//    cree le 07/01/2026
+
+asm
+class
+extends
+else
+false
+if
+instanceof
+new
+null
+readInt
+readFloat
+print
+println
+printlnx
+printx
+protected
+return
+this
+true
+while

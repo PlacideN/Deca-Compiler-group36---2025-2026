@@ -45,6 +45,8 @@ fragment LETTER : 'a' .. 'z' | 'A' .. 'Z';
 fragment DIGIT : '0' .. '9';
 IDENT : (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
 
+INVALID_IDENT : DIGIT+ (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
+
 // Symboles spéciaux
 OPARENT : '('; // exemple : numéro 23 car c'est le 23 ème déclaré
 CPARENT : ')';
