@@ -21,11 +21,9 @@ step "Running Lexical Analysis Test Suite"
 for f in src/test/deca/syntax/valid/*.deca; do
     [ -e "$f" ] || continue # skip if no files found
     output=$(test_lex "$f" 2>&1)
-    if [ $? -eq 0 ]; then
-        success "$f"
-    else
+    if [ $? -ne 0 ]; then
         failure "Real error in valid lex file: $f"
-        echo "$output"
+        printf "%s\n" "$output"
     fi
 done
 
