@@ -3,6 +3,13 @@ package fr.ensimag.deca;
 import java.io.File;
 import org.apache.log4j.Logger;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+
 /**
  * Main class for the command-line Deca compiler.
  *
@@ -37,11 +44,37 @@ public class DecacMain {
             System.exit(1);
         }
         if (options.getParallel()) {
-            // A FAIRE : instancier DecacCompiler pour chaque fichier à
-            // compiler, et lancer l'exécution des méthodes compile() de chaque
-            // instance en parallèle. Il est conseillé d'utiliser
-            // java.util.concurrent de la bibliothèque standard Java.
-            throw new UnsupportedOperationException("Parallel build not yet implemented");
+            // Nombre de threads à utiliser en parallèle
+            int nbr_threads = Runtime.getRuntime().availableProcessors();
+            System.out.println("Compilation avec " + nbr_threads + " threads en parallèle.");
+            // Crée un pool de threads avec le nombre spécifié de threads
+            ExecutorService executor = Executors.newFixedThreadPool(nbr_threads);
+            // Results contient la liste des futurs résultats de compilation
+            List<Future<Boolean>> results = new ArrayList<>();
+            // pour chaque fichier source
+            for (File source : options.getSourceFiles()) {
+                // on crée une tâche de compilation
+                DecacCompiler compiler = new DecacCompiler(options, source);
+                // Soumet la tâche au pool de threads
+                Future<Boolean> result = executor.submit(() -> compiler.compile());
+                // Ajoute le futur résultat à la liste
+                results.add(result);
+            }
+            executor.shutdown();
+            for (Future<Boolean> result : results) {
+                try {
+                    if (result.get()) {
+                        // Result.get() lit une variable de Future et bloque
+                        // jusqu'à ce que le résultat soit disponible
+                        error = true;
+                    }
+                } catch (InterruptedException | ExecutionException e) {     
+                    System.err.println("Error during compilation: " + e.getMessage());
+                    error = true;
+                }
+            }
+
+
         } else {
             for (File source : options.getSourceFiles()) {
                 DecacCompiler compiler = new DecacCompiler(options, source);

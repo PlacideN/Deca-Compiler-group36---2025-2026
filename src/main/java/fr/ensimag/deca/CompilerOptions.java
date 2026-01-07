@@ -133,6 +133,7 @@ public class CompilerOptions {
         err.println("                Repeat option for more traces (INFO, DEBUG, TRACE, ALL).");
         err.println("");
         err.println("  Options '-p' and '-v' cannot be used together.");
+        err.println("  -P          : Enable parallel compilation of source files.");
 
         // TODO: Add the missing options when implemented
     }
