@@ -1,61 +1,52 @@
-# COLORS
-GREEN='\033[0;32m'
-RED='\033[0;31m'
-BLUE='\033[0;34m'
-BOLD='\033[1m'
-NC='\033[0m' 
+#!/bin/sh
 
-# Interaction helper
-pause() {
-    echo -e "\n----------------------------------------"
-    read -p "Press any key to continue..."
-    clear
-    }
+# Find root directory and prevent depth errors when calling other scripts
+CURRENT_SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
+ROOT_DIR="$CURRENT_SCRIPT_DIR"
+while [ "$ROOT_DIR" != "/" ] && [ ! -f "$ROOT_DIR/pom.xml" ]; do
+    ROOT_DIR=$(dirname "$ROOT_DIR")
+done
+cd "$ROOT_DIR" || exit 1
 
-# Logging helpers
-info() {
-    echo -e "[${BLUE}${BOLD}INFO${NC}] ${BLUE}$1${NC}"
-}
+PATH="./src/test/script/launchers:./src/main/bin:$PATH"
 
-success() {
-    echo -e "[${GREEN}${BOLD}SUCCESS${NC}] ${GREEN}$1${NC}"
-}
+# Import utils (colors, logger, etc)
+. "$ROOT_DIR/src/test/script/utils.sh"
 
-failure() {
-    echo -e "[${RED}${BOLD}FAILURE${NC}] ${RED}$1${NC}"
-}
-
-
+# Define paths relative to project root
 CODEGEN="src/test/deca/codegen/valid/provided"
 SYNTAX="src/test/deca/syntax/valid/provided"
 CONTEXT="src/test/deca/context/valid/provided"
 
 # ---------------------------------------------------------
 clear
-echo -e "${BOLD}===== JUnit context tests =====${NC}"
-mvn surefire:test
+section "Syntax analysis functional tests (.deca)"
+sh "$ROOT_DIR/src/test/script/test-lex.sh"
 
+printf "\n"
+section "Context analysis unit tests (JUnit)"
+mvn surefire:test
 pause
-echo -e "${BOLD}===== Demo for step A and B for [ExempleSansObject] =====${NC}"
+
+section "Demo for step A and B for [ExempleSansObject]"
 
 # ---------------------------------------------------------
-echo -e "\n${BOLD}Step 1: Lexical analysis verification${NC}"
-echo "Running test_lex on moitie.deca to extract tokens..."
+step "Step 1: Lexical analysis verification"
+info "Running test_lex on moitie.deca to extract tokens..."
 
-# Ignore token index and positions for comparison
+# Create temporary files for comparison to avoid relying on <() bash syntax
 test_lex "$CODEGEN/moitie.deca" | sed -E "s/ \[@.*='(.*)',.*\]/ \1/" > "$CODEGEN/moitie.lis"
+sed -E "s/ \[@.*='(.*)',.*\]/ \1/" "$SYNTAX/moitie-lex.ref" > "$CODEGEN/moitie-lex-ref.temp"
 
-echo "Comparing without token index and positions..."
-info "Preview of filtered tokens:"
-head -3 "$CODEGEN/moitie.lis"
-echo -e "${BLUE}...${NC}"
+info "Comparing without token index and positions..."
+printf "\n${BLUE}Preview of filtered tokens:${NC}\n"
+head -n 3 "$CODEGEN/moitie.lis"
+printf "${BLUE}...${NC}\n"
 
-echo -e "\nValidating token order..."
-diff -b -B -u "$CODEGEN/moitie.lis" <(sed -E "s/ \[@.*='(.*)',.*\]/ \1/" "$SYNTAX/moitie-lex.ref")
-
-if [ $? -eq 0 ]; then
+info "Validating token order..."
+if diff -b -B -u "$CODEGEN/moitie.lis" "$CODEGEN/moitie-lex-ref.temp"; then
     success "Lexical tokens are identical to the reference."
-    rm "$CODEGEN/moitie.lis"
+    rm "$CODEGEN/moitie.lis" "$CODEGEN/moitie-lex-ref.temp"
 else
     failure "Tokens do not match."
     exit 1
@@ -64,35 +55,35 @@ fi
 # ---------------------------------------------------------
 pause
 
-echo -e "\n${BOLD}Step 2: Syntax analysis & decompilation verification${NC}"
-echo "Running test_synt on moitie.deca to generate AST..."
-echo "Comparing AST structure (ignoring line/column numbers)..."
+step "Step 2: Syntax analysis & decompilation verification"
+info "Running test_synt on moitie.deca to generate AST..."
 test_synt "$CODEGEN/moitie.deca" > "$CODEGEN/moitie-synt.lis"
 
-# Masking line/column numbers for structural comparison
-diff -b -B -u <(sed -E 's/\[[0-9]+, [0-9]+\]/\[LINE, COL\]/g' "$CODEGEN/moitie-synt.lis") \
-    <(sed -E 's/\[[0-9]+, [0-9]+\]/\[LINE, COL\]/g' "$SYNTAX/moitie-synt.ref")
+# Structural comparison with temporary files
+sed -E 's/\[[0-9]+, [0-9]+\]/\[LINE, COL\]/g' "$CODEGEN/moitie-synt.lis" > "$CODEGEN/moitie-synt-lis.temp"
+sed -E 's/\[[0-9]+, [0-9]+\]/\[LINE, COL\]/g' "$SYNTAX/moitie-synt.ref" > "$CODEGEN/moitie-synt-ref.temp"
 
-if [ $? -eq 0 ]; then
+if diff -b -B -u "$CODEGEN/moitie-synt-lis.temp" "$CODEGEN/moitie-synt-ref.temp"; then
     success "Syntax structure matches the reference."
+    rm "$CODEGEN/moitie-synt-lis.temp" "$CODEGEN/moitie-synt-ref.temp"
 else
     failure "Syntax structure does not match the reference."
     exit 1
 fi
 
-echo -e "\nRunning 'decac -p' to reconstruct source code from AST..."
+info "Running 'decac -p' to reconstruct source code..."
 decac -p "$CODEGEN/moitie.deca" > "$CODEGEN/moitie.lis"
     
-info "Preview (Hex float & priority):"
+printf "\n${BLUE}Preview (Hex float & priority):${NC}\n"
 grep "println" "$CODEGEN/moitie.lis"
 
-echo -e "\nValidating structure (ignoring float format)..."
-# Masking both hex and decimal to FLOAT for structural comparison
-diff -b -B -u <(sed -e 's/0x1.0p-1/0.5/g' "$CODEGEN/moitie.lis") <(sed -e '/\/\//d' "$CODEGEN/moitie.deca")
+info "Validating structure (ignoring float format)..."
+sed -e 's/0x1.0p-1/0.5/g' "$CODEGEN/moitie.lis" > "$CODEGEN/moitie-decomp-filtered.temp"
+sed -e '/\/\//d' "$CODEGEN/moitie.deca" > "$CODEGEN/moitie-src-filtered.temp"
 
-if [ $? -eq 0 ]; then
+if diff -b -B -u "$CODEGEN/moitie-decomp-filtered.temp" "$CODEGEN/moitie-src-filtered.temp"; then
     success "Decompiled code matches the original."
-    rm "$CODEGEN/moitie.lis"
+    rm "$CODEGEN/moitie.lis" "$CODEGEN/moitie-decomp-filtered.temp" "$CODEGEN/moitie-src-filtered.temp"
 else
     failure "Decompiled code does not match the original."
     exit 1
@@ -101,17 +92,16 @@ fi
 # ---------------------------------------------------------
 pause
 
-echo -e "\n${BOLD}Step 3: Contextual Analysis & Decoration Verification${NC}"
-echo "Running test_context on moitie.deca to verify context rules..."
-echo "Comparing decorated AST to reference..."
-
+step "Step 3: Contextual Analysis & Decoration Verification"
+info "Running test_context on moitie.deca..."
 test_context "$CODEGEN/moitie.deca" > "$CODEGEN/moitie.lis"
 
+# THE DEEP PREVIEWS YOU WANTED
 info "Preview of undecorated AST:"
 grep -A 4 "ListDeclVar" "$CODEGEN/moitie-synt.lis"
-echo -e "\t[...]"
+printf "\t[...]\n"
 grep -A 3 "ListExpr" "$CODEGEN/moitie-synt.lis"
-echo -e "${BLUE}...${NC}"
+printf "${BLUE}...${NC}\n"
 
 info "Preview ConvFloat insertion:"
 grep -A 8 "ListExpr" "$CODEGEN/moitie.lis"
@@ -119,16 +109,16 @@ grep -A 8 "ListExpr" "$CODEGEN/moitie.lis"
 info "Preview of definition decoration:"
 grep -A 1 "Identifier (x)" "$CODEGEN/moitie.lis" | head -n 2
 
-echo -e "\nValidating decorated AST against reference..."
-# Masking line/column numbers for comparison
-diff -b -B -u <(sed -E 's/\[[0-9]+, [0-9]+\]/\[LINE, COL\]/g' "$CODEGEN/moitie.lis") \
-             <(sed -E 's/\[[0-9]+, [0-9]+\]/\[LINE, COL\]/g' "$CONTEXT/moitie-context.ref")
+# Comparison logic
+sed -E 's/\[[0-9]+, [0-9]+\]/\[LINE, COL\]/g' "$CODEGEN/moitie.lis" > "$CODEGEN/moitie-context-lis.temp"
+sed -E 's/\[[0-9]+, [0-9]+\]/\[LINE, COL\]/g' "$CONTEXT/moitie-context.ref" > "$CODEGEN/moitie-context-ref.temp"
 
-if [ $? -eq 0 ]; then
+if diff -b -B -u "$CODEGEN/moitie-context-lis.temp" "$CODEGEN/moitie-context-ref.temp"; then
     success "Context analysis matches the reference."
-    rm "$CODEGEN/moitie.lis"
-    rm "$CODEGEN/moitie-synt.lis"
+    rm "$CODEGEN/moitie.lis" "$CODEGEN/moitie-synt.lis" "$CODEGEN/moitie-context-lis.temp" "$CODEGEN/moitie-context-ref.temp"
+    printf "\n${GREEN}${BOLD}===== All tests for moitie.deca PASSED =====${NC}\n"
 else
     failure "Context analysis does not match the reference."
+    rm "$CODEGEN/moitie-context-lis.temp" "$CODEGEN/moitie-context-ref.temp"
     exit 1
 fi
