@@ -20,7 +20,7 @@ import org.apache.log4j.Logger;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.tree.LocationException;
-
+import fr.ensimag.deca.tree.Location;
 /**
  * This is the super class for the lexer. It is extended by the lexer class
  * generated from DecaLexer.g.
@@ -75,6 +75,26 @@ public abstract class AbstractDecaLexer extends Lexer {
         int i = 0;
         try {
             while ((t = tokens.LT(++i)).getType() != Token.EOF) {
+                if (t.getType() == DecaLexer.UNTERMINATED_COMMENT) {
+                    Location loc = new Location(
+                        t.getLine(),
+                        t.getCharPositionInLine(),
+                        t.getTokenSource().getSourceName()
+                    );
+                    throw new ParseCancellationException(
+                        new LocationException("Unterminated comment", loc)
+                    );
+                }
+                if (t.getType() == DecaLexer.INVALID_IDENT) {
+                    Location loc = new Location(
+                        t.getLine(),
+                        t.getCharPositionInLine(),
+                        t.getTokenSource().getSourceName()
+                    );
+                    throw new ParseCancellationException(
+                        new LocationException("Invalid identifier", loc)
+                    );
+                }
                 System.out.println(getVocabulary().getSymbolicName(t.getType()) + ": " + t);
             }
         } catch (ParseCancellationException e) {

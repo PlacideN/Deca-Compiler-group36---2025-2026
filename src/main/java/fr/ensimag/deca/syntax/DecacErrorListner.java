@@ -30,7 +30,7 @@ public class DecacErrorListner implements ANTLRErrorListener {
     }
 
     @Override
-    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+    public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {        
         // When trying to recover from an error, e can actually be null
         // (eg. "println(;")
         Token offendingToken = null;

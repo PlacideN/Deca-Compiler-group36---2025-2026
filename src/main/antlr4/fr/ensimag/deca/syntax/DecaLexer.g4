@@ -45,6 +45,8 @@ fragment LETTER : 'a' .. 'z' | 'A' .. 'Z';
 fragment DIGIT : '0' .. '9';
 IDENT : (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
 
+INVALID_IDENT : DIGIT+ (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
+
 // Symboles spéciaux
 OPARENT : '('; // exemple : numéro 23 car c'est le 23 ème déclaré
 CPARENT : ')';
@@ -90,7 +92,12 @@ STRING : '"' (STRING_CAR | '\\"' | '\\\\')* '"';
 MULTI_LINE_STRING : '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
 
 // Commentaires
-COMMENT : ('/*' .*? '*/' {skip();}) | ('//' ~[\r\n]* {skip();});
+COMMENT : '//' ~[\r\n]* {skip();};
+MULTI_LINE_COMMENT: '/*' -> more, pushMode(IN_COMMENT);
+mode IN_COMMENT; 
+COMMENT_END: '*/' -> popMode;
+COMMENT_CONTENT:  . -> more;
+UNTERMINATED_COMMENT: EOF -> popMode;
 
 // Inclusions de fichiers
 fragment FILENAME : (LETTER | DIGIT | '.' | '-' | '_')+;
