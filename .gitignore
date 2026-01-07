@@ -13,3 +13,6 @@
 
 # ANTLR generated files
 src/main/antlr4/fr/ensimag/deca/syntax/.antlr/
+
+# Assembly files
+**/*.ass
