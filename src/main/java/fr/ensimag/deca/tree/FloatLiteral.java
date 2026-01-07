@@ -8,6 +8,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
@@ -39,11 +40,19 @@ public class FloatLiteral extends AbstractExpr {
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
-            ClassDefinition currentClass) throws ContextualError {
-                Type type = compiler.environmentType.FLOAT;
-                this.setType(type);
-                return type;
-    }
+        ClassDefinition currentClass) throws ContextualError {
+            //IL FAUT PRENDRE EN COMPTE le float d = -2147483648 qui raise une erreur car passe par 2147483648
+            if (Float.isInfinite(this.getValue())) {
+                throw new ContextualError("the floating-point number is too large (Overflow)", this.getLocation());
+            }
+            if (Float.isNaN(this.getValue())) {
+                throw new ContextualError("the floating-point number is not valid (NaN)", this.getLocation());
+            }
+
+            Type type = compiler.environmentType.FLOAT;
+            this.setType(type);
+            return type;
+}
 
 
     @Override
@@ -66,9 +75,11 @@ public class FloatLiteral extends AbstractExpr {
         // leaf node => nothing to do
     }
 
+
     @Override
-    protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        throw new UnsupportedOperationException("Not yet implemented");
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
+        compiler.addInstruction(new LOAD(new ImmediateFloat(value), target));
     }
-    
 }
+    
+

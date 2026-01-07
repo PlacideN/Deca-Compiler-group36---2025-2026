@@ -1,0 +1,17 @@
+// Description:
+//    on crée un float trop grand
+//
+// Resultats:
+//    "Float literal out of bounds", this.getLocation()
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+    float a = 1.25;
+    float b = 3.4e30; // Gros, mais en dessous de la limite (1e38)
+    float c = 0.00001;
+    float d = 2147483647.0;
+    float e = -2147483648.0;
+    println("Tout fonctionne : ", a, " ", b, " ", c, " ", d, " ", e);
+}

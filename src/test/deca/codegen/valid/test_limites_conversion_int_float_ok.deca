@@ -1,0 +1,19 @@
+// Test de toutes les fonctionnalités OK
+{
+    // 1. Limites des entiers (32 bits)
+    int maxInt = 2147483647;
+    int minInt = -2147483647; // Le parser gere -2147483648 séparément
+
+    // 2. Limites des flottants
+    float f1 = 3.4028235e38; // Proche du max
+    float f2 = -3.4028235e38;
+
+    // 3. Test de ConvFloat (on met un int dans un float)
+    float conversion = 42; 
+    
+    // 4. Test de UnaryMinus
+    int oppose = -maxInt;
+
+    println("Tout est OK !");
+    println("Conversion : ", conversion);
+}

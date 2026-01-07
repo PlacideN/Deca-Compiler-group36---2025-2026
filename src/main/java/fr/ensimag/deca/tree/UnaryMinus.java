@@ -35,8 +35,13 @@ public class UnaryMinus extends AbstractUnaryExpr {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        throw new UnsupportedOperationException("Not yet implemented");
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
+        // 1. On calcule la valeur de l'expression (ex: 1.25) dans target
+        getOperand().codeGenExpr(compiler, target);
+        
+        // 2. On prend l'opposé (target = -target)
+        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.OPP(target, target));
     }
+    
 
 }

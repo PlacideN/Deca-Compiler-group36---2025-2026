@@ -32,8 +32,12 @@ public class ConvFloat extends AbstractUnaryExpr {
     }
 
     @Override
-    protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
+        // 1. On génère le code de l'entier et on met le résultat dans 'target'
+        getOperand().codeGenExpr(compiler, target);
+        
+        // 2. On convertit le contenu de 'target' (int) en float (toujours dans 'target')
+        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.FLOAT(target, target));
+        }
 
 }
