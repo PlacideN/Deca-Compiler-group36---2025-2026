@@ -1,0 +1,18 @@
+// Description:
+//      Vérification de la génération de code pour une expression binaire à plusieurs opérations.
+//      Teste la réutilisation des registres.
+//
+//      L'expression globale est stockée dans R1 directement (optimisation pour print/println).
+//      => Le sous-bloc gauche (1 + 2) évalue son résultat directement dans R1.
+//      => Le sous-bloc droit (3 + 4) utilise R2 (alloué avec le gestionnaire de registres).
+//      R2 est libéré après l'opération et peut être réutilisé.
+//
+// Resultats:
+//      10
+//
+// Historique:
+//      cree le 06/01/2026
+
+{
+    println((1 + 2) + (3 + 4));
+}

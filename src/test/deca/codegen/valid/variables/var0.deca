@@ -1,13 +1,13 @@
 // Description:
-//      Déclare une variable entière unique puis l'affiche.
+//    Déclare une variable entière unique puis l'affiche.
 //
 // Resultats:
-//    42
+//    36
 //
 // Historique:
 //    cree le 06/01/2026
 
 {
-   int x = 42;
+   int x = 36;
    println(x);
 }
