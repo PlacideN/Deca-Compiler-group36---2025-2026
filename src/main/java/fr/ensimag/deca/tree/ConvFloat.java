@@ -5,6 +5,7 @@ import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.ima.pseudocode.instructions.FLOAT;
 
 /**
  * Conversion of an int into a float. Used for implicit conversions.
@@ -33,11 +34,8 @@ public class ConvFloat extends AbstractUnaryExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
-        // 1. On génère le code de l'entier et on met le résultat dans 'target'
         getOperand().codeGenExpr(compiler, target);
-        
-        // 2. On convertit le contenu de 'target' (int) en float (toujours dans 'target')
-        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.FLOAT(target, target));
+        compiler.addInstruction(new FLOAT(target, target));
         }
 
 }
