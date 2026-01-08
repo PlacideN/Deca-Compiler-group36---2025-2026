@@ -1,7 +1,8 @@
 // Description:
-//    Test de l'affectation en tant qu'expression.
-//    Vérifie que le résultat d'une affectation peut être utilisé
-//    comme rvalue pour une autre affectation.
+//      Test de l'affectation en tant qu'expression.
+//      Vérifie que le résultat d'une affectation peut être utilisé
+//      comme rvalue pour une autre affectation. 
+//      NB: Vérifie la réservation correcte de la stack (ADDSP #2) pour x et y.
 //
 // Resultats:
 //      5
