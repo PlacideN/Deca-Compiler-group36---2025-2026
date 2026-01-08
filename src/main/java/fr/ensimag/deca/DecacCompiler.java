@@ -1,5 +1,6 @@
 package fr.ensimag.deca;
 
+import fr.ensimag.deca.codegen.LabelManager;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.codegen.StackManager;
 import fr.ensimag.deca.context.EnvironmentType;
@@ -147,6 +148,7 @@ public class DecacCompiler {
 
     private final RegisterManager registerManager = new RegisterManager();
     private final StackManager stackManager = new StackManager();
+    private final LabelManager labelManager = new LabelManager();
 
     /**
      * Get the register manager.
@@ -160,6 +162,13 @@ public class DecacCompiler {
      */
     public StackManager getStackManager() {
         return this.stackManager;
+    }
+
+    /**
+     * Get the label manager.
+     */
+    public LabelManager getLabelManager() {
+        return this.labelManager;
     }
 
     /**
