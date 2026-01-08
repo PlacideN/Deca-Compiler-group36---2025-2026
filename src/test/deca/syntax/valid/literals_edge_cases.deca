@@ -1,0 +1,18 @@
+// Description:
+//      Test des limites de validité des entiers (32-bits) et flottants (IEEE 754)
+//
+// Resultats:
+//      Pas d'erreur.
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+    int minInt = -2147483648; // valide avec UnaryMinus
+    int maxInt = 2147483647;
+
+    float f1 = 3.4028235e38; 
+    float f2 = -3.4028235e38;
+
+    float conversion = 42; 
+}

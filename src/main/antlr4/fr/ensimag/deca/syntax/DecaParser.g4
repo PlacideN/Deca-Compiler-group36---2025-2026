@@ -373,8 +373,17 @@ mult_expr returns[AbstractExpr tree]
 unary_expr returns[AbstractExpr tree]
     : op=MINUS e=unary_expr {
             assert($e.tree != null);
+            if ($e.tree instanceof IntLiteral) {
+            IntLiteral lit = (IntLiteral)$e.tree;
+            long val = lit.getValue();
+                if (val > 2147483648L) { 
+                    throw new ParseCancellationException(
+                        new LocationException("Integer literal out of range", tokenLocation($op))
+                    );
+                }
+            }
             $tree = new UnaryMinus($e.tree);
-            setLocation($tree, $op); //(Note: on utilise $op ici)
+            setLocation($tree, $op); 
         }
     | op=EXCLAM e=unary_expr {
             assert($e.tree != null);
@@ -465,12 +474,26 @@ type returns[AbstractIdentifier tree]
 
 literal returns[AbstractExpr tree]
     : INT { 
-            int value = Integer.parseInt($INT.getText());
-            $tree = new IntLiteral(value);
+            try {
+                long value = Long.parseLong($INT.getText());
+                if (value > 2147483648L) {
+                    throw new NumberFormatException();
+                }
+                $tree = new IntLiteral(value);
+            } catch (NumberFormatException e) {
+                throw new ParseCancellationException(
+                    new LocationException("Integer literal out of range", tokenLocation($INT))
+                );
+            }
             setLocation($tree, $INT);
         }
     | fd=FLOAT {
             float value = Float.parseFloat($fd.getText());
+            if (Float.isInfinite(value)) {
+                throw new ParseCancellationException(
+                    new LocationException("Float literal overflow", tokenLocation($fd))
+                );
+            }
             $tree = new FloatLiteral(value);
             setLocation($tree, $fd);
         }

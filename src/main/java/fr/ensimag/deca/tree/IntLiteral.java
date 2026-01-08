@@ -1,18 +1,16 @@
 package fr.ensimag.deca.tree;
 
-import fr.ensimag.deca.context.Type;
+import java.io.PrintStream;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.ImmediateInteger;
-import fr.ensimag.ima.pseudocode.Register;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.WINT;
 import fr.ensimag.ima.pseudocode.GPRegister;
-
-import java.io.PrintStream;
+import fr.ensimag.ima.pseudocode.ImmediateInteger;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 /**
  * Integer literal
@@ -21,22 +19,19 @@ import java.io.PrintStream;
  * @date 01/01/2026
  */
 public class IntLiteral extends AbstractExpr {
-    public int getValue() {
+    public long getValue() {
         return value;
     }
 
-    private int value;
+    private long value;
 
-    public IntLiteral(int value) {
+    public IntLiteral(long value) {
         this.value = value;
     }
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
-                if (this.getValue() > Integer.MAX_VALUE || this.getValue() < Integer.MIN_VALUE) {
-                    throw new ContextualError("Integer literal out of bounds", this.getLocation());
-                }
                 Type type = compiler.environmentType.INT;
                 this.setType(type);
                 return type;
@@ -50,7 +45,7 @@ public class IntLiteral extends AbstractExpr {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print(Integer.toString(value));
+        s.print(Long.toString(value));
     }
 
     @Override
@@ -63,14 +58,8 @@ public class IntLiteral extends AbstractExpr {
         // leaf node => nothing to do
     }
 
-    // @Override
-    // protected void codeGenPrint(DecacCompiler compiler) {
-    //     compiler.addInstruction(new LOAD(new ImmediateInteger(value), Register.R1));
-    //     compiler.addInstruction(new WINT());
-    // }
-
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
-        compiler.addInstruction(new LOAD(new ImmediateInteger(value), target));
+        compiler.addInstruction(new LOAD(new ImmediateInteger((int) value), target));
     }
 }
