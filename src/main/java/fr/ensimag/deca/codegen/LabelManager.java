@@ -9,9 +9,14 @@ import fr.ensimag.ima.pseudocode.Label;
  */
 public class LabelManager {
     private int ifCount = 0;
+    private int boolOpCount = 0;
 
     public int getNextIfLabel() {
         return ifCount++;
+    }
+
+    public int getNextBoolOpLabel() {
+        return boolOpCount++;
     }
 
     public Label ifEndLabel(int ifNumber) {
@@ -20,6 +25,10 @@ public class LabelManager {
 
     public Label ifElseLabel(int ifNumber) {
         return new Label("IF_ELSE_" + ifNumber);
+    }
+
+    public Label boolOpEndLabel(int boolOpNumber) {
+        return new Label("BOOL_OP_END_" + boolOpNumber);
     }
 
     
