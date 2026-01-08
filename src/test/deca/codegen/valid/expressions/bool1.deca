@@ -1,0 +1,15 @@
+// Description:
+//      Test de l'opérateur Not avec un littéral booléen.
+//      Vérifie que la condition est correctement inversée.
+//
+// Resultats:
+//      true
+//
+// Historique:
+//      cree le 08/01/2026
+
+{
+    if (!false) {
+        print("true");
+    } 
+}
