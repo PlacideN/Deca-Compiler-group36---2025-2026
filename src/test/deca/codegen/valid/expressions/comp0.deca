@@ -1,0 +1,15 @@
+// Description:
+//      Test d'égalité simple entre des entiers.
+//
+// Resultats:
+//      true
+//
+// Historique:
+//      cree le 08/01/2026
+
+{
+    int x = 5;
+    if (x == 5) {
+        println("true");
+    }
+}

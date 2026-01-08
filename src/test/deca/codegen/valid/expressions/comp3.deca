@@ -1,0 +1,17 @@
+// Description:
+//      Test de comparaison numérique avec un entier et un flottant.
+//      Vérifie que x est convertit en flottant avant la comparaison.
+//
+// Resultats:
+//      true
+//
+// Historique:
+//      cree le 08/01/2026
+
+{
+    int x = 1;
+    float f = 1.0;
+    if (x == f) {
+        println("true");
+    }
+}

@@ -1,0 +1,16 @@
+// Description:
+//      Test des opérateurs de comparaison >= et <=.
+//
+// Resultats:
+//      true
+//
+// Historique:
+//      cree le 08/01/2026
+
+{
+    if (1 <= 2) {
+        if (3 >= 3) {
+            println("true");
+        }
+    }
+}
