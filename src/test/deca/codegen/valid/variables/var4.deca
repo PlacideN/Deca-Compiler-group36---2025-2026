@@ -1,0 +1,17 @@
+// Description:
+//    Test de l'affectation en tant qu'expression.
+//    Vérifie que le résultat d'une affectation peut être utilisé
+//    comme rvalue pour une autre affectation.
+//
+// Resultats:
+//      5
+//
+// Historique:
+//      cree le 08/01/2026
+
+
+{
+    int x, y;
+    x = (y = 5);
+    println(x);
+}

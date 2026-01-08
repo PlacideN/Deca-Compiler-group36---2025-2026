@@ -1,0 +1,18 @@
+// Description:
+//      Déclare plusieurs variables entières et les affiche.
+//      Vérifie que chaque variable reçoit une adresse unique et 
+//      que le pointeur de stack est correctement incrémenté.
+//
+// Resultats:
+//      1
+//      2
+//
+// Historique:
+//      cree le 08/01/2026
+
+{
+   int x = 1;
+   int y = 2;
+   println(x);
+   println(y);
+}
