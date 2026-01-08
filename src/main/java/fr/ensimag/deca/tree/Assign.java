@@ -1,12 +1,15 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
  * Assignment, i.e. lvalue = expr.
@@ -52,7 +55,14 @@ public class Assign extends AbstractBinaryExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        throw new UnsupportedOperationException("Not yet implemented");
+        //load the value of the right operand into target
+        this.getRightOperand().codeGenExpr(compiler, target); 
+
+        ExpDefinition def = this.getLeftOperand().getExpDefinition();
+        DAddr addr = def.getOperand(); // get the address on the stack
+        
+        // store the value in the address
+        compiler.addInstruction(new STORE(target, addr));
     }
 
 }
