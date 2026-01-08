@@ -6,6 +6,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
 
 /**
  *
@@ -57,9 +58,23 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
         return null;
     }
 
+    /**
+     * Generate the comparison code (Scc instruction) for the comparison operator (<, <=, >, >=).
+     * @param compiler
+     * @param target register used to store the result
+     */
+    protected abstract void codeGenOpCmp(DecacCompiler compiler, GPRegister target);
+
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.getLeftOperand().codeGenExpr(compiler, target);
+        GPRegister temp = compiler.getRegisterManager().allocateRegister();
+        this.getRightOperand().codeGenExpr(compiler, temp);
+
+        compiler.addInstruction(new CMP(temp, target));
+        compiler.getRegisterManager().freeRegister();
+
+        this.codeGenOpCmp(compiler, target); // adds specific Scc instruction
     }
 
 }
