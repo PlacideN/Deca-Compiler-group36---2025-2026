@@ -1,0 +1,14 @@
+// Description:
+//      Test de débordement d'un entier.
+//      Vérifie que le compilateur rejette un nombre supérieur à 2^31 - 1 
+//      lors de l'analyse contextuelle.
+//
+// Resultats:
+//    Ligne 13: Erreur de syntaxe (Integer literal out of range)
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+   int x = 3000000000;
+}

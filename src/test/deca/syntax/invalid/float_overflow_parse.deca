@@ -1,0 +1,13 @@
+// Description:
+//      Test de débordement d'un flottant.
+//      Vérifie que le compilateur rejette un flottant trop grand (isInfinite)
+//
+// Resultats:
+//      Ligne 12: Erreur de syntaxe (Float literal overflow)
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+    float x = 1.0e40; 
+}
