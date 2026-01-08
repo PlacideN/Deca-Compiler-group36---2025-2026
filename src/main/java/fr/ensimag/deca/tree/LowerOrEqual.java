@@ -1,5 +1,8 @@
 package fr.ensimag.deca.tree;
 
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.SLE;
 
 /**
  *
@@ -15,6 +18,11 @@ public class LowerOrEqual extends AbstractOpIneq {
     @Override
     protected String getOperatorName() {
         return "<=";
+    }
+
+    @Override
+    protected void codeGenOpCmp(DecacCompiler compiler, GPRegister target) {
+        compiler.addInstruction(new SLE(target));
     }
 
 }
