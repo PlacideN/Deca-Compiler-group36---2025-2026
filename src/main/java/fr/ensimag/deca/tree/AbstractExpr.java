@@ -164,7 +164,7 @@ public abstract class AbstractExpr extends AbstractInst {
             throw new DecacInternalError("Type " + this.getType() + " should have been handled by a specific override or caught in contextual verification.");
         }
 
-        compiler.getRegisterManager().freeRegister();
+        compiler.getRegisterManager().freeRegister(res);
     }
 
     @Override
@@ -172,7 +172,7 @@ public abstract class AbstractExpr extends AbstractInst {
         // use a temporary register to evaluate the expression
         GPRegister temp = compiler.getRegisterManager().allocateRegister();
         this.codeGenExpr(compiler, temp);
-        compiler.getRegisterManager().freeRegister();
+        compiler.getRegisterManager().freeRegister(temp);
     }
     
 

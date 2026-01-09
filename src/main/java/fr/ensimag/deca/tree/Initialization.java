@@ -51,10 +51,10 @@ public class Initialization extends AbstractInitialization {
 
     @Override
     protected void codeGenInit(DecacCompiler compiler, DAddr address) {
-        GPRegister r = compiler.getRegisterManager().allocateRegister();
-        this.expression.codeGenExpr(compiler, r);
-        compiler.addInstruction(new STORE(r, address));
-        compiler.getRegisterManager().freeRegister();
+        GPRegister temp = compiler.getRegisterManager().allocateRegister();
+        this.expression.codeGenExpr(compiler, temp);
+        compiler.addInstruction(new STORE(temp, address));
+        compiler.getRegisterManager().freeRegister(temp);
     }
 
     @Override

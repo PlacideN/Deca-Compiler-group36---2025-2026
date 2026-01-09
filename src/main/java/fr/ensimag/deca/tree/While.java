@@ -53,7 +53,7 @@ public class While extends AbstractInst {
         condition.codeGenExpr(compiler, cond);
         compiler.addInstruction(new CMP(0, cond));
         compiler.addInstruction(new BEQ(endLabel)); // when condition is false, exit while loop
-        compiler.getRegisterManager().freeRegister();
+        compiler.getRegisterManager().freeRegister(cond);
 
         body.codeGenListInst(compiler);
         compiler.addInstruction(new BRA(startLabel));

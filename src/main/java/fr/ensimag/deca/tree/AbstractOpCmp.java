@@ -72,7 +72,7 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
         this.getRightOperand().codeGenExpr(compiler, temp);
 
         compiler.addInstruction(new CMP(temp, target));
-        compiler.getRegisterManager().freeRegister();
+        compiler.getRegisterManager().freeRegister(temp);
 
         this.codeGenOpCmp(compiler, target); // adds specific Scc instruction
     }

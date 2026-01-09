@@ -64,7 +64,7 @@ public class IfThenElse extends AbstractInst {
         GPRegister cond = compiler.getRegisterManager().allocateRegister();
         condition.codeGenExpr(compiler, cond);
         compiler.addInstruction(new CMP(0, cond));
-        compiler.getRegisterManager().freeRegister();
+        compiler.getRegisterManager().freeRegister(cond);
         compiler.addInstruction(new BEQ(elseLabel)); // move to else if condition is false
 
         // then
