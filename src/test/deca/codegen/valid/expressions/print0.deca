@@ -1,0 +1,13 @@
+// Description:
+//      Test minimaliste affichant une chaine de charactères.
+//
+// Resultats:
+//      Hello World
+//
+// Historique:
+//      cree le 09/01/2026
+
+{
+    print("Hello ");
+    println("World");
+}

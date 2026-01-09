@@ -1,0 +1,14 @@
+// Description:
+//      Test de print/println sans arguments.
+//
+// Resultats:
+//      
+//      texte a la ligne
+//
+// Historique:
+//      cree le 09/01/2026
+{
+    print();
+    println();
+    print("texte a la ligne");
+}
