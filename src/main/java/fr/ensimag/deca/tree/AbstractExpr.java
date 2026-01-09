@@ -15,9 +15,8 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
-import fr.ensimag.ima.pseudocode.instructions.WSTR;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
+import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
 
 
 /**
@@ -142,14 +141,18 @@ public abstract class AbstractExpr extends AbstractInst {
      *
      * @param compiler
      */
-    protected void codeGenPrint(DecacCompiler compiler) {
+    protected void codeGenPrint(DecacCompiler compiler, boolean printHex) {
         // WINT, WFLOAT, etc. instructions fetch the value from R1
         this.codeGenExpr(compiler, Register.R1);
 
         if (this.getType().isInt()) {
             compiler.addInstruction(new WINT());
         } else if (this.getType().isFloat()) {
-            compiler.addInstruction(new WFLOAT());
+            if (printHex) {
+                compiler.addInstruction(new WFLOATX());
+            } else {
+                compiler.addInstruction(new WFLOAT());
+            }
         } else {
             // String type doesn't have an expression to evaluate 
             // It is managed by StringLiteral directly
