@@ -44,14 +44,14 @@ public class DecacMain {
             System.exit(1);
         }
         if (options.getParallel()) {
-            // Nombre de threads à utiliser en parallèle
             int nbr_threads = Runtime.getRuntime().availableProcessors();
-            System.out.println("Compilation avec " + nbr_threads + " threads en parallèle.");
+            LOG.info("Compilation avec " + nbr_threads + " threads en parallèle.");
+            
             // Crée un pool de threads avec le nombre spécifié de threads
             ExecutorService executor = Executors.newFixedThreadPool(nbr_threads);
             // Results contient la liste des futurs résultats de compilation
             List<Future<Boolean>> results = new ArrayList<>();
-            // pour chaque fichier source
+            
             for (File source : options.getSourceFiles()) {
                 // on crée une tâche de compilation
                 DecacCompiler compiler = new DecacCompiler(options, source);

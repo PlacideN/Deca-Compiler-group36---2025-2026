@@ -40,6 +40,14 @@ public class CompilerOptions {
         return verification;
     }
 
+    public int getRegisterCount() {
+        return registerCount;
+    }
+
+    public boolean getNoCheck() {
+        return noCheck;
+    }
+
     public List<File> getSourceFiles() {
         return Collections.unmodifiableList(sourceFiles);
     }
@@ -49,6 +57,8 @@ public class CompilerOptions {
     private boolean printBanner = false;
     private boolean parse = false;
     private boolean verification = false;
+    private boolean noCheck = false;
+    private int registerCount = 16; // default = use all 16 registers R0...R15
     private List<File> sourceFiles = new ArrayList<File>();
 
     
@@ -58,7 +68,6 @@ public class CompilerOptions {
             System.exit(1);
         }
 
-        // TODO: add missing -n -r X -w and -P
         for (int i = 0; i < args.length; i++) {
             String arg = args[i];
             if (arg.startsWith("-")) {
@@ -75,15 +84,37 @@ public class CompilerOptions {
                 case "-P": // parallel compilation
                     parallel = true;
                     break;
-                case "-d": // increase debug level
+                    case "-d": // increase debug level
                     debug++;
+                    break;
+                case "-n": // disable arithmetic and stack overflow runtime checks
+                    noCheck = true;
+                    break;
+                case "-r": // set a custom number of registers
+                    if (i + 1 < args.length) {
+                        try {
+                            int registerCount = Integer.parseInt(args[++i]);
+                            if (registerCount < 4 || registerCount > 16) {
+                                throw new CLIException("Invalid number of registers: " + registerCount + " (expected 4 to 16).");
+                            }
+                            this.registerCount = registerCount;
+                        } catch (NumberFormatException e) {
+                            throw new CLIException("Register count " + args[i] + " is not a valid integer.");
+                        }
+                    } else {
+                        throw new CLIException("Missing register count after -r option.");
+                    } 
                     break;
                 default:
                     throw new CLIException("Unknown option: " + arg);
                 }
             } else {
                 if (arg.endsWith(".deca")){
-                    sourceFiles.add(new File(arg));
+                    File file = new File(arg).getAbsoluteFile();
+                    if (!sourceFiles.contains(file)) { // don't compile the same file twice
+                        sourceFiles.add(file);
+                    }
+                        
                 } else {
                     throw new CLIException("Invalid file extension: " + arg + " (expected .deca)");
                 }
@@ -121,7 +152,7 @@ public class CompilerOptions {
 
     protected void displayUsage() {
         PrintStream err = System.err;
-        err.println("Usage: decac [[-p | -v] [-d]* <.deca source files>] | [-b]");
+        err.println("Usage: decac [[-p | -v] [-n] [-r <number>] [-d]* <.deca source files>] | [-b]");
         err.println("");
         err.println("OPTIONS:");
         err.println("  -b          : Display team banner.");
@@ -129,12 +160,12 @@ public class CompilerOptions {
         err.println("                (Print decompiled program if program is syntactically valid).");
         err.println("  -v          : Run lexer, parser, and contextual verification and stop.");
         err.println("                (No output if program is valid).");
-        err.println("  -d          : Enable debug. ");
+        err.println("  -n          : Disable arithmetic and stack overflow runtime checks.");
+        err.println("  -r <number> : Use a custom number of registers for code generation (4 to 16).");
+        err.println("  -d          : Enable debug trace. Use multiple times to increase verbosity.");
         err.println("                Repeat option for more traces (INFO, DEBUG, TRACE, ALL).");
+        err.println("  -P          : Enable parallel compilation of source files.");
         err.println("");
         err.println("  Options '-p' and '-v' cannot be used together.");
-        err.println("  -P          : Enable parallel compilation of source files.");
-
-        // TODO: Add the missing options when implemented
     }
 }
