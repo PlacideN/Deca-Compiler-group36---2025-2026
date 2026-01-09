@@ -45,8 +45,10 @@ public class Modulo extends AbstractOpArith {
     @Override
     protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src) {
         compiler.addInstruction(new REM(src, dest));
-        Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.MOD_BY_ZERO);
-        compiler.addInstruction(new BOV(errorLabel));
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.MOD_BY_ZERO);
+            compiler.addInstruction(new BOV(errorLabel));
+        }
     }
 
 }

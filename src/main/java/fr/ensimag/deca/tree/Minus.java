@@ -31,8 +31,12 @@ public class Minus extends AbstractOpArith {
     @Override
     protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src){
         compiler.addInstruction(new SUB(src, dest));
-        Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.OVERFLOW);
-        compiler.addInstruction(new BOV(errorLabel));
+        if (this.getType().isFloat()) {
+            if (!compiler.getCompilerOptions().getNoCheck()) {
+                Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.OVERFLOW);
+                compiler.addInstruction(new BOV(errorLabel));
+            }
+        }
     }
     
 }

@@ -31,7 +31,11 @@ public class Plus extends AbstractOpArith {
     @Override
     protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src) {
         compiler.addInstruction(new ADD(src, dest));
-        Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.OVERFLOW);
-        compiler.addInstruction(new BOV(errorLabel));
+        if (this.getType().isFloat()) {
+            if (!compiler.getCompilerOptions().getNoCheck()) {
+                Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.OVERFLOW);
+                compiler.addInstruction(new BOV(errorLabel));
+            }
+        }
     }
 }

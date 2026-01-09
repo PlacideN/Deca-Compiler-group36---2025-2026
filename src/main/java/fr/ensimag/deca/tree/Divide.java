@@ -33,12 +33,16 @@ public class Divide extends AbstractOpArith {
     protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src) {
         if (getLeftOperand().getType().isInt() && getRightOperand().getType().isInt()) {
             compiler.addInstruction(new QUO(src, dest));
-            Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.DIV_BY_ZERO);
-            compiler.addInstruction(new BOV(errorLabel));
+            if (!compiler.getCompilerOptions().getNoCheck()) {
+                Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.DIV_BY_ZERO);
+                compiler.addInstruction(new BOV(errorLabel));
+            }
         } else {
             compiler.addInstruction(new DIV(src, dest)); // only works for floats
-            Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.OVERFLOW);
-            compiler.addInstruction(new BOV(errorLabel));
+            if (!compiler.getCompilerOptions().getNoCheck()) {
+                Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.OVERFLOW);
+                compiler.addInstruction(new BOV(errorLabel));
+            }
         }
     }
 
