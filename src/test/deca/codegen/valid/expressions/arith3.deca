@@ -1,0 +1,15 @@
+// Description:
+//      Test d'une imbrication de signe opposé.
+//
+// Resultats:
+//      -10
+//      10
+//
+// Historique:
+//      cree le 09/01/2026
+
+{
+    int x = 10;
+    println(-x);
+    println(-(-x));
+}

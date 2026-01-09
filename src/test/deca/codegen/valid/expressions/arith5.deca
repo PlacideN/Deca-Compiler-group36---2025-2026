@@ -1,0 +1,23 @@
+// Description:
+//      Test des opérations élémentaires avec des entiers.
+//
+// Resultats:
+//      4
+//      12
+//      10
+//      10
+//
+// Historique:
+//      cree le 09/01/2026
+
+{
+    int x = 0;
+    x = x + 4;
+    println(x);
+    x = x * 3;
+    println(x);
+    x = x - 2;
+    println(x);
+    x = x / 1;
+    println(x);
+}
