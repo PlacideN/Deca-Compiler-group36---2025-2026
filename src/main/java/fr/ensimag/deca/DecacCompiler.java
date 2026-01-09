@@ -3,6 +3,7 @@ package fr.ensimag.deca;
 import fr.ensimag.deca.codegen.LabelManager;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.codegen.StackManager;
+import fr.ensimag.deca.codegen.RuntimeErrorManager;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.syntax.DecaLexer;
 import fr.ensimag.deca.syntax.DecaParser;
@@ -149,6 +150,7 @@ public class DecacCompiler {
     private final RegisterManager registerManager = new RegisterManager();
     private final StackManager stackManager = new StackManager();
     private final LabelManager labelManager = new LabelManager();
+    private final RuntimeErrorManager errorManager = new RuntimeErrorManager(this, labelManager);
 
     /**
      * Get the register manager.
@@ -169,6 +171,13 @@ public class DecacCompiler {
      */
     public LabelManager getLabelManager() {
         return this.labelManager;
+    }
+
+    /**
+     * Get the runtime error manager.
+     */
+    public RuntimeErrorManager getRuntimeErrorManager() {
+        return this.errorManager;
     }
 
     /**
@@ -247,6 +256,9 @@ public class DecacCompiler {
         addComment("start main program");
         prog.codeGenProgram(this);
         addComment("end main program");
+        
+        this.errorManager.generateErrorHandlers(); // generate error assembly code
+
         LOG.debug("Generated assembly code:" + nl + program.display());
         LOG.info("Output file assembly file is: " + destName);
 

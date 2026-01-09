@@ -4,6 +4,7 @@ import fr.ensimag.ima.pseudocode.Label;
 
 /**
  * Manager for unique labels used in control flow statements (if, while).
+ * 
  * @author gl36
  * @date 06/01/2026
  */
@@ -42,5 +43,9 @@ public class LabelManager {
 
     public Label whileEndLabel(int whileNumber) {
         return new Label("WHILE_END_" + whileNumber);
+    }
+
+    public Label runtimeErrorLabel(String error) {
+        return new Label(error + "_error");
     }
 }
