@@ -6,9 +6,12 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.RFLOAT;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 
 import java.io.PrintStream;
 
@@ -46,6 +49,8 @@ public class ReadFloat extends AbstractReadExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
         compiler.addInstruction(new RFLOAT());
+        Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.IO);
+        compiler.addInstruction(new BOV(errorLabel));
         compiler.addInstruction(new LOAD(GPRegister.R1, target));
     }
 

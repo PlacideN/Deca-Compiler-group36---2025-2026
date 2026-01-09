@@ -1,0 +1,14 @@
+
+// Description:
+//    Test d'erreur de lecture.
+//    Vérifie que la saisie d'une valeur non entière déclenche l'erreur.
+//
+// Resultats:
+//    Error: Input/Output error
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    int x = readInt();
+}

@@ -1,0 +1,13 @@
+// Description:
+//    Test d'erreur de lecture.
+//    Vérifie que la saisie d'une valeur non flottante déclenche l'erreur.
+//
+// Resultats:
+//    Error: Input/Output error
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    float f = readFloat();
+}

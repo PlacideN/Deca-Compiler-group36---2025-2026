@@ -2,11 +2,14 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.RINT;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
@@ -48,6 +51,8 @@ public class ReadInt extends AbstractReadExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
         compiler.addInstruction(new RINT());
+        Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.IO);
+        compiler.addInstruction(new BOV(errorLabel));
         compiler.addInstruction(new LOAD(GPRegister.R1, target));
     }
 
