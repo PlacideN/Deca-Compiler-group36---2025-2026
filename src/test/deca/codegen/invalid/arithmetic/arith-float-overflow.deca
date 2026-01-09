@@ -1,0 +1,14 @@
+// Description:
+//    Test d'un débordement sur une opération arithmétique avec des flottants.
+//    Affiche un message d'erreur et s'arrête avec l'instruction ERROR.
+//    NB: un flottant peut stocker jusqu'à ≈ 3.4e38.
+//
+// Resultats:
+//    Error: Overflow during arithmetic operation
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    float f = 1e30 * 1e10;
+}

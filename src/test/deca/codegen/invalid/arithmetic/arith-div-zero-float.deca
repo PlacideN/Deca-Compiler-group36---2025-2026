@@ -1,0 +1,13 @@
+// Description:
+//    Test de division flottante par zéro.
+//    Affiche un message d'erreur et s'arrête avec l'instruction ERROR.
+//
+// Resultats:
+//    Error: Overflow during arithmetic operation 
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    float f = 10 / 0.0;
+}

@@ -1,0 +1,13 @@
+// Description:
+//    Test de calcul de modulo par zéro.
+//    Affiche un message d'erreur et s'arrête avec l'instruction ERROR.
+//
+// Resultats:
+//    Error: Modulo by zero
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    int x = 10 % 0;
+}
