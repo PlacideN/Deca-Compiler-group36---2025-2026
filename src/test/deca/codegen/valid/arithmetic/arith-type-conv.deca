@@ -1,0 +1,15 @@
+// Description:
+//    Test d'une opération arithmétique simple.
+//    Vérifie que 1 et 2 sont convertis en flottants avant l'addition (ConvFloat)
+//
+// Resultats:
+//    3.50000e+00
+//
+// Historique:
+//    cree le 09/01/2026
+
+
+{
+    float f = 1 + 0.5 + 2;
+    println(f);
+}

@@ -1,0 +1,15 @@
+// Description:
+//    Test l'initialisation d'une variable booléenne à partir d'une comparaison. 
+//    Vérifie que le booléen est manipulé comme 0 ou 1 par la machine.
+//
+// Resultats:
+//    true
+//
+// Historique:
+//    cree le 09/01/2026
+{
+    boolean b = (1 < 2);
+    if (b) { 
+        println("true");
+    }
+}

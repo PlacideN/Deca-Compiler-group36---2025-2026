@@ -1,0 +1,14 @@
+// Description:
+//    Test de déclaration de plusieurs variables.
+//    Vérifie que l'instruction ADDSP au début du code assembleur 
+//    correspond au nombre de variables déclarées (ici 10).
+//
+// Resultats: 
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    int x1, x2, x3, x4, x5, x6, x7, x8, x9;
+    float f;
+}
