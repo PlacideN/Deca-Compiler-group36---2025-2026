@@ -40,12 +40,6 @@ RETURN : 'return';
 THIS : 'this';
 TRUE : 'true';
 
-// Identificateurs
-fragment LETTER : 'a' .. 'z' | 'A' .. 'Z';
-fragment DIGIT : '0' .. '9';
-IDENT : (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
-
-INVALID_IDENT : DIGIT+ (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
 
 // Symboles spéciaux
 OPARENT : '('; // exemple : numéro 23 car c'est le 23 ème déclaré
@@ -80,11 +74,18 @@ fragment NUM : DIGIT+;
 fragment SIGN : '+' | '-';
 fragment EXP : ('E' | 'e') SIGN? NUM;
 fragment DEC : NUM '.' NUM;
-fragment FLOATDEC : (DEC | DEC EXP) ('F' | 'f')?;
+fragment FLOATDEC : (DEC | DEC EXP | NUM EXP) ('F' | 'f')?;
 fragment DIGITHEX : ('0' .. '9') | ('A' .. 'F') | ('a' .. 'f');
 fragment NUMHEX : DIGITHEX+;
 fragment FLOATHEX : ('0x' | '0X') NUMHEX '.' NUMHEX ('P' | 'p') SIGN NUM ('F' | 'f')?;
 FLOAT : FLOATDEC | FLOATHEX;
+
+// Identificateurs
+fragment LETTER : 'a' .. 'z' | 'A' .. 'Z';
+fragment DIGIT : '0' .. '9';
+IDENT : (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
+
+INVALID_IDENT : DIGIT+ (LETTER | '$' | '_') (LETTER | DIGIT | '$' | '_')*;
 
 // Chaines de caractères
 fragment STRING_CAR : ~( '"' | '\\' | '\r' | '\n');
@@ -109,7 +110,3 @@ INCLUDE : '#include' (' ')* '"' FILENAME '"' {
    String name = text.substring(first + 1, last);
    doInclude(name);
    };
-   
-
-
-// les numéros des tokens sont numérotés dans l'ordre de la déclaration
