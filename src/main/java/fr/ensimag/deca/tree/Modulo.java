@@ -2,8 +2,11 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.ima.pseudocode.instructions.REM;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -42,6 +45,8 @@ public class Modulo extends AbstractOpArith {
     @Override
     protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src) {
         compiler.addInstruction(new REM(src, dest));
+        Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.MOD_BY_ZERO);
+        compiler.addInstruction(new BOV(errorLabel));
     }
 
 }

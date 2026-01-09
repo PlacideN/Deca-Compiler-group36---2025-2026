@@ -1,8 +1,12 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.SUB;
+
 
 /**
  * @author gl36
@@ -27,6 +31,8 @@ public class Minus extends AbstractOpArith {
     @Override
     protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src){
         compiler.addInstruction(new SUB(src, dest));
+        Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.OVERFLOW);
+        compiler.addInstruction(new BOV(errorLabel));
     }
     
 }
