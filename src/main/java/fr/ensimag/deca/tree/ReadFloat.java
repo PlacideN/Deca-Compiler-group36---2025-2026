@@ -7,6 +7,8 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.RFLOAT;
 
 import java.io.PrintStream;
 
@@ -43,7 +45,8 @@ public class ReadFloat extends AbstractReadExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        throw new UnsupportedOperationException("Not yet implemented");
+        compiler.addInstruction(new RFLOAT());
+        compiler.addInstruction(new LOAD(GPRegister.R1, target));
     }
 
 }

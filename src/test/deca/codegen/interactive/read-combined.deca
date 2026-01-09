@@ -1,0 +1,14 @@
+// Description:
+//    Test d'une lecture au clavier combinée.
+//    Vérifie que le contenu du registre R1 est déchargé avant qu'il ne soit 
+//    réecrit par l'instruction de lecture suivante.
+//
+// Resultats:
+//    Affiche la valeur flottante résultante de la somme des deux entrées.
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    println(readInt() + readInt());
+}

@@ -7,6 +7,10 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.RINT;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
+import fr.ensimag.ima.pseudocode.Register;
 
 import java.io.PrintStream;
 
@@ -43,7 +47,8 @@ public class ReadInt extends AbstractReadExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        throw new UnsupportedOperationException("Not yet implemented");
+        compiler.addInstruction(new RINT());
+        compiler.addInstruction(new LOAD(GPRegister.R1, target));
     }
 
 }

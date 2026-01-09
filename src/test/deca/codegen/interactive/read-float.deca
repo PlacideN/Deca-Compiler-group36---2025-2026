@@ -1,0 +1,13 @@
+// Description:
+//    Test simple de ReadFloat
+//
+// Resultats:
+//    Affiche la valeur flottante entrée au clavier.
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    float f = readFloat();
+    println(f);
+}

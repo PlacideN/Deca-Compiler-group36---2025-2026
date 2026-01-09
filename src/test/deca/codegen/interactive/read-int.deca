@@ -1,0 +1,13 @@
+// Description:
+//    Test simple de ReadInt.
+//
+// Resultats:
+//    Affiche la valeur entière entrée au clavier.
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    int x = readInt();
+    println(x);
+}
