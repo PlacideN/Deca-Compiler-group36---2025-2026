@@ -1,0 +1,16 @@
+// Description:
+//    Test du débordement sur la stack.
+//    Vérfie avec l'option -r 4 que le code généré contient des instructions PUSH et POP.
+//    R2 => 1 + 2
+//    R3 => 3 + 4 => PUSH car plus de registres disponibles.
+//    
+// Resultats:
+//    26
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    int x = (1 + 2) + (3 + 4) + (5 + 6) + (7 + 8);
+    println(x);
+}

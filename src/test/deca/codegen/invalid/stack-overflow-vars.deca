@@ -1,0 +1,14 @@
+// Description:
+//    Test du débordement de la stack avec des déclarations de variables.
+//    Pour réduire la stack utiliser ima -p 4 (comme TSTO vaut 5 ici)
+//    Affiche un message d'erreur et s'arrête avec l'instruction ERROR.
+//
+// Resultats:
+//    Error: Stack overflow
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    int a, b, c, d, e;
+}

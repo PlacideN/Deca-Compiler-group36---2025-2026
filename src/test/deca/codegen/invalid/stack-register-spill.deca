@@ -1,0 +1,15 @@
+// Description:
+//    Test du débordement de la stack avec un débordement des registres sur la stack.
+//    Compiler avec decac -r 4 => [R0...R3]
+//    Exécuter avec ima -p 4
+//    Affiche un message d'erreur et s'arrête avec l'instruction ERROR.
+//
+// Resultats:
+//    Error: Stack overflow
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    int x = (1 + (2 + (3 + (4 + (5 + 6)))));
+}
