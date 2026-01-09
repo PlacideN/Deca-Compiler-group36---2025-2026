@@ -52,6 +52,9 @@ public class DecacCompiler {
         super();
         this.compilerOptions = compilerOptions;
         this.source = source;
+
+        this.registerManager = new RegisterManager(this, compilerOptions.getRegisterCount());
+        this.errorManager = new RuntimeErrorManager(this, labelManager);
     }
 
     /**
@@ -133,6 +136,7 @@ public class DecacCompiler {
     
     private final CompilerOptions compilerOptions;
     private final File source;
+
     /**
      * The main program. Every instruction generated will eventually end up here.
      */
@@ -147,10 +151,12 @@ public class DecacCompiler {
         return symbolTable.create(name);
     }
 
-    private final RegisterManager registerManager = new RegisterManager();
+    // initialized in the constructor due to runtime dependencies (compilerOptions)
+    private final RegisterManager registerManager;
+    private final RuntimeErrorManager errorManager;
+
     private final StackManager stackManager = new StackManager();
     private final LabelManager labelManager = new LabelManager();
-    private final RuntimeErrorManager errorManager = new RuntimeErrorManager(this, labelManager);
 
     /**
      * Get the register manager.
