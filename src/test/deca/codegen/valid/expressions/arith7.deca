@@ -1,0 +1,16 @@
+// Description:
+//    Test de l'opérateur modulo.
+//    Vérifie le calcul du reste de la division entière.
+//
+// Resultats:
+//    1
+//    0
+//
+// Historique:
+//      cree le 09/01/2026
+
+{
+    int x = 10;
+    println(x % 3);
+    println(x % 5);
+}
