@@ -7,16 +7,16 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
-import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.WFLOAT;
 import fr.ensimag.ima.pseudocode.instructions.WINT;
 import fr.ensimag.ima.pseudocode.instructions.WFLOATX;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 
 /**
@@ -142,8 +142,12 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler, boolean printHex) {
+        // use a an available register (starting from R2) to store the expression result
+        GPRegister res = compiler.getRegisterManager().allocateRegister();
+        this.codeGenExpr(compiler, res);
+
         // WINT, WFLOAT, etc. instructions fetch the value from R1
-        this.codeGenExpr(compiler, Register.R1);
+        compiler.addInstruction(new LOAD(res, GPRegister.R1));
 
         if (this.getType().isInt()) {
             compiler.addInstruction(new WINT());
@@ -159,6 +163,8 @@ public abstract class AbstractExpr extends AbstractInst {
             // => Should never happen if contextual verification is correct
             throw new DecacInternalError("Type " + this.getType() + " should have been handled by a specific override or caught in contextual verification.");
         }
+
+        compiler.getRegisterManager().freeRegister();
     }
 
     @Override
