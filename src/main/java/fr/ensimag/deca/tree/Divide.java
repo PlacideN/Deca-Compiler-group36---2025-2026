@@ -27,11 +27,11 @@ public class Divide extends AbstractOpArith {
     }
 
     @Override
-    protected void codeGenOpArith(DecacCompiler compiler, GPRegister leftReg, GPRegister rightReg) {
+    protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src) {
         if (getLeftOperand().getType().isInt() && getRightOperand().getType().isInt()) {
-            compiler.addInstruction(new QUO(leftReg, rightReg));
+            compiler.addInstruction(new QUO(src, dest));
         } else {
-            compiler.addInstruction(new DIV(leftReg, rightReg)); // only works for floats
+            compiler.addInstruction(new DIV(src, dest)); // only works for floats
         }
     }
 
