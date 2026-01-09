@@ -3,8 +3,13 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType;
 import fr.ensimag.ima.pseudocode.IMAProgram;
-import fr.ensimag.ima.pseudocode.instructions.*;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.HALT;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
+import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -52,11 +57,18 @@ public class Program extends AbstractProgram {
         compiler.setProgram(init);
 
         int stackSize = compiler.getStackManager().getStackSize();
+        if (!compiler.getCompilerOptions().getNoCheck()) {
+            int tsto = compiler.getRegisterManager().getMaxTempStackUsage() + stackSize;
+            if (tsto > 0) {
+                compiler.addInstruction(new TSTO(tsto));
+                Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.STACK_OVERFLOW);
+                compiler.addInstruction(new BOV(errorLabel));
+            }
+        }
         if (stackSize > 0) {
             compiler.addInstruction(new ADDSP(stackSize));
         }
 
-        // TODO: add TSTO stack overflow
 
         init.append(body);
     }
