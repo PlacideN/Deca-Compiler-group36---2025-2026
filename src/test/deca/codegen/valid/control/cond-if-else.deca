@@ -1,0 +1,19 @@
+// Description:
+//    Test d'un if/else simple.
+//    Vérifie l'évaluation d'une condition booléenne et le saut du bloc else.
+//
+// Resultats:
+//    then
+//    end
+//
+// Historique:
+//    cree le 08/01/2026
+
+{
+    if (true) {
+        println("then");
+    } else {
+        println("else");
+    }
+    println("end");
+}

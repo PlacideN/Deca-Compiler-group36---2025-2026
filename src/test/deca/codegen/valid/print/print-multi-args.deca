@@ -1,0 +1,15 @@
+// Description:
+//    Test de print avec plusieurs arguments de types differents.
+//    Vérifie la gestion des listes d'expressions dans print.
+//
+// Resultats:
+//    x peut s'ecrire: 10 ou 1.00000e+01
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    int x = 10;
+    float f = 10.0;
+    println("x peut s'ecrire: ", x, " ou ", f);
+}

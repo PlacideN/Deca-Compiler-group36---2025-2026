@@ -1,0 +1,14 @@
+// Description:
+//    Test de la priorité naturelle des opérateurs et priorité forcée par des parenthèses.
+//
+// Resultats:
+//    7
+//    9
+//
+// Historique:
+//    cree le 06/01/2026
+
+{
+    println(1 + 2 * 3);
+    println((1 + 2) * 3);
+}

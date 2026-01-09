@@ -1,14 +1,14 @@
 // Description:
-//      Test des opérations élémentaires avec des entiers.
+//    Test des opérations arithmétiques de base (+, -, *, /) sur les entiers.
 //
 // Resultats:
-//      4
-//      12
-//      10
-//      10
+//    4
+//    12
+//    10
+//    10
 //
 // Historique:
-//      cree le 09/01/2026
+//    cree le 09/01/2026
 
 {
     int x = 0;

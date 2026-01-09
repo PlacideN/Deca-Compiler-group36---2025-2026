@@ -1,0 +1,16 @@
+// Description:
+//    Test de l'affectation en tant qu'expression (x = (y = 5)).
+//    Vérifie que l'affectation laisse son résultat dans un registre
+//    NB: Vérifie la réservation correcte de la stack (ADDSP #2) pour x et y.
+//
+// Resultats:
+//    5
+//
+// Historique:
+//    cree le 08/01/2026
+
+{
+    int x, y;
+    x = (y = 5);
+    println(x);
+}

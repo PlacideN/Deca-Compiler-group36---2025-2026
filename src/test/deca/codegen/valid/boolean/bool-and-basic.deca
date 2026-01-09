@@ -1,0 +1,16 @@
+// Description:
+//    Test des littéraux booléens (true/false).
+//    Vérifie que les littéraux sont correctement évalués à l'aide d'une 
+//    structure ifThenElse.
+//
+// Resultats:
+//    true
+//
+// Historique:
+//    cree le 08/01/2026
+
+{
+    if (true && true) { 
+        println("true"); 
+    } 
+}

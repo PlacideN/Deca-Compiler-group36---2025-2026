@@ -1,0 +1,15 @@
+// Description:
+//    Test de l'affectation simple comme instruction.
+//    Déclare une variable entière non initialisée puis lui affecte une valeur et l'affiche.
+//
+// Resultats:
+//    36
+//
+// Historique:
+//    cree le 08/01/2026
+
+{
+   int x;
+   x = 36;
+   println(x);
+}

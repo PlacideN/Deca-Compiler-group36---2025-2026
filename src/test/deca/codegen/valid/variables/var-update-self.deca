@@ -1,0 +1,14 @@
+// Description:
+//    Charge une valeur, l'incrémente et la sauvegarde (x = x + 1).
+//
+// Resultats:
+//    2
+//
+// Historique:
+//    cree le 08/01/2026
+
+{
+    int x = 1;
+    x = x + 1;
+    println(x);
+}

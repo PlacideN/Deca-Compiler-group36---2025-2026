@@ -1,14 +1,14 @@
 // Description:
-//      Test des opérations élémentaires avec des flottants.
+//    Test des opérations arithmétiques de base (+, -, *, /) sur les flottants.
 //
 // Resultats:
-//      4.00000e+00
-//      1.20000e+01
-//      1.00000e+01
-//      1.00000e-01
+//    4.00000e+00
+//    1.20000e+01
+//    1.00000e+01
+//    1.00000e-01
 //
 // Historique:
-//      cree le 09/01/2026
+//    cree le 09/01/2026
 
 {
     float f = 0;

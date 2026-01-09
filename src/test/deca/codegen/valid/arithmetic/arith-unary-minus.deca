@@ -1,12 +1,12 @@
 // Description:
-//      Test d'une imbrication de signe opposé.
+//    Test de l'opérateur UnaryMinus et de son imbrication
 //
 // Resultats:
-//      -10
-//      10
+//    -10
+//    10
 //
 // Historique:
-//      cree le 09/01/2026
+//    cree le 09/01/2026
 
 {
     int x = 10;

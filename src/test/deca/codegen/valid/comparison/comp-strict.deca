@@ -1,11 +1,11 @@
 // Description:
-//      Test des opérateurs de comparaison stricte.
+//    Test des opérateurs de comparaison stricte (< et >).
 //
 // Resultats:
-//      true
+//    true
 //
 // Historique:
-//      cree le 08/01/2026
+//    cree le 08/01/2026
 
 {
     if (1 < 2) {

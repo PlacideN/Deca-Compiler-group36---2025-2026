@@ -1,0 +1,16 @@
+// Description:
+//    Test de print/println sans arguments.
+//    Vérifie que print() est ignoré et println() saute une ligne.
+//
+// Resultats:
+//      
+//    texte a la ligne
+//
+// Historique:
+//    cree le 09/01/2026
+
+{
+    print();
+    println();
+    print("texte a la ligne");
+}

@@ -1,11 +1,11 @@
 // Description:
-//      Test de l'opérateur NotEquals
+//    Test de l'opérateur NotEquals (!=).
 //
 // Resultats:
-//      false
+//    false
 //
 // Historique:
-//      cree le 08/01/2026
+//    cree le 08/01/2026
 
 {
     if (1 != 1) {

@@ -1,13 +1,13 @@
 // Description:
-//      Test d'une boucle while avec une boucle if imbriquée
-//      Vérfie l'ajout des labels associés à chaque structure logique.
+//    Test d'une boucle while avec une boucle if/else imbriquée
+//    Vérifie que le LabelManager génère des labels uniques pour chque structure.
 //
 // Resultats:
-//      1 est impair
-//      2 est pair
+//    1 est impair
+//    2 est pair
 //
 // Historique:
-//      cree le 09/01/2026
+//    cree le 09/01/2026
 
 {
     int i = 1;

@@ -1,0 +1,15 @@
+// Description:
+//    Test de l'opérateur Or avec des littéraux booléens. 
+//    Vérifie que la condition est évaluée paresseusement de gauche à droite.
+//
+// Resultats:
+//    true
+//
+// Historique:
+//    cree le 08/01/2026
+
+{
+    if (true || false) { 
+        println("true"); 
+    } 
+}
