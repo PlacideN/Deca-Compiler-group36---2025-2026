@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.instructions.DIV;
+import fr.ensimag.ima.pseudocode.instructions.QUO;
 
 /**
  *
@@ -27,7 +28,11 @@ public class Divide extends AbstractOpArith {
 
     @Override
     protected void codeGenOpArith(DecacCompiler compiler, GPRegister leftReg, GPRegister rightReg) {
-        compiler.addInstruction(new DIV(leftReg, rightReg));
+        if (getLeftOperand().getType().isInt() && getRightOperand().getType().isInt()) {
+            compiler.addInstruction(new QUO(leftReg, rightReg));
+        } else {
+            compiler.addInstruction(new DIV(leftReg, rightReg)); // only works for floats
+        }
     }
 
 }
