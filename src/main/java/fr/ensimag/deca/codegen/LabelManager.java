@@ -10,6 +10,7 @@ import fr.ensimag.ima.pseudocode.Label;
 public class LabelManager {
     private int ifCount = 0;
     private int boolOpCount = 0;
+    private int whileCount = 0;
 
     public int getNextIfLabel() {
         return ifCount++;
@@ -17,6 +18,10 @@ public class LabelManager {
 
     public int getNextBoolOpLabel() {
         return boolOpCount++;
+    }
+
+    public int getNextWhileLabel() {
+        return whileCount++;
     }
 
     public Label ifEndLabel(int ifNumber) {
@@ -31,5 +36,11 @@ public class LabelManager {
         return new Label("BOOL_OP_END_" + boolOpNumber);
     }
 
-    
+    public Label whileStartLabel(int whileNumber) {
+        return new Label("WHILE_BEGIN_" + whileNumber);
+    }
+
+    public Label whileEndLabel(int whileNumber) {
+        return new Label("WHILE_END_" + whileNumber);
+    }
 }

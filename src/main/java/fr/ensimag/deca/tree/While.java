@@ -6,7 +6,12 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.codegen.LabelManager;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -36,7 +41,23 @@ public class While extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+        LabelManager lm = compiler.getLabelManager();
+        int index = lm.getNextWhileLabel();
+        Label startLabel = lm.whileStartLabel(index);
+        Label endLabel = lm.whileEndLabel(index);
+
+        compiler.addLabel(startLabel);
+
+        // evaluate condition
+        GPRegister cond = compiler.getRegisterManager().allocateRegister();
+        condition.codeGenExpr(compiler, cond);
+        compiler.addInstruction(new CMP(0, cond));
+        compiler.addInstruction(new BEQ(endLabel)); // when condition is false, exit while loop
+        compiler.getRegisterManager().freeRegister();
+
+        body.codeGenListInst(compiler);
+        compiler.addInstruction(new BRA(startLabel));
+        compiler.addLabel(endLabel);
     }
 
     @Override
