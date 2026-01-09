@@ -4,12 +4,16 @@
 //
 // Resultats:
 //      true
+//      true
 //
 // Historique:
 //      cree le 08/01/2026
 
 {
     if (!false) {
-        print("true");
+        println("true");
     } 
+    if (!!true){
+        println("true");
+    }
 }

@@ -1,0 +1,23 @@
+// Description:
+//      Test d'une boucle while avec une boucle if imbriquée
+//      Vérfie l'ajout des labels associés à chaque structure logique.
+//
+// Resultats:
+//      1 est impair
+//      2 est pair
+//
+// Historique:
+//      cree le 09/01/2026
+
+{
+    int i = 1;
+    while (i <= 2) {
+        print(i, " est ");
+        if (i % 2 == 0) {
+            println("pair");
+        } else {
+            println("impair");
+        }
+        i = i + 1;
+    }
+}
