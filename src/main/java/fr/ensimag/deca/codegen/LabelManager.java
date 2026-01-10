@@ -26,23 +26,23 @@ public class LabelManager {
     }
 
     public Label ifEndLabel(int ifNumber) {
-        return new Label("IF_END_" + ifNumber);
+        return new Label("if_end_" + ifNumber);
     }
 
     public Label ifElseLabel(int ifNumber) {
-        return new Label("IF_ELSE_" + ifNumber);
+        return new Label("if_else_" + ifNumber);
     }
 
     public Label boolOpEndLabel(int boolOpNumber) {
-        return new Label("BOOL_OP_END_" + boolOpNumber);
+        return new Label("bool_op_end_" + boolOpNumber);
     }
 
     public Label whileStartLabel(int whileNumber) {
-        return new Label("WHILE_BEGIN_" + whileNumber);
+        return new Label("while_begin_" + whileNumber);
     }
 
     public Label whileEndLabel(int whileNumber) {
-        return new Label("WHILE_END_" + whileNumber);
+        return new Label("while_end_" + whileNumber);
     }
 
     public Label runtimeErrorLabel(String error) {
