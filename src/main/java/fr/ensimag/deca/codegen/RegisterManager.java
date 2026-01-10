@@ -40,7 +40,9 @@ public class RegisterManager {
             return GPRegister.getR(nextFree++);
         } else {
             GPRegister last = GPRegister.getR(maxRegisterIndex);
-            compiler.addInstruction(new PUSH(last)); // save the content of the last register on the stack
+            PUSH inst = new PUSH(last);
+            inst.setComment("Register overflow");
+            compiler.addInstruction(inst); // save the content of last on the stack
             currentTempStackUsage++;
             if (currentTempStackUsage > maxTempStackUsage) {
                 maxTempStackUsage = currentTempStackUsage;
@@ -54,7 +56,9 @@ public class RegisterManager {
      */
     public void freeRegister(GPRegister reg) {
         if (currentTempStackUsage > 0 && reg.getNumber() == maxRegisterIndex) {
-            compiler.addInstruction(new POP(reg));
+            POP inst = new POP(reg);
+            inst.setComment("Restoring " + reg + " from stack");
+            compiler.addInstruction(inst);
             currentTempStackUsage--;
         } else if (nextFree > 2) {
             nextFree--;

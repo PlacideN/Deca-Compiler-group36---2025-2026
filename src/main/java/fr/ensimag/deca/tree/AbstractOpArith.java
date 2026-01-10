@@ -48,6 +48,8 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
+        compiler.addComment("Binary arithmetic operation: " + this.getOperatorName());
+        
         this.getLeftOperand().codeGenExpr(compiler, target);
         GPRegister temp = compiler.getRegisterManager().allocateRegister();
         this.getRightOperand().codeGenExpr(compiler, temp);
@@ -58,7 +60,9 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
             // temp = last register holds the right op
             // target, allocated before temp was pushed on the stack during right op eval
             
-            compiler.addInstruction(new LOAD(temp, GPRegister.R0));
+            LOAD inst = new LOAD(temp, GPRegister.R0);
+            inst.setComment("Moving right operand to R0");
+            compiler.addInstruction(inst);
             compiler.getRegisterManager().freeRegister(temp);
 
             this.codeGenOpArith(compiler, target, GPRegister.R0);
