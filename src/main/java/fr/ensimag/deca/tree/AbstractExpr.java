@@ -142,6 +142,8 @@ public abstract class AbstractExpr extends AbstractInst {
      * @param compiler
      */
     protected void codeGenPrint(DecacCompiler compiler, boolean printHex) {
+        compiler.addComment("Print expression" + (printHex ? " (Hex)" : ""));
+
         // use a an available register (starting from R2) to store the expression result
         GPRegister res = compiler.getRegisterManager().allocateRegister();
         this.codeGenExpr(compiler, res);

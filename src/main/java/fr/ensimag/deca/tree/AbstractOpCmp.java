@@ -67,6 +67,8 @@ public abstract class AbstractOpCmp extends AbstractBinaryExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
+        compiler.addComment("Binary comparison operation: " + this.getOperatorName());
+        
         this.getLeftOperand().codeGenExpr(compiler, target);
         GPRegister temp = compiler.getRegisterManager().allocateRegister();
         this.getRightOperand().codeGenExpr(compiler, temp);

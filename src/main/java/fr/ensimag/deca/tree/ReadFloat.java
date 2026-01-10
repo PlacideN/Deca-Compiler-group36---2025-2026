@@ -48,6 +48,8 @@ public class ReadFloat extends AbstractReadExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
+        compiler.addComment("Read input");
+        
         compiler.addInstruction(new RFLOAT());
         Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.IO);
         compiler.addInstruction(new BOV(errorLabel));
