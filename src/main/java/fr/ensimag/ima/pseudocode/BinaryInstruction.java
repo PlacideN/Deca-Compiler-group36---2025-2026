@@ -26,6 +26,10 @@ public class BinaryInstruction extends Instruction {
         s.print(operand1);
         s.print(", ");
         s.print(operand2);
+        if (getComment() != null) {
+            s.print("\t ; "); 
+            s.print(getComment());
+        }
     }
 
     protected BinaryInstruction(Operand op1, Operand op2) {

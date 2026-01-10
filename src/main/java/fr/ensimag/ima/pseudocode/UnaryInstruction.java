@@ -16,6 +16,10 @@ public abstract class UnaryInstruction extends Instruction {
     void displayOperands(PrintStream s) {
         s.print(" ");
         s.print(operand);
+        if (getComment() != null) {
+            s.print("\t\t ; "); 
+            s.print(getComment());
+        }
     }
 
     protected UnaryInstruction(Operand operand) {
