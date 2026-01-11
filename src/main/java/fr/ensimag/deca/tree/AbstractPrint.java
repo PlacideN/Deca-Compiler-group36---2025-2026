@@ -43,7 +43,7 @@ public abstract class AbstractPrint extends AbstractInst {
                     Type type = expr.verifyExpr(compiler, localEnv, currentClass);
 
                     if (!(type.isInt() || type.isFloat() || type.isString())) {
-                        throw new ContextualError("The params of a print/println instruction must be of type int, float or string expression", expr.getLocation());
+                        throw new ContextualError("Invalid print/println parameter type (expected int, float, or string)", expr.getLocation());
                     }
                 }
     }

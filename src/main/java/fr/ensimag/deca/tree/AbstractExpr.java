@@ -93,7 +93,7 @@ public abstract class AbstractExpr extends AbstractInst {
         Type actualType = this.verifyExpr(compiler, localEnv, currentClass);
 
         if (!compiler.environmentType.assignCompatible(expectedType, actualType)) {
-            throw new ContextualError("Incompatible types in Rvalue " + this.decompile() + ": cannot assign " + actualType + " to " + expectedType, this.getLocation());
+            throw new ContextualError("Incompatible types in Rvalue = " + this.decompile() + ": cannot assign " + actualType + " to " + expectedType, this.getLocation());
         }
 
         // Float promotion if expression is int and expected type is float
