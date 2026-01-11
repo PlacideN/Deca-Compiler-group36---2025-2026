@@ -556,11 +556,6 @@ list_classes returns[ListDeclClass tree]
             }
         }
       )*
-      (c1=class_decl {
-            assert($c1.tree != null);
-            $tree.add($c1.tree);
-        }
-      )*
     ;
 
 class_decl returns[AbstractDeclClass tree]
@@ -595,6 +590,7 @@ decl_field_set[ListDeclField l]
 
 visibility returns [Visibility vis]
     : /* epsilon */ {
+            $vis = Visibility.PUBLIC;
         }
     | PROTECTED {
             $vis = Visibility.PROTECTED;
@@ -632,7 +628,7 @@ decl_method returns[AbstractDeclMethod tree]
             $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, body);
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
-            AbstractMethodBody body = new MethodAsm($code.text, $code.location);
+            AbstractMethodBody body = new MethodAsmBody($code.text);
             setLocation(body, $ASM);
 
             $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, body);
