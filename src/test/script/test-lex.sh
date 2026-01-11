@@ -39,7 +39,7 @@ for f in src/test/deca/syntax/valid/provided/*.deca; do
 done
 
 # Invalid Lexical Files
-for f in src/test/deca/syntax/invalid/*_lex.deca; do
+for f in src/test/deca/syntax/invalid/*-lex.deca; do
     [ -e "$f" ] || continue # skip if no files found
     output=$(test_lex "$f" 2>&1)
     if [ $? -ne 0 ]; then
@@ -51,7 +51,7 @@ for f in src/test/deca/syntax/invalid/*_lex.deca; do
 done
 
 # Run also the provided tests
-for f in src/test/deca/syntax/invalid/provided/*_lex.deca; do
+for f in src/test/deca/syntax/invalid/provided/*-lex.deca; do
     [ -e "$f" ] || continue
     test_lex "$f" > /dev/null 2>&1;
     if [ $? -ne 0 ]; then

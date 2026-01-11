@@ -24,7 +24,7 @@ for f in src/test/deca/syntax/valid/*.deca; do
     # Since all keywords are not yet implented (for the no-object sublanguage) 
     # skip files using them
     case "$f" in
-        *_lex*) continue ;;
+        *-lex*) continue ;;
     esac
 
     test_synt "$f" > "$f-synt.temp" 2>&1
@@ -62,7 +62,7 @@ for f in src/test/deca/syntax/valid/provided/*.deca; do
 done
 
 # Invalid Syntax Files
-for f in src/test/deca/syntax/invalid/*_parse.deca; do
+for f in src/test/deca/syntax/invalid/*-parse.deca; do
     [ -e "$f" ] || continue # skip if no files found
     output=$(test_synt "$f" 2>&1)
     if [ $? -ne 0 ]; then
@@ -74,7 +74,7 @@ for f in src/test/deca/syntax/invalid/*_parse.deca; do
 done
 
 # Run also the provided tests
-for f in src/test/deca/syntax/invalid/provided/*_parse.deca; do
+for f in src/test/deca/syntax/invalid/provided/*-parse.deca; do
     [ -e "$f" ] || continue
     test_synt "$f" > /dev/null 2>&1;
     if [ $? -ne 0 ]; then

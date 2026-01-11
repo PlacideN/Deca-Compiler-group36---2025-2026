@@ -1,0 +1,15 @@
+// Description:
+//    Test des priorités des opérateurs.
+//    Vérifie que le parser reconnait les priorités naturelles et manuelles.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+    +0x1.00p+0
+    +0x0.00p+0
+    +0x1.999999999999aP-0004 // 0.1
+}

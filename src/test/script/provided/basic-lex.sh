@@ -21,8 +21,8 @@ PATH=./src/test/script/launchers:"$PATH"
 # test_lex peut au choix afficher les messages sur la sortie standard
 # (1) ou sortie d'erreur (2). On redirige la sortie d'erreur sur la
 # sortie standard pour accepter les deux (2>&1)
-if test_lex src/test/deca/syntax/invalid/provided/simple_lex.deca 2>&1 \
-    | head -n 1 | grep -q 'simple_lex.deca:[0-9]'
+if test_lex src/test/deca/syntax/invalid/provided/simple-lex.deca 2>&1 \
+    | head -n 1 | grep -q 'simple-lex.deca:[0-9]'
 then
     echo "Echec inattendu de test_lex"
     exit 1
@@ -31,12 +31,12 @@ else
 fi
 
 # Ligne 10 codée en dur. Il faudrait stocker ça quelque part ...
-if test_lex src/test/deca/syntax/invalid/provided/chaine_incomplete_lex.deca 2>&1 \
-    | grep -q -e 'chaine_incomplete_lex.deca:10:'
+if test_lex src/test/deca/syntax/invalid/provided/chaine_incomplete-lex.deca 2>&1 \
+    | grep -q -e 'chaine_incomplete-lex.deca:10:'
 then
     echo "Echec attendu pour test_lex"
 else
-    echo "Erreur non detectee par test_lex pour chaine_incomplete.deca"
+    echo "Erreur non detectee par test_lex pour chaine_incomplete-lex.deca"
     exit 1
 fi
 
