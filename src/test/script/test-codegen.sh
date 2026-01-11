@@ -26,8 +26,6 @@ for sub in $VALID_SUBFOLDERS; do
 
     for f in $dir/*.deca; do
         [ -f "$f" ] || continue # Skip if file doesn't exist
-        
-        info "File: $(basename "$f")"
         decac "$f"
     
         ass_file=${f%.deca}.ass
@@ -36,9 +34,9 @@ for sub in $VALID_SUBFOLDERS; do
         expected_res=$(sed -n '/Resultats:/,/Historique:/p' "$f" | grep -vE 'Resultats:|Historique:' | sed 's/\/\/\s*//g' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' ) # extract only result from .deca file
         
         if [ "$result" = "$expected_res" ]; then
-            success "Execution result is correct"
+            success "Execution result is correct for $(basename "$f")"
         else
-            failure "Execution result: $result (Expected $expected_res)"
+            failure "Execution result for $(basename "$f"): $result (Expected $expected_res)"
         fi
     done
 done
@@ -48,7 +46,6 @@ step "Testing semantic invalid test cases (Runtime Errors)"
 for f in "$ROOT_DIR/src/test/deca/codegen/invalid/arithmetic/"*.deca; do
     [ -f "$f" ] || continue # Skip if file doesn't exist
     
-    info "File: $(basename "$f")"
     decac "$f"
 
     ass_file=${f%.deca}.ass 
@@ -57,9 +54,9 @@ for f in "$ROOT_DIR/src/test/deca/codegen/invalid/arithmetic/"*.deca; do
     expected_res=$(sed -n '/Resultats:/,/Historique:/p' "$f" | grep -vE 'Resultats:|Historique:' | sed 's/\/\/\s*//g' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' ) # extract only result from .deca file
     
     if [ "$result" = "$expected_res" ]; then
-        success "Execution correctly raised an error"
+        success "Execution correctly raised an error for $(basename "$f")"
     else
-        failure "Execution result: $result (Expected $expected_res)"
+        failure "Execution result for $(basename "$f"): $result (Expected $expected_res)"
     fi
 done
 

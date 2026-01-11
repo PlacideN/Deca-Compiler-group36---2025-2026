@@ -15,7 +15,7 @@ PATH="./src/test/script/launchers:./src/main/bin:$PATH"
 # Import utils (colors, logger, etc)
 . "$ROOT_DIR/src/test/script/utils.sh"
 
-step "Running Lexical Analysis Test Suite"
+section "Running Lexical Analysis Test Suite"
 
 # Valid Lexical Files
 for f in src/test/deca/syntax/valid/*.deca; do

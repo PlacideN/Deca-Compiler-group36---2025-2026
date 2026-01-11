@@ -158,4 +158,3 @@ for t in $NO_CHECK_TESTS; do
 done
 
 rm -rf "$TMP_DIR"
-section "Decac CLI Tests Complete"
