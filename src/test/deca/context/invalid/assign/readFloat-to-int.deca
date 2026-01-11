@@ -1,0 +1,14 @@
+// Description:
+//    Test d'affectation d'une lecture au clavier d'un flottant à un entier.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.36)
+//    Ligne 13 : Incompatible types in Rvalue = readFloat(): cannot assign float to int
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    int x;
+    x = readFloat();
+}

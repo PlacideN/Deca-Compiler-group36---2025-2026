@@ -1,0 +1,14 @@
+// Description:
+//    Test de redéclaration d'une variable du même type.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.17)
+//    Ligne 13 : Variable x is already defined
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    int x;
+    int x;
+}

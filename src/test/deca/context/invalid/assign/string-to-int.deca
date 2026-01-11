@@ -1,0 +1,13 @@
+// Description:
+//    Test d'initialisation d'une variable entière avec une chaîne de caractères.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.28)
+//    Ligne 12 : Incompatible types in Rvalue = "Hello": cannot assign string to int
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    int x = "Hello";
+}

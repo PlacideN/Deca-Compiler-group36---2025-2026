@@ -1,0 +1,13 @@
+// Description:
+//    Test l'utilisation d'une condition non bouléenne dans un if.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.29)
+//    Ligne 12 : If statement condition must be boolean
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    if (1){}
+}

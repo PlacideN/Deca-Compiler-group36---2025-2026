@@ -1,0 +1,13 @@
+// Description:
+//    Test d'initialisation d'une variable booléenne avec un entier.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.28)
+//    Ligne 12 : Incompatible types in Rvalue = 1: cannot assign int to boolean
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    boolean b = 1;
+}

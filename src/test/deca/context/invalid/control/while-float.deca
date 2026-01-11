@@ -1,0 +1,13 @@
+// Description:
+//    Test l'utilisation d'une condition non bouléenne dans une boucle while.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.29)
+//    Ligne 12 : While loop condition must be boolean
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    while (1.0){}
+}

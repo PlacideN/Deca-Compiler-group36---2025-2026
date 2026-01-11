@@ -1,0 +1,14 @@
+// Description:
+//    Test d'affectation d'une lecture au clavier d'un entier à un booléen.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.35)
+//    Ligne 13 : Incompatible types in Rvalue = readInt(): cannot assign int to boolean
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    boolean b;
+    b = readInt();
+}

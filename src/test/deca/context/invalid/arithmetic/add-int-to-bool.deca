@@ -1,0 +1,13 @@
+// Description:
+//    Test l'ajout d'un entier et d'un booléen.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.33)
+//    Ligne 12 : Incompatible types for arithmetic operation: int and boolean
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    1 + true;
+}

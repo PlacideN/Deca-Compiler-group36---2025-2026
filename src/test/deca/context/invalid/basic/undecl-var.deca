@@ -1,0 +1,13 @@
+// Description:
+//    Test d'une affectation à une variable non déclarée.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.69)
+//    Ligne 12 : Identifier x not found
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    x = 1;
+}

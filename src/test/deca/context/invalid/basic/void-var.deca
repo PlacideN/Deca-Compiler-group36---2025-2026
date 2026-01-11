@@ -1,0 +1,13 @@
+// Description:
+//    Test d'une déclaration de variable du type void.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.17)
+//    Ligne 12 : Variable type cannot be void
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    void x;
+}

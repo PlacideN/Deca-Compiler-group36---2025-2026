@@ -1,0 +1,14 @@
+// Description:
+//    Test d'initialisation d'une variable entière avec un flottant.
+//    NB: Aucune troncation de doit être faite en deca.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.28)
+//    Ligne 13 : Incompatible types in Rvalue = 0x1.8p0: cannot assign float to int
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    int x = 1.5;
+}

@@ -1,0 +1,13 @@
+// Description:
+//    Test l'utilisation de l'opérateur UnaryMinus avec un booléen.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.37)
+//    Ligne 12 : Operand of UnaryMinus must be of numeric type
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    -true;
+}

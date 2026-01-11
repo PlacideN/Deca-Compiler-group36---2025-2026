@@ -1,0 +1,13 @@
+// Description:
+//    Test l'utilisation de l'opérateur Not avec un entier.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.37)
+//    Ligne 12 : Operand of Not ('!') must be of boolean type
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    !1;
+}

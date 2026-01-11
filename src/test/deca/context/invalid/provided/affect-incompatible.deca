@@ -2,7 +2,8 @@
 //    Affectation et typage
 //
 // Resultats:
-//    Ligne 15: Affectation de types incompatibles.
+//    Erreur contextuelle
+//    Ligne 16: Incompatible types in Rvalue = b: cannot assign boolean to int
 // 
 // Historique:
 //    cree le 01/01/2026
