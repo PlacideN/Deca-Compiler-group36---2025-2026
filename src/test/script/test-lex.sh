@@ -18,12 +18,15 @@ PATH="./src/test/script/launchers:./src/main/bin:$PATH"
 section "Running Lexical Analysis Test Suite"
 
 # Valid Lexical Files
-for f in src/test/deca/syntax/valid/*.deca; do
+VALID_FILES=$(find src/test/deca/syntax/valid -name "*.deca")
+for f in $VALID_FILES; do
     [ -e "$f" ] || continue # skip if no files found
     output=$(test_lex "$f" 2>&1)
     if [ $? -ne 0 ]; then
         failure "Real error in valid lex file: $f"
         printf "%s\n" "$output"
+    else
+        success "$f"
     fi
 done
 
