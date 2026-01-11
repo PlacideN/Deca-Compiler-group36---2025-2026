@@ -1,0 +1,12 @@
+// Description:
+//    Test de définition de plusieurs classes héritées. 
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 11/01/2026
+
+class A {}
+class B extends A {}
+class C extends A {}

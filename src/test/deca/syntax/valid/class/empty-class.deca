@@ -1,0 +1,10 @@
+// Description:
+//    Test de définition de classe vide sans héritage
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 11/01/2026
+
+class A {}

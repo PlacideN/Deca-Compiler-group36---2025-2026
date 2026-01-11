@@ -1,0 +1,11 @@
+// Description:
+//    Test de l'héritage des classes.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 11/01/2026
+
+class A {}
+class B extends A {}

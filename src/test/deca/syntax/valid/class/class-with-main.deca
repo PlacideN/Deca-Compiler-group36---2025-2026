@@ -1,0 +1,13 @@
+// Description:
+//    Test de déclaration d'une classe vide sans héritage.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 11/01/2026
+
+class A {}
+{
+    A a;
+}
