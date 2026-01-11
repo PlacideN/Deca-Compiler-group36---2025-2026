@@ -13,7 +13,7 @@
 
 # On se place dans le répertoire du projet (quel que soit le
 # répertoire d'où est lancé le script) :
-cd "$(dirname "$0")"/../../.. || exit 1
+cd "$(dirname "$0")"/../../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
@@ -31,8 +31,8 @@ else
 fi
 
 # Ligne 10 codée en dur. Il faudrait stocker ça quelque part ...
-if test_lex src/test/deca/syntax/invalid/provided/chaine_incomplete.deca 2>&1 \
-    | grep -q -e 'chaine_incomplete.deca:10:'
+if test_lex src/test/deca/syntax/invalid/provided/chaine_incomplete_lex.deca 2>&1 \
+    | grep -q -e 'chaine_incomplete_lex.deca:10:'
 then
     echo "Echec attendu pour test_lex"
 else

@@ -8,7 +8,7 @@
 
 # Ce genre d'approche est bien sûr généralisable, en conservant le
 # résultat attendu dans un fichier pour chaque fichier source.
-cd "$(dirname "$0")"/../../.. || exit 1
+cd "$(dirname "$0")"/../../../.. || exit 1
 
 PATH=./src/test/script/launchers:./src/main/bin:"$PATH"
 

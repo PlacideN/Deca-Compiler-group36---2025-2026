@@ -5,12 +5,12 @@
 
 # Test minimaliste de la vérification contextuelle.
 # Le principe et les limitations sont les mêmes que pour basic-synt.sh
-cd "$(dirname "$0")"/../../.. || exit 1
+cd "$(dirname "$0")"/../../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
 if test_context src/test/deca/context/invalid/provided/affect-incompatible.deca 2>&1 | \
-    grep -q -e 'affect-incompatible.deca:15:'
+    grep -q -e 'affect-incompatible.deca:16:'
 then
     echo "Echec attendu pour test_context"
 else

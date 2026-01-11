@@ -15,7 +15,7 @@
 # automatiquement. Un exemple d'automatisation est donné avec une
 # boucle for sur les tests invalides, il faut aller encore plus loin.
 
-cd "$(dirname "$0")"/../../.. || exit 1
+cd "$(dirname "$0")"/../../../.. || exit 1
 
 PATH=./src/test/script/launchers:"$PATH"
 
