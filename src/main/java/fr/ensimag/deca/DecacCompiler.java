@@ -53,7 +53,8 @@ public class DecacCompiler {
         this.compilerOptions = compilerOptions;
         this.source = source;
 
-        this.registerManager = new RegisterManager(this, compilerOptions.getRegisterCount());
+        int count = (compilerOptions != null) ? compilerOptions.getRegisterCount() : 16;
+        this.registerManager = new RegisterManager(this, count);
         this.errorManager = new RuntimeErrorManager(this, labelManager);
     }
 
