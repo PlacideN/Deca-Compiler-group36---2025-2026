@@ -1,0 +1,27 @@
+// Description:
+//    Test de déclaration, d'initialization et d'affectation des différents types primitifs.
+//
+// Resultats:
+//    Verification OK
+//    => Variables décorées avec leur type.
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    int x = 1;
+    float f = 1.5;
+    boolean b = true;
+
+    int y; 
+    float g;
+    boolean c;
+    
+    y = 1;
+    g = 1.5;
+    c = false;
+
+    x = y;
+    f = g;
+    b = c;
+}

@@ -1,0 +1,14 @@
+// Description:
+//    Test d'affichage d'un booléen.
+//
+// Resultats:
+//    Erreur contextuelle (Règle 3.31)
+//    Ligne 13 : Invalid print/println parameter type (expected int, float, or string)
+//
+// Historique:
+//    cree le 10/01/2026
+
+
+{
+    print(true);
+}

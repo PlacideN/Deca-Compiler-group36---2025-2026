@@ -1,0 +1,21 @@
+// Description:
+//    Test des opérateurs booléens sur des variables booléennes ou des litéraux booléens.
+//
+// Resultats:
+//    Verification OK
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    boolean a = true;
+    boolean b = false;
+    boolean r;
+    
+    r = a && b;
+    r = a || b;
+    r = !a;
+    r = !!b;
+
+    r = !(a && b) || (true && !false);
+}

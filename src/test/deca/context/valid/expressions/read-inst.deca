@@ -1,0 +1,16 @@
+// Description:
+//    Test d'une lecture au clavier d'un entier et d'un flottant.
+//    Vérifie que les instructions readInt et readFloat sont reconnues comme expressions.
+//
+// Resultats:
+//    Verification OK
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    int x;
+    float y;
+    x = readInt();
+    y = readFloat();
+}

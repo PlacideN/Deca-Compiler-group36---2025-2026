@@ -1,0 +1,20 @@
+// Description:
+//    Test d'imbrication d'une boucle while avec des if/else.
+//
+// Resultats:
+//    Verification OK
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    int x = 0;
+    while (x < 10) {
+        if ((x % 2) == 0) {
+            println("*");
+        } else {
+            println(".");
+        }
+        x = x + 1;
+    }
+}

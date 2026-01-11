@@ -1,0 +1,18 @@
+// Description:
+//    Test des comparaisons booléennes du même type.
+//
+// Resultats:
+//    Verification OK
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    boolean b;
+    b = (1 == 1);
+    b = (1.0 != 2.0);
+    b = (2 > 1);
+    b = (1.0 >= 2.0);
+    b = (2 < 1);
+    b = (1.0 <= 2.0);
+}

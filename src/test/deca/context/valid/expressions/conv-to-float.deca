@@ -1,0 +1,28 @@
+// Description:
+//    Test de conversion implicite en flottant.
+//    Vérifie l'insertion du noeud ConvFloat lors de l'initialization 
+//    et des opérations arithmétiques.
+//
+// Resultats:
+//    Verification OK
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    float f = 1;
+    float g = f + 1;
+    float h = 1 + f;
+    boolean b;
+    
+    g = f / 2;
+    g = f * 2;
+    g = f - 5;
+    
+    b = (f < 2);
+    b = (f <= 2);
+    b = (f > 2);
+    b = (f >= 2);
+    b = (f == 2);
+    b = (2 != f);
+}

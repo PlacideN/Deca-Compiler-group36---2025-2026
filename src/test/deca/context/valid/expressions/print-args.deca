@@ -1,0 +1,15 @@
+// Description:
+//    Test d'affichage de plusieurs arguments/expressions.
+//
+// Resultats:
+//    Verification OK
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    int x = 1;
+    float y = 2.0;
+    println("x = ", x, " | y = ", y);
+    println("res = ", (x + 1) * (y - 1));
+}

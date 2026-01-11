@@ -1,0 +1,15 @@
+// Description:
+//    Test de l'opérateur UnaryMinus (-).
+//    Vérifie l'ajout du noeud UnaryMinus devant un IntLiteral, FloatLiteral, ou un Identifier.
+//
+// Resultats:
+//    Verification OK
+//
+// Historique:
+//    cree le 10/01/2026
+
+{
+    int x = -1;
+    float y = -1.5;
+    float z = -x + y;
+}
