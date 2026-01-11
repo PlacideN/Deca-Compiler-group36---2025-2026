@@ -553,87 +553,103 @@ list_classes returns[ListDeclClass tree]
     (c1=class_decl {
             if ($c1.tree != null) {
                 $tree.add($c1.tree);
-                setLocation($c1.tree, $c1.start);
             }
         }
       )*
-    /* The Hello World sublanguage doesn't use classes. 
-     * To prevent any assertion errros we initialize an empty list 
-     * and don't add the null classes. 
-     * TODO: Uncomment the version below when implementing the full language.
-     */
-    /*
       (c1=class_decl {
             assert($c1.tree != null);
             $tree.add($c1.tree);
-            setLocation($c1.tree, $c1.start);
         }
       )*
-    */
     ;
 
-/* TODO: Replace the null initialization with actual implementation when implementing the full language */
 class_decl returns[AbstractDeclClass tree]
-    : CLASS name=ident superclass=class_extension OBRACE class_body CBRACE {
-            $tree = null;
+    : CLASS name=ident superclass=class_extension OBRACE body=class_body CBRACE {
+            $tree = new DeclClass($name.tree, $superclass.tree, $body.fields, $body.methods);
+            setLocation($tree, $CLASS);
         }
     ;
 
 class_extension returns[AbstractIdentifier tree]
     : EXTENDS ident {
+            assert($ident.tree != null);
+            $tree = $ident.tree;
         }
     | /* epsilon */ {
         }
     ;
 
-class_body
-    : (m=decl_method {
-        }
-      | decl_field_set
+class_body returns[ListDeclField fields, ListDeclMethod methods]
+@init {
+    $fields = new ListDeclField();
+    $methods = new ListDeclMethod();
+}
+    : (m=decl_method { $methods.add($m.tree); }
+      | decl_field_set[$fields]     
       )*
     ;
 
-decl_field_set
-    : v=visibility t=type list_decl_field
-      SEMI
+decl_field_set[ListDeclField l]
+    : v=visibility t=type list_decl_field[$l, $v.vis, $t.tree] SEMI
     ;
 
-visibility
+visibility returns [Visibility vis]
     : /* epsilon */ {
         }
     | PROTECTED {
+            $vis = Visibility.PROTECTED;
         }
     ;
 
-list_decl_field
-    : dv1=decl_field
-        (COMMA dv2=decl_field
-      )*
+list_decl_field [ListDeclField list, Visibility v, AbstractIdentifier t]
+    : dv1=decl_field[$v, $t] { list.add($dv1.tree); }
+      (COMMA dv2=decl_field[$v, $t] { list.add($dv2.tree); } )*
     ;
 
-decl_field
-    : i=ident {
-        }
-      (EQUALS e=expr {
-        }
-      )? {
-        }
-    ;
-
-decl_method
+decl_field[Visibility v, AbstractIdentifier t] returns[AbstractDeclField tree]
 @init {
+    AbstractInitialization init = null;
 }
+    : i=ident (EQUALS e=expr {
+            init = new Initialization($e.tree);
+            setLocation(init, $e.start);
+        })? 
+        {
+            if (init == null) {
+                init = new NoInitialization();
+            }
+
+            $tree = new DeclField($v, t, $i.tree, init);
+            setLocation($tree, $i.start);
+        }
+    ;
+
+decl_method returns[AbstractDeclMethod tree]
     : type ident OPARENT params=list_params CPARENT (block {
+            AbstractMethodBody body = new MethodBody($block.decls, $block.insts);
+            setLocation(body, $block.start);
+
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, body);
         }
       | ASM OPARENT code=multi_line_string CPARENT SEMI {
+            AbstractMethodBody body = new MethodAsm($code.text, $code.location);
+            setLocation(body, $ASM);
+
+            $tree = new DeclMethod($type.tree, $ident.tree, $params.tree, body);
         }
       ) {
+            setLocation($tree, $ident.start);
         }
     ;
 
-list_params
+list_params returns[ListDeclParam tree]
+@init {
+    $tree = new ListDeclParam();
+}
     : (p1=param {
+            $tree.add($p1.tree);
         } (COMMA p2=param {
+            $tree.add($p2.tree);
         }
       )*)?
     ;
@@ -649,7 +665,9 @@ multi_line_string returns[String text, Location location]
         }
     ;
 
-param
+param returns[AbstractDeclParam tree]
     : type ident {
+            $tree = new DeclParam($type.tree, $ident.tree);
+            setLocation($tree, $ident.start);
         }
     ;
