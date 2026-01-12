@@ -1,0 +1,17 @@
+// Description:
+//    Test du mot clé return avec des objets.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 12/01/2026
+
+class B {}
+
+class A {
+    B b;
+    B getB() {
+        return this.b;
+    }
+}

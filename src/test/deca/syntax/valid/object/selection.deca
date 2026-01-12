@@ -1,0 +1,25 @@
+// Description:
+//    Test de l'opérateur de séléction (.) pour une expression ou un identificateur.
+//    Vérifie que l'arbre est correctement créé sans conflits d'identificateurs.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 12/01/2026
+
+class A {
+    int field;
+    void setField(int field) {
+        this.field = field;
+    }
+
+    // reste de la classe
+}
+
+{
+    A.field = 5;
+    A.getField();
+    A.setField(1);
+    (new A()).field = 10;
+}

@@ -1,0 +1,14 @@
+// Description:
+//    Test de l'opérateur de séléction (.) avec chaînage.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 12/01/2026
+
+{
+    a.b.c = 1;
+    a.getB().c = 1;
+    a.getB().setC(1);
+}

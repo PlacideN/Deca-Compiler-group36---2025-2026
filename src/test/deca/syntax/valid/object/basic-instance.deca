@@ -1,0 +1,14 @@
+// Description:
+//    Test de la creation d'instance avec new. 
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 12/01/2026
+
+class A {}
+
+{
+    A a = new A();
+}

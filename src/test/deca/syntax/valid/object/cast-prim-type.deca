@@ -1,0 +1,13 @@
+// Description:
+//    Test de coercition (cast) d'un flottant en un entier.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 12/01/2026
+
+{
+    float f = 1.0;
+    int i = (int)(f);
+}

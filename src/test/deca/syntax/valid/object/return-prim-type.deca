@@ -1,0 +1,26 @@
+// Description:
+//    Test du mot clé return avec les types primitifs.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 12/01/2026
+
+class A {
+    int x;
+    float f;
+    boolean b;
+
+    int getX() {
+        return x;
+    }
+
+    float getF() {
+        return f;
+    }
+
+    boolean getB() {
+        return b;
+    }
+}
