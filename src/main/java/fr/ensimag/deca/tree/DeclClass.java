@@ -2,7 +2,11 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.deca.context.ClassType;
+import fr.ensimag.deca.context.ClassDefinition;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -19,6 +23,7 @@ public class DeclClass extends AbstractDeclClass {
 
     public DeclClass(AbstractIdentifier className, AbstractIdentifier superClassName, ListDeclField fields, ListDeclMethod methods) {
         Validate.notNull(className);
+        Validate.notNull(superClassName); // no extends => Object
         Validate.notNull(fields);
         Validate.notNull(methods);
 
@@ -50,7 +55,27 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Symbol classSymb = className.getName();
+        Symbol superClassSymb = superClassName.getName();
+
+        TypeDefinition superClassDef = compiler.environmentType.defOfType(superClassSymb);
+        if (superClassDef == null) {
+            throw new ContextualError("Superclass " + superClassSymb.getName() + " of class " + classSymb.getName() + " is not defined.", superClassName.getLocation());
+        }
+        if (!superClassDef.getType().isClass()) {
+            throw new ContextualError("Superclass " + superClassSymb.getName() + " of class " + classSymb.getName() + " is not a class type.", superClassName.getLocation());
+        }
+
+        ClassDefinition superClassTypeDef = (ClassDefinition) superClassDef;
+        ClassType classType = new ClassType(classSymb, className.getLocation(), superClassTypeDef);
+        ClassDefinition classDef = classType.getDefinition();
+
+        compiler.environmentType.declare(classSymb, classDef); // throws ContextualError if already defined
+
+        className.setDefinition(classDef);
+        className.setType(classType);
+        superClassName.setDefinition(superClassTypeDef);
+        superClassName.setType(superClassTypeDef.getType());
     }
 
     @Override
