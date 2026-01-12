@@ -159,14 +159,12 @@ inst returns[AbstractInst tree]
             $tree = new While($condition.tree, $body.tree);
             setLocation($tree, $WHILE);
         }
-    ;
-    /*
     | RETURN expr SEMI {
             assert($expr.tree != null);
             $tree = new Return($expr.tree);
             setLocation($tree, $RETURN);
         }
-    */
+    ;
     
     
 
@@ -313,17 +311,13 @@ inequality_expr returns[AbstractExpr tree]
             $tree = new Lower($e1.tree, $e2.tree);
             setLocation($tree, $LT);
         }
-    ;
-    /* TODO: Implement InstanceOf() class to handle this branch
-     * Not required for the Hello World deca sub-language. 
-    */
-    /* 
     | e1=inequality_expr INSTANCEOF type {
             assert($e1.tree != null);
             assert($type.tree != null);
+            $tree = new InstanceOf($e1.tree, $type.tree);
+            setLocation($tree, $INSTANCEOF);
         }
     ;
-    */
 
 
 sum_expr returns[AbstractExpr tree]
@@ -403,26 +397,22 @@ select_expr returns[AbstractExpr tree]
             assert($e.tree != null);
             $tree = $e.tree;
         }
-    ;
-    /* TODO: Implement a java class to handle selection
-     * to use in the rule specification below
-     */
-    /*
     | e1=select_expr DOT i=ident {
             assert($e1.tree != null);
             assert($i.tree != null);
 
         }
-        (o=OPARENT args=list_expr CPARENT {
-            // we matched "e1.i(args)"
-            assert($args.tree != null);
+        (o=OPARENT params=list_expr CPARENT {
+            assert($params.tree != null);
+            $tree = new MethodCall($e1.tree, $i.tree, $params.tree);
+            setLocation($tree, $DOT);
         }
-        | /* epsilon */ /*{
-            // we matched "e.i"
+        | /* epsilon => matched e.i */ {
+            $tree = new Selection($e1.tree, $i.tree);
+            setLocation($tree, $DOT);
         }
         )
     ;
-*/
 
 primary_expr returns[AbstractExpr tree]
     : ident {
@@ -445,25 +435,28 @@ primary_expr returns[AbstractExpr tree]
             assert($literal.tree != null);  
             $tree = $literal.tree;
         }
-    ;
-    /* TODO: Implment method call, object instance creation 
-     * and cast classes to handle the branches below.
-     * Not required for the Hello World deca sub-language.
-     */
-    /*
     | m=ident OPARENT args=list_expr CPARENT {
-            assert($args.tree != null);
             assert($m.tree != null);
+            assert($args.tree != null);
+
+            AbstractExpr object = new This();
+            setLocation(object, $m.start);
+
+            $tree = new MethodCall(object, $m.tree, $args.tree);
+            setLocation($tree, $m.start);
         }
     | NEW ident OPARENT CPARENT {
             assert($ident.tree != null);
+            $tree = new New($ident.tree);
+            setLocation($tree, $NEW);
         }
     | cast=OPARENT type CPARENT OPARENT expr CPARENT {
             assert($type.tree != null);
             assert($expr.tree != null);
+            $tree = new Cast($type.tree, $expr.tree);
+            setLocation($tree, $cast);
         }
     ;
-    */
 
 type returns[AbstractIdentifier tree]
     : ident {
@@ -524,17 +517,15 @@ literal returns[AbstractExpr tree]
             $tree = new BooleanLiteral(false);
             setLocation($tree, $FALSE);
         }
-    ;
-    /* TODO: Implement NullLiteral and This classes to handle these branches
-     * Not required for the Hello World deca sub-language.
-     */
-    /*
     | THIS {
+            $tree = new This();
+            setLocation($tree, $THIS);
         }
     | NULL {
+            $tree = new Null();
+            setLocation($tree, $NULL);
         }
     ;
-    */
 
 ident returns[AbstractIdentifier tree]
     : IDENT {
