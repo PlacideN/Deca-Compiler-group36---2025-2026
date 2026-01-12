@@ -1,0 +1,23 @@
+// Description:
+//    Test de reconnaissance du mot null
+//    Vérifie l'assignation, la comparaison et le retour.
+//
+// Resultats:
+//    Syntaxiquement correct.
+
+class A {
+    A getNull() {
+        return null;
+    }
+}
+
+{
+    A a = new A();
+
+    if (null != a) {
+        println("new A() works");
+    }
+    if (a.getNull() == null) {
+        println("getNull() works");
+    }
+}

@@ -1,0 +1,21 @@
+// Description:
+//    Test d'un appel de méthode implicite (this)
+//    Vérifie qu'un appel de méthode dont l'objet (this) est implicite est reconnu.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 12/01/2026
+
+class A {
+    int x = 0;
+
+    int getX() { 
+        return x; 
+    }
+
+    int getY() {
+        return getX();
+    }
+}
