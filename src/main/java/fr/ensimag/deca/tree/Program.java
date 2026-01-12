@@ -40,7 +40,7 @@ public class Program extends AbstractProgram {
 
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
-        // TODO: call verify methods on classes
+        this.classes.verifyListClass(compiler);
         this.main.verifyMain(compiler);
     }
 
