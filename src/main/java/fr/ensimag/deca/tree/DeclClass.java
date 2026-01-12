@@ -23,7 +23,6 @@ public class DeclClass extends AbstractDeclClass {
 
     public DeclClass(AbstractIdentifier className, AbstractIdentifier superClassName, ListDeclField fields, ListDeclMethod methods) {
         Validate.notNull(className);
-        // Validate.notNull(superClassName); // no extends => Object
         Validate.notNull(fields);
         Validate.notNull(methods);
 
@@ -56,26 +55,36 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClass(DecacCompiler compiler) throws ContextualError {
         Symbol classSymb = className.getName();
-        Symbol superClassSymb = superClassName.getName();
+        ClassDefinition superClassDef;
 
-        TypeDefinition superClassDef = compiler.environmentType.defOfType(superClassSymb);
-        if (superClassDef == null) {
-            throw new ContextualError("Superclass " + superClassSymb.getName() + " of class " + classSymb.getName() + " is not defined.", superClassName.getLocation());
-        }
-        if (!superClassDef.getType().isClass()) {
-            throw new ContextualError("Superclass " + superClassSymb.getName() + " of class " + classSymb.getName() + " is not a class type.", superClassName.getLocation());
+        if (superClassName == null) {
+            superClassDef = compiler.environmentType.OBJECT.getDefinition();
+        } else {
+            Symbol superClassSymb = superClassName.getName();
+            TypeDefinition def = compiler.environmentType.defOfType(superClassSymb);
+
+            if (def == null) {
+                throw new ContextualError("Superclass " + superClassSymb.getName() + " of class " + classSymb.getName() + " is not defined.", superClassName.getLocation());
+            }
+            if (!def.getType().isClass()) {
+                throw new ContextualError("Superclass " + superClassSymb.getName() + " of class " + classSymb.getName() + " is not a class type.", superClassName.getLocation());
+            }
+
+            superClassDef = (ClassDefinition) def;
+
+            // set the type and definition of the SuperClassName identifier 
+            // to be able to reference it later using super.            
+            superClassName.setType(superClassDef.getType());
+            superClassName.setDefinition(superClassDef);
         }
 
-        ClassDefinition superClassTypeDef = (ClassDefinition) superClassDef;
-        ClassType classType = new ClassType(classSymb, className.getLocation(), superClassTypeDef);
+        ClassType classType = new ClassType(classSymb, className.getLocation(), superClassDef);
         ClassDefinition classDef = classType.getDefinition();
-
+        
         compiler.environmentType.declare(classSymb, classDef); // throws ContextualError if already defined
 
         className.setDefinition(classDef);
         className.setType(classType);
-        superClassName.setDefinition(superClassTypeDef);
-        superClassName.setType(superClassTypeDef.getType());
     }
 
     @Override
