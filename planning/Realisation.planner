@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="Projet GL" company="Ensimag" manager="" phase="" project-start="20251215T000000Z" mrproject-version="2" calendar="1">
+<project name="Projet GL" company="Ensimag" manager="" phase="" project-start="20251215T000000Z" mrproject-version="2" calendar="2">
   <properties/>
   <phases/>
   <calendars>
@@ -9,6 +9,16 @@
       <day-type id="2" name="Use base" description="Use day from base calendar"/>
     </day-types>
     <calendar id="1" name="Default">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1700"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
+    </calendar>
+    <calendar id="2" name="Default">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
       <overridden-day-types>
         <overridden-day-type id="0">
@@ -29,7 +39,7 @@
         <day date="20251231" type="day-type" id="1"/>
       </days>
     </calendar>
-    <calendar id="2" name="Default">
+    <calendar id="3" name="Default">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
       <overridden-day-types>
         <overridden-day-type id="0">
@@ -41,70 +51,138 @@
     </calendar>
   </calendars>
   <tasks>
-    <task id="1" name="Analyse lexicosyntaxique" note="" work="230400" duration="57600" start="20251215T000000Z" end="20251216T170000Z" work-start="20251215T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-      <task id="2" name="Lexeur" note="" work="115200" duration="57600" start="20251215T000000Z" end="20251216T170000Z" work-start="20251215T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="3" name="Parseur" note="" work="115200" duration="57600" start="20251215T000000Z" end="20251216T170000Z" work-start="20251215T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-    </task>
-    <task id="4" name="Compilateur g&#xE9;rant Hello World" note="" work="301500" duration="87300" start="20251216T170000Z" end="20251222T081500Z" work-start="20251217T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-      <predecessors>
-        <predecessor id="1" predecessor-id="1" type="FS"/>
-      </predecessors>
-      <task id="5" name="Tests" note="" work="77400" duration="77400" start="20251216T170000Z" end="20251219T143000Z" work-start="20251217T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="6" name="Analyse contextuelle" note="" work="81000" duration="81000" start="20251216T170000Z" end="20251219T153000Z" work-start="20251217T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="7" name="G&#xE9;n&#xE9;ration de code" note="" work="87300" duration="87300" start="20251216T170000Z" end="20251222T081500Z" work-start="20251217T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="8" name="..." note="" work="55800" duration="55800" start="20251216T170000Z" end="20251218T163000Z" work-start="20251217T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-    </task>
-    <task id="9" name="Compilateur sans objet" note="" work="214200" duration="128700" start="20251222T081500Z" end="20260107T120000Z" work-start="20251222T081500Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-      <predecessors>
-        <predecessor id="1" predecessor-id="4" type="FS"/>
-      </predecessors>
-      <task id="10" name="..." note="" work="57600" duration="57600" start="20251222T081500Z" end="20260105T081500Z" work-start="20251222T081500Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="11" name="" note="" work="27900" duration="27900" start="20260105T081500Z" end="20260105T170000Z" work-start="20260105T081500Z" percent-complete="14" priority="0" type="normal" scheduling="fixed-work">
-        <predecessors>
-          <predecessor id="1" predecessor-id="10" type="FS"/>
-        </predecessors>
+    <task id="1" name="Phase 1 : Hello World" note="" work="277200" duration="115200" start="20251215T000000Z" end="20251218T170000Z" work-start="20251215T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="2" name="Lexeur &amp; Parser ( Hello World)" note="" work="86400" duration="86400" start="20251215T000000Z" end="20251217T170000Z" work-start="20251215T080000Z" percent-complete="43" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20251215T000000Z"/>
       </task>
-      <task id="12" name="..." note="" work="128700" duration="128700" start="20251222T081500Z" end="20260107T120000Z" work-start="20251222T081500Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="3" name="Contextual Verification (print)" note="" work="57600" duration="28800" start="20251216T000000Z" end="20251216T170000Z" work-start="20251216T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="4" name="Comp&#xE9;ter Environnement" note="" work="28800" duration="28800" start="20251216T000000Z" end="20251216T170000Z" work-start="20251216T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="start-no-earlier-than" time="20251216T000000Z"/>
+        </task>
+        <task id="5" name="Compl&#xE9;ter la cha&#xEE;ne de v&#xE9;rification" note="" work="28800" duration="28800" start="20251216T000000Z" end="20251216T170000Z" work-start="20251216T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="start-no-earlier-than" time="20251216T000000Z"/>
+        </task>
+      </task>
+      <task id="6" name="Code Generation ( print)" note="" work="32400" duration="61200" start="20251215T000000Z" end="20251217T090000Z" work-start="20251215T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="7" name="Compl&#xE9;ter DecaMain, DecaCo" note="" work="3600" duration="3600" start="20251217T000000Z" end="20251217T090000Z" work-start="20251217T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="start-no-earlier-than" time="20251217T000000Z"/>
+        </task>
+        <task id="8" name="Impl&#xE9;menter CodeGenPtintpour Intliteral et Floatliteral" note="" work="28800" duration="28800" start="20251215T000000Z" end="20251215T170000Z" work-start="20251215T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      </task>
+      <task id="9" name="Test - Hello World" note="" work="28800" duration="28800" start="20251217T000000Z" end="20251217T170000Z" work-start="20251217T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20251217T000000Z"/>
+      </task>
+      <task id="10" name="Pr&#xE9;paration Suivi 1" note="" work="72000" duration="57600" start="20251217T000000Z" end="20251218T170000Z" work-start="20251217T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <task id="11" name="R&#xE9;diger la charte d'equipe" note="" work="3600" duration="3600" start="20251218T000000Z" end="20251218T090000Z" work-start="20251218T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="start-no-earlier-than" time="20251218T000000Z"/>
+        </task>
+        <task id="12" name="Pr&#xE9;parer une d&#xE9;mo de tests" note="" work="57600" duration="57600" start="20251217T000000Z" end="20251218T170000Z" work-start="20251217T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="start-no-earlier-than" time="20251217T000000Z"/>
+        </task>
+        <task id="13" name="Planning Pr&#xE9;visionnel" note="" work="7200" duration="7200" start="20251217T000000Z" end="20251217T100000Z" work-start="20251217T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="start-no-earlier-than" time="20251217T000000Z"/>
+        </task>
+        <task id="14" name="Pr&#xE9;sentation de l'extension( d&#xE9;but bliblio)" note="" work="3600" duration="3600" start="20251218T000000Z" end="20251218T090000Z" work-start="20251218T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="start-no-earlier-than" time="20251218T000000Z"/>
+        </task>
+      </task>
     </task>
-    <task id="13" name="Compilateur pour la totalit&#xE9; du langage" note="" work="86400" duration="86400" start="20251215T000000Z" end="20251217T170000Z" work-start="20251215T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-    <task id="14" name="Rendu version interm&#xE9;diaire" note="" work="0" duration="0" start="20260112T000000Z" end="20260112T000000Z" work-start="20260112T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="15" name="Phase 2 : Langage sans objet" note="" work="342000" duration="230400" start="20251218T000000Z" end="20260108T170000Z" work-start="20251218T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="16" name="Parser - Instructions &amp; expression" note="" work="57600" duration="57600" start="20251218T000000Z" end="20251219T170000Z" work-start="20251218T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20251218T000000Z"/>
+      </task>
+      <task id="17" name="Contextual Verification sans -Objet" note="" work="115200" duration="115200" start="20251222T000000Z" end="20260106T170000Z" work-start="20251222T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20251222T000000Z"/>
+      </task>
+      <task id="18" name="G&#xE9;n&#xE9;ration de code Sans - Objet" note="" work="144000" duration="144000" start="20251226T000000Z" end="20260108T170000Z" work-start="20251229T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20251226T000000Z"/>
+      </task>
+      <task id="19" name="Tests sans objet" note="" work="25200" duration="25200" start="20260106T000000Z" end="20260106T160000Z" work-start="20260106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260106T000000Z"/>
+      </task>
+    </task>
+    <task id="20" name="Pr&#xE9;paration du suivi 2" note="" work="54000" duration="46800" start="20260106T000000Z" end="20260107T140000Z" work-start="20260106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="21" name="mise &#xE0; jour dun plannig" note="" work="3600" duration="3600" start="20260106T000000Z" end="20260106T090000Z" work-start="20260106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260106T000000Z"/>
+      </task>
+      <task id="22" name="Sch&#xE9;ma d'architecture de l'extension" note="" work="10800" duration="10800" start="20260106T000000Z" end="20260106T110000Z" work-start="20260106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260106T000000Z"/>
+      </task>
+      <task id="23" name="r&#xE9;daction de la partie ALgo" note="" work="7200" duration="7200" start="20260106T000000Z" end="20260106T100000Z" work-start="20260106T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260106T000000Z"/>
+      </task>
+      <task id="24" name="Tableau des risques " note="" work="18000" duration="18000" start="20260107T000000Z" end="20260107T140000Z" work-start="20260107T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260107T000000Z"/>
+      </task>
+      <task id="25" name="Pr&#xE9;paration  du rendu interm&#xE9;diaire" note="" work="14400" duration="14400" start="20260107T000000Z" end="20260107T120000Z" work-start="20260107T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260107T000000Z"/>
+      </task>
+    </task>
+    <task id="26" name="Phase 3 : Langage essentiel" note="" work="72000" duration="100800" start="20260108T170000Z" end="20260114T120000Z" work-start="20260109T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <predecessors>
+        <predecessor id="1" predecessor-id="15" type="FS"/>
+      </predecessors>
+      <task id="27" name="Parser" note="" work="72000" duration="72000" start="20260111T000000Z" end="20260114T120000Z" work-start="20260112T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260111T000000Z"/>
+      </task>
+      <task id="28" name="Analyses &amp; Contextual V&#xE9;rification - Classe" note="" work="0" duration="0" start="20260108T170000Z" end="20260109T080000Z" work-start="20260109T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="29" name="Code Generation - objets &amp; Classes" note="" work="0" duration="0" start="20260108T170000Z" end="20260109T080000Z" work-start="20260109T080000Z" percent-complete="14" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="30" name="Tests - Full Language" note="" work="0" duration="0" start="20260108T170000Z" end="20260109T080000Z" work-start="20260109T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    </task>
+    <task id="31" name="Pr&#xE9;paration du suivi 3" note="" work="28800" duration="28800" start="20251215T000000Z" end="20251215T170000Z" work-start="20251215T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="32" name="" note="" work="28800" duration="28800" start="20251215T000000Z" end="20251215T170000Z" work-start="20251215T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    </task>
+    <task id="33" name="Compilateur pour la totalit&#xE9; du langage" note="" work="86400" duration="86400" start="20251215T000000Z" end="20251217T170000Z" work-start="20251215T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    <task id="34" name="Rendu version interm&#xE9;diaire" note="" work="0" duration="0" start="20260112T000000Z" end="20260112T000000Z" work-start="20260112T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20260112T000000Z"/>
     </task>
-    <task id="15" name="Rendu Final" note="" work="0" duration="0" start="20260119T000000Z" end="20260119T000000Z" work-start="20260119T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="35" name="Rendu Final" note="" work="0" duration="0" start="20260119T000000Z" end="20260119T000000Z" work-start="20260119T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20260119T000000Z"/>
     </task>
-    <task id="16" name="Rendu Bilan" note="" work="0" duration="0" start="20260121T000000Z" end="20260121T000000Z" work-start="20260121T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="36" name="Rendu Bilan" note="" work="0" duration="0" start="20260121T000000Z" end="20260121T000000Z" work-start="20260121T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20260121T000000Z"/>
     </task>
-    <task id="17" name="Rendu documentation" note="" work="0" duration="0" start="20260112T000000Z" end="20260112T000000Z" work-start="20260112T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="37" name="Rendu documentation" note="" work="0" duration="0" start="20260112T000000Z" end="20260112T000000Z" work-start="20260112T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20260112T000000Z"/>
     </task>
-    <task id="18" name="Soutenance" note="" work="0" duration="0" start="20260122T000000Z" end="20260122T000000Z" work-start="20260122T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
+    <task id="38" name="Soutenance" note="" work="0" duration="0" start="20260122T000000Z" end="20260122T000000Z" work-start="20260122T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20260122T000000Z"/>
     </task>
   </tasks>
   <resource-groups/>
   <resources>
-    <resource id="1" name="Etudiant 5" short-name="E5" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="2" name="Etudiant 4" short-name="E4" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="3" name="Etudiant 3" short-name="E3" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="4" name="Etudiant 2" short-name="E2" type="1" units="0" email="" note="" std-rate="0"/>
-    <resource id="5" name="Etudiant 1" short-name="E1" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="1" name="David" short-name="D" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="2" name="Placide" short-name="P" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="3" name="Hugo" short-name="H" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="4" name="Famagan" short-name="F" type="1" units="0" email="" note="" std-rate="0"/>
+    <resource id="5" name="Romain" short-name="R" type="1" units="0" email="" note="" std-rate="0"/>
   </resources>
   <allocations>
-    <allocation task-id="4" resource-id="1" units="100"/>
-    <allocation task-id="9" resource-id="2" units="100"/>
-    <allocation task-id="4" resource-id="2" units="100"/>
-    <allocation task-id="3" resource-id="2" units="100"/>
-    <allocation task-id="9" resource-id="3" units="100"/>
-    <allocation task-id="4" resource-id="3" units="100"/>
+    <allocation task-id="20" resource-id="1" units="100"/>
+    <allocation task-id="10" resource-id="1" units="100"/>
+    <allocation task-id="1" resource-id="1" units="100"/>
+    <allocation task-id="3" resource-id="1" units="100"/>
+    <allocation task-id="15" resource-id="1" units="100"/>
+    <allocation task-id="26" resource-id="2" units="100"/>
+    <allocation task-id="20" resource-id="2" units="100"/>
+    <allocation task-id="10" resource-id="2" units="100"/>
+    <allocation task-id="1" resource-id="2" units="100"/>
+    <allocation task-id="15" resource-id="2" units="100"/>
+    <allocation task-id="26" resource-id="3" units="100"/>
+    <allocation task-id="20" resource-id="3" units="100"/>
+    <allocation task-id="10" resource-id="3" units="100"/>
+    <allocation task-id="1" resource-id="3" units="100"/>
     <allocation task-id="3" resource-id="3" units="100"/>
-    <allocation task-id="7" resource-id="4" units="100"/>
-    <allocation task-id="9" resource-id="4" units="100"/>
-    <allocation task-id="4" resource-id="4" units="100"/>
-    <allocation task-id="2" resource-id="4" units="100"/>
-    <allocation task-id="9" resource-id="5" units="100"/>
-    <allocation task-id="4" resource-id="5" units="100"/>
-    <allocation task-id="2" resource-id="5" units="100"/>
+    <allocation task-id="15" resource-id="3" units="100"/>
+    <allocation task-id="26" resource-id="4" units="100"/>
+    <allocation task-id="20" resource-id="4" units="100"/>
+    <allocation task-id="10" resource-id="4" units="100"/>
+    <allocation task-id="1" resource-id="4" units="100"/>
+    <allocation task-id="15" resource-id="4" units="100"/>
+    <allocation task-id="26" resource-id="5" units="100"/>
+    <allocation task-id="20" resource-id="5" units="100"/>
+    <allocation task-id="10" resource-id="5" units="100"/>
+    <allocation task-id="1" resource-id="5" units="100"/>
+    <allocation task-id="15" resource-id="5" units="100"/>
   </allocations>
 </project>
