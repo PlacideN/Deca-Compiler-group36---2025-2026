@@ -57,6 +57,13 @@ public class EnvironmentType {
         return envTypes.get(s);
     }
 
+    public void declare(Symbol s, TypeDefinition def) throws ContextualError {
+        if (envTypes.containsKey(s)) {
+            throw new ContextualError("Type " + s + " is already defined.", def.getLocation());
+        }
+        envTypes.put(s, def);
+    }
+
     private void initializeObjectClass(DecacCompiler compiler) {
         // add Equals method to Object class
         Signature equalsSignature = new Signature();
