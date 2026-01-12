@@ -1,0 +1,13 @@
+// Description:
+//    Test d'appel de méthode (.) par simple appel ou affectation.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 12/01/2026
+
+{
+    int x = A.getField();
+    A.setField(1);
+}

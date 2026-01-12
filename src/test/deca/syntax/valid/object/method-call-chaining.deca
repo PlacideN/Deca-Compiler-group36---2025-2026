@@ -1,0 +1,12 @@
+// Description:
+//    Test d'un appel de méthode chaîné.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 12/01/2026
+
+{
+    a.getB().setC(1);
+}
