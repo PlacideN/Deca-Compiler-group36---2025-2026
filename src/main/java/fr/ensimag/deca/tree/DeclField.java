@@ -42,7 +42,6 @@ public class DeclField extends AbstractDeclField {
         s.print(" ");
         fieldName.decompile(s);
         if (init != null) {
-            s.print(" = ");
             init.decompile(s);
         }
         s.println(";");

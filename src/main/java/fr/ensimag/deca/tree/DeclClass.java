@@ -37,7 +37,7 @@ public class DeclClass extends AbstractDeclClass {
             superClassName.decompile(s);
         }
         if (!fields.getList().isEmpty() || !methods.getList().isEmpty()) {
-            s.print(" {");
+            s.println(" {");
             s.indent();
             fields.decompile(s);
             methods.decompile(s);
