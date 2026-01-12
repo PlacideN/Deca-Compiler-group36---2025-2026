@@ -23,7 +23,7 @@ public class DeclClass extends AbstractDeclClass {
 
     public DeclClass(AbstractIdentifier className, AbstractIdentifier superClassName, ListDeclField fields, ListDeclMethod methods) {
         Validate.notNull(className);
-        Validate.notNull(superClassName); // no extends => Object
+        // Validate.notNull(superClassName); // no extends => Object
         Validate.notNull(fields);
         Validate.notNull(methods);
 
