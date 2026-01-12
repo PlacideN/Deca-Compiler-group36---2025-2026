@@ -118,8 +118,23 @@ public class EnvironmentType {
      * Check if T1 is a subtype of T2.
      */   
     public boolean subtype(Type t1, Type t2) {
-        // Add other rules when classes are implemented
-        return t1.sameType(t2);
+        if (t1.equals(t2)) { // same type
+            return true;
+        }
+
+        if (t1.isNull() && t2.isClass()) { // null is subtype of all class types
+            return true;
+        }
+
+        if (t1.isClass() && t2.isClass()) { // inheritance
+            ClassDefinition superClassDef = ((ClassType) t1).getDefinition().getSuperClass();
+            if (superClassDef == null) { // base case => reached Object class
+                return false;
+            }
+            return subtype(superClassDef.getType(), t2); // recursive call
+        }
+        
+        return false;
     }
 
     public final VoidType    VOID;
