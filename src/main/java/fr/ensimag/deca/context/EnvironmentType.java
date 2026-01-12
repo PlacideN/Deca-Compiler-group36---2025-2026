@@ -3,6 +3,8 @@ package fr.ensimag.deca.context;
 import fr.ensimag.deca.DecacCompiler;
 import java.util.HashMap;
 import java.util.Map;
+
+import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
 
@@ -39,12 +41,41 @@ public class EnvironmentType {
         STRING = new StringType(stringSymb);
         // not added to envTypes, it's not visible for the user.
         
+        Symbol nullSymb = compiler.createSymbol("null");
+        NULL = new NullType(nullSymb);
+        // not visible for the user
+
+        Symbol objectSymb = compiler.createSymbol("Object");
+        OBJECT = new ClassType(objectSymb, Location.BUILTIN, null);
+        initializeObjectClass(compiler);
+        envTypes.put(objectSymb, OBJECT.getDefinition());
     }
 
     private final Map<Symbol, TypeDefinition> envTypes;
 
     public TypeDefinition defOfType(Symbol s) {
         return envTypes.get(s);
+    }
+
+    private void initializeObjectClass(DecacCompiler compiler) {
+        // add Equals method to Object class
+        Signature equalsSignature = new Signature();
+        Symbol equalsSymb = compiler.createSymbol("equals");
+        equalsSignature.add(OBJECT); // parameter of type Object
+        MethodDefinition equalsMethod = new MethodDefinition(
+            BOOLEAN,
+            Location.BUILTIN,
+            equalsSignature,
+            0
+        );
+
+        try {
+            OBJECT.getDefinition().getMembers().declare(equalsSymb, equalsMethod);
+        } catch (EnvironmentExp.DoubleDefException e) { // should not happen
+            throw new DecacInternalError("Double definition of method equals in Object class");
+        }
+
+        OBJECT.getDefinition().setNumberOfMethods(1);
     }
 
     /**
@@ -96,4 +127,6 @@ public class EnvironmentType {
     public final FloatType   FLOAT;
     public final StringType  STRING;
     public final BooleanType BOOLEAN;
+    public final NullType    NULL;
+    public final ClassType  OBJECT;
 }
