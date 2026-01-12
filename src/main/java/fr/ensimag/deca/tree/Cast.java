@@ -1,0 +1,57 @@
+package fr.ensimag.deca.tree;
+
+
+import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.tools.IndentPrintStream;
+
+import java.io.PrintStream;
+import org.apache.commons.lang.Validate;
+
+import fr.ensimag.ima.pseudocode.GPRegister;
+
+public class Cast extends AbstractExpr {
+    private final AbstractIdentifier typeName;
+    private final AbstractExpr expr;
+
+    public Cast(AbstractIdentifier typeName, AbstractExpr expr) {
+        Validate.notNull(typeName);
+        Validate.notNull(expr);
+        this.typeName = typeName;
+        this.expr = expr;
+    }
+
+    @Override
+    public void decompile(IndentPrintStream s) {
+        s.print("(");
+        typeName.decompile(s);
+        s.print(") ");
+        expr.decompile(s);
+    }
+
+    @Override
+    protected void iterChildren(TreeFunction f) {
+        typeName.iter(f);
+        expr.iter(f);
+    }
+
+    @Override
+    protected void prettyPrintChildren(PrintStream s, String prefix) {
+        typeName.prettyPrint(s, prefix, false);
+        expr.prettyPrint(s, prefix, true);
+    }
+
+    @Override
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
+
+    @Override
+    protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
+        throw new UnsupportedOperationException("Not implemented yet.");
+    }
+    
+}
