@@ -7,7 +7,12 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 /**
  * @author gl36
@@ -67,7 +72,31 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     protected void verifyFieldMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Type fieldType = type.verifyType(compiler);
+        if (fieldType.isVoid()) {
+            throw new ContextualError("Field type cannot be void", getLocation());
+        }
+
+        // name collision
+        Symbol name = fieldName.getName();
+        ExpDefinition inherited = currentClass.getSuperClass().getMembers().get(name);
+        if (inherited != null && inherited.isMethod()) {
+            throw new ContextualError("Field name collides with an inherited method", getLocation());
+        }
+
+        // declaration
+        int index = currentClass.getNumberOfFields() + 1;
+        FieldDefinition fieldDef = new FieldDefinition(fieldType, getLocation(), visibility, currentClass.getSuperClass(), index);
+        try {
+            currentClass.getMembers().declare(name, fieldDef);
+        } catch (DoubleDefException e) {
+            throw new ContextualError("Field " + name + " already defined in class", getLocation());
+        }
+
+        currentClass.setNumberOfFields(index);
+        
+        fieldName.setDefinition(fieldDef);
+        fieldName.setType(fieldType);
     }
 
     @Override
