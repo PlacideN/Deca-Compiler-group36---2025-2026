@@ -1,0 +1,12 @@
+// Description:
+//    Test d'un échappement d'antislash (\).
+//
+// Resultats:
+//    \
+//
+// Historique:
+//    cree le 13/01/2026
+
+{
+    println("\\");
+}

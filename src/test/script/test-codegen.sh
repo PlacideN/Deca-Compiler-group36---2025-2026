@@ -16,7 +16,7 @@ PATH="./src/test/script/launchers:./src/main/bin:$PATH"
 section "Running CodeGen Test Suite"
 
 # Test valid test files
-VALID_SUBFOLDERS="arithmetic boolean comparison control print variables"
+VALID_SUBFOLDERS="arithmetic boolean comparison control print variables special"
 
 for sub in $VALID_SUBFOLDERS; do
     dir="$ROOT_DIR/src/test/deca/codegen/valid/$sub"

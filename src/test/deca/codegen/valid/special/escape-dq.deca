@@ -1,0 +1,12 @@
+// Description:
+//    Test d'un échappement de guillemets.
+//
+// Resultats:
+//    This is a "quote"
+//
+// Historique:
+//    cree le 13/01/2026
+
+{
+    println("This is a \"quote\"");
+}
