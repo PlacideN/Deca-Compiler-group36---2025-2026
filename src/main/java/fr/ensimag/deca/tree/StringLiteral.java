@@ -29,7 +29,7 @@ public class StringLiteral extends AbstractStringLiteral {
 
     public StringLiteral(String value) {
         Validate.notNull(value);
-        this.value = value;
+        this.value = value.replace("\\\"", "\"").replace("\\\\", "\\");
     }
 
     @Override
@@ -58,7 +58,8 @@ public class StringLiteral extends AbstractStringLiteral {
 
     @Override
     public void decompile(IndentPrintStream s) {
-        s.print("\"" + value + "\"");
+        String raw = value.replace("\\", "\\\\").replace("\"", "\\\"");
+        s.print("\"" + raw + "\"");
     }
 
     @Override
