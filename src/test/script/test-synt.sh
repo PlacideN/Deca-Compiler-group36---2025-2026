@@ -18,68 +18,46 @@ PATH="./src/test/script/launchers:./src/main/bin:$PATH"
 section "Running Syntax Analysis Test Suite"
 
 # Valid Syntax Files
-for f in src/test/deca/syntax/valid/*.deca; do
-    [ -e "$f" ] || continue 
+VALID_FILES=$(find src/test/deca/syntax/valid -name "*.deca")
+for f in $VALID_FILES; do
 
-    # Since all keywords are not yet implented (for the no-object sublanguage) 
-    # skip files using them
+    # skip lexical tests
     case "$f" in
-        *-lex*) continue ;;
+        *valid/lexer*) 
+            continue 
+            ;;
     esac
-
-    test_synt "$f" > "$f-synt.temp" 2>&1
+    
+    decac -p "$f" > "$f.decompiled" 2> "$f.error"
     if [ $? -ne 0 ]; then
-        failure "Real error in valid syntax file: $f"
-        printf "%s\n" "$output"
+        failure "Should not fail to decompile valid file: $f"
+        rm -f "$f.decompiled" "$f.error"
         continue
     fi
 
-    ref=$(printf "%s" "$f" | sed 's/\.deca/.ref/') # check for a corresponding .ref file
-    if [ -f "$ref" ]; then
-        info "Comparing $f against reference..."
-
-        if diff -b -B -Z "$f-synt.temp" "$ref"; then
-            success "$f The AST is identical to the reference."
-        else
-            failure "$f The AST differs from the reference."
-        fi
+    test_synt "$f" | sed 's/\[[0-9]*, [0-9]*\]//g' > "$f-AST-from-original" 2>&1
+    test_synt "$f.decompiled" | sed 's/\[[0-9]*, [0-9]*\]//g' > "$f-AST-from-decompiled" 2>&1
+    
+    if diff -b -B -Z "$f-AST-from-original" "$f-AST-from-decompiled" > /dev/null; then
+        success "Decompilation preserved the AST structure for: $f"
     else
-        success "No reference found, skipping comparison for $f"
+        failure "Decompilation changed the AST structure for: $f"
+        diff -u "$f-AST-from-original" "$f-AST-from-decompiled"
     fi
-    rm "$f-synt.temp"
+
+    rm -f "$f.decompiled" "$f.error" "$f-AST-from-original" "$f-AST-from-decompiled"
 done
 
-
-# Run also the provided tests
-for f in src/test/deca/syntax/valid/provided/*.deca; do
-    [ -e "$f" ] || continue 
-    test_synt "$f" > /dev/null 2>&1 # /dev/null runs silently
-    if [ $? -eq 0 ]; then
-        success "$f"
-    else
-        failure "Real error in valid syntax file: $f"
-    fi
-done
 
 # Invalid Syntax Files
-for f in src/test/deca/syntax/invalid/*-parse.deca; do
+INVALID_FILES=$(find src/test/deca/syntax/invalid -name "*.deca")
+for f in $INVALID_FILES; do
     [ -e "$f" ] || continue # skip if no files found
-    output=$(test_synt "$f" 2>&1)
+    output=$(decac -p "$f" 2>&1)
     if [ $? -ne 0 ]; then
         success "Error correctly detected in: $f"
     else
         failure "Parser failed to detect error in: $f"
         echo "$output"
-    fi
-done
-
-# Run also the provided tests
-for f in src/test/deca/syntax/invalid/provided/*-parse.deca; do
-    [ -e "$f" ] || continue
-    test_synt "$f" > /dev/null 2>&1;
-    if [ $? -ne 0 ]; then
-        success "Error correctly detected in: $f"
-    else
-        failure "Parser failed to detect error in: $f"
     fi
 done

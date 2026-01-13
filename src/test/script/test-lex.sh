@@ -23,26 +23,17 @@ for f in $VALID_FILES; do
     [ -e "$f" ] || continue # skip if no files found
     output=$(test_lex "$f" 2>&1)
     if [ $? -ne 0 ]; then
-        failure "Real error in valid lex file: $f"
+        failure "Lexical error in valid file: $f"
         printf "%s\n" "$output"
     else
-        success "$f"
+        success "No lexical error in: $(basename "$f")"
     fi
 done
 
-# Run also the provided tests
-for f in src/test/deca/syntax/valid/provided/*.deca; do
-    [ -e "$f" ] || continue 
-    test_lex "$f" > /dev/null 2>&1 # /dev/null runs silently
-    if [ $? -eq 0 ]; then
-        success "$f"
-    else
-        failure "Real error in valid lex file: $f"
-    fi
-done
 
 # Invalid Lexical Files
-for f in src/test/deca/syntax/invalid/*-lex.deca; do
+INVALID_FILES=$(find src/test/deca/syntax/invalid \( -path "*/lexer/*" -o -name "*-lex.deca" \) -name "*.deca");
+for f in $INVALID_FILES; do
     [ -e "$f" ] || continue # skip if no files found
     output=$(test_lex "$f" 2>&1)
     if [ $? -ne 0 ]; then
@@ -50,16 +41,5 @@ for f in src/test/deca/syntax/invalid/*-lex.deca; do
     else
         failure "Lexer failed to detect error in: $f"
         echo "$output"
-    fi
-done
-
-# Run also the provided tests
-for f in src/test/deca/syntax/invalid/provided/*-lex.deca; do
-    [ -e "$f" ] || continue
-    test_lex "$f" > /dev/null 2>&1;
-    if [ $? -ne 0 ]; then
-        success "Error correctly detected in: $f"
-    else
-        failure "Lexer failed to detect error in: $f"
     fi
 done
