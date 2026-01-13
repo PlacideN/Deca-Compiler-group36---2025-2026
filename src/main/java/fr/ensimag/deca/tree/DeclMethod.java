@@ -49,7 +49,7 @@ public class DeclMethod extends AbstractDeclMethod {
         s.print(") ");
         methodBody.decompile(s);
     }
-*
+
     @Override
     protected void prettyPrintChildren(java.io.PrintStream s, String prefix) {
         returnType.prettyPrint(s, prefix, false);
