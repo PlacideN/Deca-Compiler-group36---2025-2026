@@ -1,0 +1,16 @@
+// Description:
+//    Test l'affectation dans une condition d'une condition if.
+//    Vérifie l'ordre d'évaluation de la condition par rapport à l'affectation.
+//
+// Resultats:
+//    1
+//
+// Historique:
+//    cree le 13/01/2026
+
+{
+    int x = 0;
+    if ((x = 1) == 1) {
+        println(x);
+    }
+}

@@ -1,0 +1,13 @@
+// Description:
+//    Test d'évaluation d'une affectation comme paramètre d'un println.
+//
+// Resultats:
+//    11
+//
+// Historique:
+//    cree le 13/01/2026
+
+{
+    int x = 0;
+    println(x = 1, "", x); 
+}

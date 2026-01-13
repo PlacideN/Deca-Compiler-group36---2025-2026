@@ -1,0 +1,17 @@
+// Description:
+//    Test de l'opérateur modulo et division.
+//    Vérifie le calcul avec des nombres négatifs.
+//
+// Resultats:
+//    -1
+//    -2
+//
+// Historique:
+//      cree le 13/01/2026
+
+{
+    int x = -5 % 2;
+    int y = -5 / 2;
+    println(x);
+    println(y);
+}

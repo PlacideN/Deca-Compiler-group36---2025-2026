@@ -1,0 +1,17 @@
+// Description:
+//    Test de l'affectation chaînée.
+//    Déclare 3 variables, affecte la valeur '10' puis les affiche à la suite.
+//
+// Resultats:
+//    101010
+//
+// Historique:
+//    cree le 13/01/2026
+
+{
+    int x;
+    int y;
+    int z;
+    x = y = z = 10;
+    println(x, y, z);
+}

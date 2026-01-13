@@ -14,4 +14,7 @@
     if (x == f) {
         println("true");
     }
+    if (f > 2.0) {
+        println("false");
+    }
 }
