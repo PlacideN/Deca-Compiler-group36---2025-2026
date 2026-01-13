@@ -1,0 +1,14 @@
+// Description:
+//    Tests d'instruction lexicalement correct. 
+//    Deux opérateurs binaires ne peuvent pas être côte à côte.
+//
+// Resultats:
+//    Erreur de syntaxe.
+//    Ligne 13 : extraneous input '*' expecting {'false', 'readInt', 'readFloat', 'true', '(', '!', '-', INT, FLOAT, IDENT, STRING}
+//
+// Historique:
+//    cree le 13/01/2026
+
+{
+    int x = 5 + * 3;
+}

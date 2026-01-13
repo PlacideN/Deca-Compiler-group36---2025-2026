@@ -2,7 +2,7 @@
 //    Programme inclu lexicalement incorrect. Inclut un fichier avec une chaine incomplete
 //
 // Resultats:
-//    Erreur de syntaxe.
+//    Erreur lexicale.
 //    Ligne 2: token recognition error at: '"Hello World'
 //
 // Historique:

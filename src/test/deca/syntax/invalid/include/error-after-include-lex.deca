@@ -1,0 +1,15 @@
+// Description:
+//    Programme inclu lexicalement incorrect après une inclusion.
+//
+// Resultats:
+//    Erreur lexicale.
+//    Ligne 12: no viable alternative at input 'invalid'
+//
+// Historique:
+//    cree le 13/01/2026
+
+#include "file.ref"
+invalid; 
+{
+    println("Never print")
+}
