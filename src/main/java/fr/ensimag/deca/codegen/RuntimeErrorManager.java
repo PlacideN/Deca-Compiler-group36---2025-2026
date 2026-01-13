@@ -26,7 +26,8 @@ public class RuntimeErrorManager {
         MOD_BY_ZERO("Error: Modulo by zero"),
         STACK_OVERFLOW("Error: Stack overflow"),
         IO("Error: Input/Output error"),
-        OVERFLOW("Error: Overflow during arithmetic operation"),;
+        OVERFLOW("Error: Overflow during arithmetic operation"),
+        NO_RETURN("Error: No return statement in function with non-void return type");
 
         private final String message;
 

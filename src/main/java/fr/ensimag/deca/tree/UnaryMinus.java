@@ -43,5 +43,5 @@ public class UnaryMinus extends AbstractUnaryExpr {
         compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.OPP(target, target));
     }
     
-
+    
 }

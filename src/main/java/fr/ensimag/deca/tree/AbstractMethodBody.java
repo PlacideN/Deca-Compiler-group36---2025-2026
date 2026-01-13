@@ -17,4 +17,5 @@ public abstract class AbstractMethodBody extends Tree {
      * Pass 3 of [Syntaxe Contextuelle]. Verify method body (3.11).
      */
     protected abstract void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError;
+    protected abstract void codeGenMethodBody(DecacCompiler compiler);
 }

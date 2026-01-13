@@ -25,6 +25,18 @@ public class LabelManager {
         return whileCount++;
     }
 
+    
+    private Label currentMethodEndLabel;
+
+    public void setMethodEndLabel(Label label) {
+        this.currentMethodEndLabel = label;
+    }
+
+    public Label getMethodEndLabel() {
+        return this.currentMethodEndLabel;
+    }
+    
+
     public Label ifEndLabel(int ifNumber) {
         return new Label("if_end_" + ifNumber);
     }

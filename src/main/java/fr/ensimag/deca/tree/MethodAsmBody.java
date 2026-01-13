@@ -41,4 +41,9 @@ public class MethodAsmBody extends AbstractMethodBody {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
+    @Override
+    protected void codeGenMethodBody(DecacCompiler compiler) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
 }

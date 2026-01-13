@@ -31,6 +31,8 @@ public class Divide extends AbstractOpArith {
 
     @Override
     protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src) {
+
+
         if (getLeftOperand().getType().isInt() && getRightOperand().getType().isInt()) {
             compiler.addInstruction(new QUO(src, dest));
             if (!compiler.getCompilerOptions().getNoCheck()) {

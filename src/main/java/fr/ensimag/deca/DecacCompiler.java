@@ -192,6 +192,14 @@ public class DecacCompiler {
      *
      * @return true on error
      */
+
+    /**
+     * Get the label manager.
+     */
+
+
+
+
     public boolean compile() {
         String sourceFile = source.getAbsolutePath();
         String destFile = sourceFile.substring(0, sourceFile.lastIndexOf('.')) + ".ass";    

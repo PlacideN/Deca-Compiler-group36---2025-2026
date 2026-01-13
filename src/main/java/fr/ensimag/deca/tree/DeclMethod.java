@@ -14,7 +14,9 @@ import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
-
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.deca.codegen.LabelManager;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
 /**
  * @author gl36
  * @date 11/01/2026
@@ -47,7 +49,7 @@ public class DeclMethod extends AbstractDeclMethod {
         s.print(") ");
         methodBody.decompile(s);
     }
-
+*
     @Override
     protected void prettyPrintChildren(java.io.PrintStream s, String prefix) {
         returnType.prettyPrint(s, prefix, false);
@@ -103,5 +105,30 @@ public class DeclMethod extends AbstractDeclMethod {
     @Override
     protected void verifyMethodBody(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+
+
+    @Override
+    protected void codeGenMethod(DecacCompiler compiler) {
+        // 1. On crée l'étiquette
+        Label endLabel = new Label("end." + methodName.getName().getName());
+        
+        // 2. MODIFICATION : On l'enregistre dans le LabelManager
+        compiler.getLabelManager().setMethodEndLabel(endLabel);
+
+        // 3. Corps de la méthode
+        this.methodBody.codeGenMethodBody(compiler);
+
+        // 4. Le piège pour le return manquant
+        if (!returnType.getType().isVoid()) {
+            Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(
+                    fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType.NO_RETURN);
+            compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.BRA(errorLabel));
+        }
+
+        // 5. Fin de la méthode
+        compiler.addLabel(endLabel);
+        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.RTS());
     }
 }

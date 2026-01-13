@@ -6,9 +6,11 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
-
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.Label;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
+
 
 public class Return extends AbstractInst {
     private AbstractExpr expr;
@@ -25,6 +27,7 @@ public class Return extends AbstractInst {
             if (returnType.isVoid()) {
                 throw new ContextualError("Return expression cannot be of void type", getLocation());
             }
+
 
             // The expression must match the return type (with float to int promotion).
             // Not relevant for the "no-object" sublanguage.
@@ -50,7 +53,8 @@ public class Return extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("not yet implemented");
+        expr.codeGenExpr(compiler, Register.R0);
+        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.BRA(compiler.getLabelManager().getMethodEndLabel()));
     }  
     
 }
