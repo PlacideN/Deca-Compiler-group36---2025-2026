@@ -1,0 +1,13 @@
+// Description:
+//    Test de reconnaissance des commentaires
+//
+// Results:
+//    Syntaxiquement correct
+//
+// History:
+//    13/01/2026
+
+{
+    /* Commentaire */ x = x + 5; /* Commentaire */
+    /* Commentaire avec * qui doit être reconnu jusqu'au bout *** / */ 
+}

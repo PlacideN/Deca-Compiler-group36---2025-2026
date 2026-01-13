@@ -1,0 +1,14 @@
+// Description:
+//    Test des représentations hexadécimales des flottants autour de 0.
+//
+// Resultats:
+//    Syntaxiquement correct
+//
+// Historique:
+//    cree le 13/01/2026
+
+{
+    println(1e-10);
+    println(0.000);
+    println(0x0.0p0);
+}

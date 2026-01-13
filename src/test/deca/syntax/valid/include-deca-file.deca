@@ -1,0 +1,11 @@
+// Description:
+//    Test de l'inclusion de fichiers .deca
+//
+// Results:
+//    Syntaxiquement correct
+//
+
+#include "header.ref"
+{
+    #include "main.ref"
+}

@@ -1,0 +1,11 @@
+// Description:
+//    Test d'utilisation de charactères spéciaux dans les commentaires et les chaînes de charactères
+//
+// Results:
+//    Syntaxiquement correct
+//
+
+{
+    // +ěščřžýáíé&"'-è_çà@#$%*()1234567890
+    println("+ěščřžýáíé&'-è_çà@#$%*()1234567890");
+}

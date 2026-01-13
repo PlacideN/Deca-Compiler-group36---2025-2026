@@ -1,0 +1,2 @@
+// .deca file containing a lexical error (unclosed string)
+println("Hello World
