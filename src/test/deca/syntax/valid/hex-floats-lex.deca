@@ -1,6 +1,5 @@
 // Description:
-//    Test des priorités des opérateurs.
-//    Vérifie que le parser reconnait les priorités naturelles et manuelles.
+//    Test des représentations hexadécimales des flottants.
 //
 // Resultats:
 //    Syntaxiquement correct
