@@ -2,11 +2,10 @@
 //    Programme lexicalement incorrect
 //
 // Resultats:
-//    Ligne 11: Erreur "Invalid identifier"
+//    Erreur lexicale
+//    Ligne 11: Erreur "Unterminated comment"
 //
 // Historique:
 //    cree le 07/01/2026
 
-{
-    2int;
-}
+/* Commentaire non ferme

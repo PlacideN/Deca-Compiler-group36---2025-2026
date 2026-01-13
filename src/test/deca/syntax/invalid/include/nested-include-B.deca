@@ -1,0 +1,11 @@
+// Description:
+//    Test d'inclusion cyclique. Le fichier -B inclut -A qui inclut -B.
+//
+// Resultats:
+//    Erreur de syntaxe
+//    Ligne 11: Circular include for file nested-include-B.deca
+//
+// Historique:
+//    cree le 13/01/2026
+
+#include "nested-include-B.deca"

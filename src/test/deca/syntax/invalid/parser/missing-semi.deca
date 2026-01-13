@@ -1,0 +1,13 @@
+// Description:
+//    Tests d'instruction lexicalement correct. Point virgule manquant en fin d'instruction.
+//
+// Resultats:
+//    Erreur de syntaxe.
+//    Ligne 13 : no viable alternative at input '}'
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+    int x = 3
+}

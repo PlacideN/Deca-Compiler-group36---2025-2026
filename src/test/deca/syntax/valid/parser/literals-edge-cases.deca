@@ -1,8 +1,8 @@
 // Description:
-//      Test des limites de validité des entiers (32-bits) et flottants (IEEE 754)
+//    Test des limites de validité des entiers (32-bits) et flottants (IEEE 754)
 //
 // Resultats:
-//      Pas d'erreur.
+//    Pas d'erreur.
 //
 // Historique:
 //    cree le 07/01/2026

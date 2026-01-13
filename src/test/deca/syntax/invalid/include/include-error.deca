@@ -1,0 +1,13 @@
+// Description:
+//    Programme inclu lexicalement incorrect. Inclut un fichier avec une chaine incomplete
+//
+// Resultats:
+//    Erreur de syntaxe.
+//    Ligne 2: token recognition error at: '"Hello World'
+//
+// Historique:
+//    cree le 13/01/2026
+
+{
+    #include "error.ref"
+}

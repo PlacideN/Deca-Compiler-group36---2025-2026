@@ -1,0 +1,15 @@
+// Description:
+//    Test de débordement d'un flottant.
+//    Vérifie que le compilateur rejette un flottant trop petit (isInfinite)
+//
+// Resultats:
+//    Erreur de syntaxe
+//    Ligne 14: Float literal underflow
+//
+// Historique:
+//    cree le 13/01/2026
+
+
+{
+    float x = 1.0e-500;
+}

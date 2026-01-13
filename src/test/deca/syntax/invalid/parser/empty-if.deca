@@ -1,0 +1,15 @@
+// Description:
+//    Tests d'instruction lexicalement correct. Une structure conditionnelle doit 
+//    fournir une condition booléenne valide.
+//
+// Resultats:
+//    Erreur de syntaxe.
+//    Ligne 13 : mismatched input ')' expecting {'false', 'readInt', 'readFloat', 'true', '(', '!', '-', INT, FLOAT, IDENT, STRING}
+//
+// Historique:
+//    cree le 07/01/2026
+
+{
+    if () {
+    }
+}
