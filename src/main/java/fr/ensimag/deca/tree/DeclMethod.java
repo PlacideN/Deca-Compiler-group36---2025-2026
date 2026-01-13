@@ -1,10 +1,18 @@
 package fr.ensimag.deca.tree;
 
+import java.lang.reflect.Method;
+
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.context.Signature;
+import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
@@ -58,7 +66,38 @@ public class DeclMethod extends AbstractDeclMethod {
     
     @Override
     protected void verifyMethodMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Type type = returnType.verifyType(compiler);
+        Signature sig = params.verifyListParamType(compiler);
+        ClassDefinition superClassDef = currentClass.getSuperClass();
+        ExpDefinition inherited = superClassDef.getMembers().get(methodName.getName());
+
+        int index;
+        if (inherited != null) {
+            MethodDefinition inheritedMethodDef = inherited.asMethodDefinition("The name " + methodName.getName().getName() + " is already used by a field in superclass", getLocation());
+            
+            if (!sig.equals(inheritedMethodDef.getSignature())) {
+                throw new ContextualError("Method '" + methodName.getName() 
+                    + "' signature does not match inherited method.", getLocation());
+            }
+
+            if (!compiler.environmentType.subtype(type, inheritedMethodDef.getType())) {
+                throw new ContextualError("Method '" + methodName.getName() 
+                    + "' return type is not a valid subtype of inherited method.", getLocation());
+            }
+
+            index = inheritedMethodDef.getIndex();
+        } else {
+            index = currentClass.incNumberOfMethods();
+        }
+
+        MethodDefinition methodDef = new MethodDefinition(type, getLocation(), sig, index);
+        try {
+            currentClass.getMembers().declare(methodName.getName(), methodDef);
+        } catch (DoubleDefException e) {
+            throw new ContextualError("Method '" + methodName.getName() + "' is already defined in class '" + currentClass.getClass().getName() + "'.", getLocation()); 
+        }
+
+        methodName.setDefinition(methodDef);
     }
 
     @Override
