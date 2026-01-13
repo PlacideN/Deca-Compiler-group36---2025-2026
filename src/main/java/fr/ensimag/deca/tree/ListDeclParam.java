@@ -1,8 +1,11 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.tools.IndentPrintStream;
+
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.Signature;
+import fr.ensimag.deca.context.Type;
 
 public class ListDeclParam extends TreeList<AbstractDeclParam> {
 
@@ -22,10 +25,13 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
     /**
      * Pass 2 of [Syntaxe Contextuelle]. Delegate verification to each parameter (Rule 2.8)
      */
-    void verifyListParamType(DecacCompiler compiler) throws ContextualError {
+    public Signature verifyListParamType(DecacCompiler compiler) throws ContextualError {
+        Signature sig = new Signature();
         for (AbstractDeclParam p : getList()) {
-            p.verifyParamType(compiler);
+            Type paramType = p.verifyParamType(compiler);
+            sig.add(paramType);
         }
+        return sig;
     }
 
     /**
