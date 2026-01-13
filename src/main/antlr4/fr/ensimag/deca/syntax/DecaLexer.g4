@@ -92,17 +92,18 @@ fragment STRING_CAR : ~( '"' | '\\' | '\r' | '\n');
 STRING : '"' (STRING_CAR | '\\"' | '\\\\')* '"';
 MULTI_LINE_STRING : '"' (STRING_CAR | EOL | '\\"' | '\\\\')* '"';
 
-// Commentaires
-COMMENT : '//' ~[\r\n]* {skip();};
-MULTI_LINE_COMMENT: '/*' -> more, pushMode(IN_COMMENT);
-mode IN_COMMENT; 
-COMMENT_END: '*/' -> popMode;
-COMMENT_CONTENT:  . -> more;
-UNTERMINATED_COMMENT: EOF -> popMode;
-
 // Inclusions de fichiers
 fragment FILENAME : (LETTER | DIGIT | '.' | '-' | '_')+;
 INCLUDE : '#include' (' ')* '"' FILENAME '"' {
    String text = getText();
    doInclude(text);
    };
+
+// Commentaires
+COMMENT : '//' ~[\r\n]* {skip();};
+MULTI_LINE_COMMENT: '/*' -> more, pushMode(IN_COMMENT);
+mode IN_COMMENT; 
+COMMENT_END: '*/' -> skip, popMode;
+COMMENT_CONTENT:  . -> more;
+UNTERMINATED_COMMENT: EOF -> popMode;
+
