@@ -1,0 +1,13 @@
+// Description:
+//    Test d'une chaîne de caractères dans un Main.
+//
+// Resultats:
+//    OK
+//
+// Historique:
+//    cree le 13/01/2026
+
+{
+    "Hello World";
+    println("OK");
+}

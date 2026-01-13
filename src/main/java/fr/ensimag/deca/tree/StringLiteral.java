@@ -52,6 +52,11 @@ public class StringLiteral extends AbstractStringLiteral {
     }
 
     @Override
+    protected void codeGenInst(DecacCompiler compiler) {
+        // A standalone string literal has no effect.
+    }
+
+    @Override
     public void decompile(IndentPrintStream s) {
         s.print("\"" + value + "\"");
     }
