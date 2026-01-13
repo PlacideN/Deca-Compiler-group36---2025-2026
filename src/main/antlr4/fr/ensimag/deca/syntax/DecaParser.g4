@@ -488,12 +488,26 @@ literal returns[AbstractExpr tree]
             setLocation($tree, $INT);
         }
     | fd=FLOAT {
-            float value = Float.parseFloat($fd.getText());
+            String raw = $fd.getText().toLowerCase();
+            float value = Float.parseFloat(raw);
+
             if (Float.isInfinite(value)) {
                 throw new ParseCancellationException(
                     new LocationException("Float literal overflow", tokenLocation($fd))
                 );
             }
+
+            if (value == 0.0f){
+                String numbersOnly = raw.replaceFirst("0x", "").replaceAll("[ep[+\\-f]]", "");
+                boolean isZero = !numbersOnly.matches(".*[1-9a-f].*");
+
+                if (!isZero) {
+                    throw new ParseCancellationException(
+                        new LocationException("Float literal underflow", tokenLocation($fd))
+                    );
+                }
+            }
+            
             $tree = new FloatLiteral(value);
             setLocation($tree, $fd);
         }
