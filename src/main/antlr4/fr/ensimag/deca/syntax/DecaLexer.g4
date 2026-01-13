@@ -104,9 +104,5 @@ UNTERMINATED_COMMENT: EOF -> popMode;
 fragment FILENAME : (LETTER | DIGIT | '.' | '-' | '_')+;
 INCLUDE : '#include' (' ')* '"' FILENAME '"' {
    String text = getText();
-   // on cherche entre les guillemets
-   int first = text.indexOf('"');
-   int last = text.lastIndexOf('"');
-   String name = text.substring(first + 1, last);
-   doInclude(name);
+   doInclude(text);
    };
