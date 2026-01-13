@@ -43,6 +43,12 @@ public class Modulo extends AbstractOpArith {
     }
 
     @Override
+    public Priority getPriority() {
+        return Priority.PRODUCT;
+    }
+
+
+    @Override
     protected void codeGenOpArith(DecacCompiler compiler, GPRegister dest, GPRegister src) {
         compiler.addInstruction(new REM(src, dest));
         if (!compiler.getCompilerOptions().getNoCheck()) {
