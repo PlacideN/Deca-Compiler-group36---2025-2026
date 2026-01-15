@@ -7,7 +7,9 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.DAddr;
-
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 import java.io.PrintStream;
 
 /**
@@ -42,7 +44,10 @@ public class NoInitialization extends AbstractInitialization {
 
     @Override
     protected void codeGenInit(DecacCompiler compiler, DAddr address) {
-        // nothing
+        GPRegister r = compiler.getRegisterManager().allocateRegister();
+        compiler.addInstruction(new LOAD(0, r));
+        compiler.addInstruction(new STORE(r, address));
+        compiler.getRegisterManager().freeRegister(r);
     }
 
     @Override
