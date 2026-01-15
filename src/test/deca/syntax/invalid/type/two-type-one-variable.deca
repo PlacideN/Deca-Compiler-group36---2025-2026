@@ -1,0 +1,12 @@
+// Description: 
+//      test avec deux types et une variable
+// Résultat attendu :
+//      Erreur contextuelle : variable déjà définie 
+//
+// Historique:
+// Création : 15/01/2026
+
+{
+    int x;
+    float x;
+}

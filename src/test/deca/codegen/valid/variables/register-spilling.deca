@@ -1,0 +1,15 @@
+// Description:
+//    On utilise beaucoup de variables dans une seule ligne 
+//    pour forcer l'utilisation de la pile (spilling)
+//
+// Resultats:
+//    20
+//
+// Historique:
+//    cree le 15/01/2026
+
+{
+    int a=1, b=1, c=1, d=1, e=1, f=1, g=1, h=1, i=1, j=1;
+   int res = a+b+c+d+e+f+g+h+i+j + a+b+c+d+e+f+g+h+i+j;
+   println(res);
+}

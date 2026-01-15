@@ -1,0 +1,12 @@
+// Description: 
+//      assign a boolean to an int
+// Résultat attendu :
+//      Erreur contextuelle : variable déjà définie 
+//
+// Historique:
+// Création : 15/01/2026
+{
+    int x;
+    boolean b = true;
+    x = b;
+}
