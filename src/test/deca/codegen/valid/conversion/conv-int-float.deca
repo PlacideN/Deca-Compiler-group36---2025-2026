@@ -1,0 +1,14 @@
+// Description:
+//    Test de cast explicite de float vers int (troncation).
+//
+// Resultats:
+//    12
+//
+// Historique:
+//    cree le 15/01/2026
+
+{
+    float f = 12.95;
+    int x = (int)(f);
+    println(x);
+}

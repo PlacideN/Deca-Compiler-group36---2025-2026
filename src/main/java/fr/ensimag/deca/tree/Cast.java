@@ -7,7 +7,7 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
-
+import fr.ensimag.ima.pseudocode.instructions.INT;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -57,7 +57,13 @@ public class Cast extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        expr.codeGenExpr(compiler, target);
+        Type sourceType = expr.getType();
+        Type targetType = this.getType();
+        if (sourceType.isFloat() && targetType.isInt()) {
+            compiler.addInstruction(new INT(target, target));
+        } else if (!sourceType.isFloat() || !targetType.isInt()) {
+            throw new UnsupportedOperationException("Unsupported cast from " + sourceType + " to " + targetType);
+        }
     }
-    
 }
