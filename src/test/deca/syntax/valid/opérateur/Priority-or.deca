@@ -1,0 +1,16 @@
+// Description:
+//    Vérifie la priorité à gauche de l'opérateur OR
+//
+// Resultats:
+//    ok
+//
+// Historique:
+//    cree le 15/01/2026
+
+{
+    if (true || (1 / 0 == 0)) {
+        println("ok");
+    } else {
+        println("erreur");
+    }
+}

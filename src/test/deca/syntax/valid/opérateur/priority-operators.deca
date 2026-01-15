@@ -1,0 +1,18 @@
+// Description:
+//    Test de logique combinée avec parenthèses et négations.
+//
+// Resultats:
+//    succes
+//
+// Historique:
+//    cree le 15/01/2026
+
+{
+    boolean a = true;
+    boolean b = false;
+    if (!(a && b) && (a || b)) {
+        println("success");
+    } else {
+        println("echec");
+    }
+}
