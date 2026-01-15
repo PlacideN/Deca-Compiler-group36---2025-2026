@@ -237,4 +237,33 @@ public class Identifier extends AbstractIdentifier {
         }
     }
 
+    @Override
+    public FieldDefinition verifyFieldIdent(DecacCompiler compiler, EnvironmentExp localEnv) 
+            throws ContextualError {
+        ExpDefinition def = localEnv.get(this.getName());
+        if (def == null || !def.isField()) {
+            throw new ContextualError("Identifier " + getName() + " is not a field", getLocation());
+        }
+        
+        FieldDefinition fieldDef = (FieldDefinition) def;
+        this.setDefinition(fieldDef);
+        this.setType(fieldDef.getType());
+        return fieldDef;
+    }
+
+    @Override
+    public MethodDefinition verifyMethodIdent(DecacCompiler compiler, EnvironmentExp localEnv) 
+            throws ContextualError {
+        ExpDefinition def = localEnv.get(this.getName());
+        
+        if (def == null || !def.isMethod()) {
+            throw new ContextualError("Identifier " + getName() + " is not a method", getLocation());
+        }
+        
+        MethodDefinition methodDef = (MethodDefinition) def;
+        this.setDefinition(methodDef);
+        this.setType(methodDef.getType());
+        return methodDef;
+    }
+
 }
