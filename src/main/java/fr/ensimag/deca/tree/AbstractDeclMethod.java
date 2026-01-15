@@ -12,15 +12,24 @@ import fr.ensimag.deca.context.ContextualError;
  */
 public abstract class AbstractDeclMethod extends Tree {
     /**
-     * Pass 2 of [Syntaxe Contextuelle]. Verify method signature and return type (Rule 2.7).
+     * Implements non-terminal "decl_method" of [SyntaxeContextuelle] in pass 2 (Rule 2.7). 
+     * Verify method signature and return type.
+     * @param compiler contains the "env_types" attribute
+     * @param currentClass corresponds to the "class" attribute
      */
     protected abstract void verifyMethodMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError;
 
     /**
-     * Pass 3 of [Syntaxe Contextuelle]. Verify method body (3.11).
+     * Implements non-terminal "decl_method" of [SyntaxeContextuelle] in pass 3 (Rule 3.11). 
+     * Verify method body.
+     * @param compiler contains the "env_types" attribute
+     * @param currentClass corresponds to the "class" attribute
      */
     protected abstract void verifyMethodBody(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError;
 
+    /** Generate code for method.
+     * @param compiler 
+     */
     protected abstract void codeGenMethod(DecacCompiler compiler) throws ContextualError;
 
 }

@@ -13,14 +13,16 @@ import fr.ensimag.deca.context.Type;
  */
 public abstract class AbstractDeclParam extends Tree {
     /**
-     * Pass 2 of [Syntaxe Contextuelle]. Verify the parameter type and 
-     * return it to build the method signature (Rule 2.9).
+     * Implements non-terminal "decl_param" of [SyntaxeContextuelle] in pass 2 (Rule 2.9).
+     * @param compiler contains the "env_types" attribute
+     * @return Type corresponds to the "type" attribute
      */
     protected abstract Type verifyParamType(DecacCompiler compiler) throws ContextualError;
 
     /**
-     * Pass 3 of [Syntaxe Contextuelle]. Verify the parameter name and 
-     * add it to the method's local environment (Rule 3.13).
+     * Implements non-terminal "decl_param" of [SyntaxeContextuelle] in pass 3 (Rule 3.13).
+     * @param compiler contains the "env_types" attribute
+     * @param localEnv corresponds to the "env_exp" attribute (params)
      */
     protected abstract void verifyParamName(DecacCompiler compiler, EnvironmentExp localEnv) throws ContextualError;
 }

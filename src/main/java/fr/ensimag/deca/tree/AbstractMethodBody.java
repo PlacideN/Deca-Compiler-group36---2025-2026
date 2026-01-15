@@ -14,8 +14,20 @@ import fr.ensimag.deca.context.Type;
  */
 public abstract class AbstractMethodBody extends Tree {
     /**
-     * Pass 3 of [Syntaxe Contextuelle]. Verify method body (3.11).
+     * Implements non-terminal "method_body" of [SyntaxeContextuelle] in pass 3
+     * @param compiler contains the "env_types" attribute
+     * @param localEnv its "parentEnvironment" corresponds to "env_exp_sup" attribute (the class) and the "current" corresponds to the "env_exp" attribute (the parameters)
+     * @param currentClass 
+     * corresponds to "class" attribute
+     * @param returnType
+     * corresponds to "return" attribute
      */
     protected abstract void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError;
+
+    /**
+     * Generate code for the method body.
+     * 
+     * @param compiler
+     */
     protected abstract void codeGenMethodBody(DecacCompiler compiler);
 }

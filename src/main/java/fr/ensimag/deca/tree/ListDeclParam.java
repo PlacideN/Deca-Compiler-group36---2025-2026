@@ -4,6 +4,7 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
 
@@ -23,7 +24,9 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
     }
 
     /**
-     * Pass 2 of [Syntaxe Contextuelle]. Delegate verification to each parameter (Rule 2.8)
+     * Implements non-terminal "list_decl_param" of [SyntaxeContextuelle] in pass 2 (Rule 2.8)
+     * @param compiler contains the "env_types" attribute
+     * @return Signature corresponds to the "sig" attribute
      */
     public Signature verifyListParamType(DecacCompiler compiler) throws ContextualError {
         Signature sig = new Signature();
@@ -35,12 +38,17 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
     }
 
     /**
-     * Pass 3 of [Syntaxe Contextuelle]. Delegate verification to each parameter (Rule 3.12)
+     * Implements non-terminal "list_decl_param" of [SyntaxeContextuelle] in pass 3 (Rule 3.12)
+     * @param compiler contains the "env_types" attribute
+     * @param parentEnv corresponds to the "env_exp_sup" attribute (class)
+     * @return EnvironmentExp corresponds to the "env_exp" attribute (params)
      */
-    void verifyListParam(DecacCompiler compiler) throws ContextualError {
+    public EnvironmentExp verifyListParam(DecacCompiler compiler, EnvironmentExp parentEnv) throws ContextualError {
+        EnvironmentExp env = new EnvironmentExp(parentEnv);
         for (AbstractDeclParam p : getList()) {
-            p.verifyParamName(compiler, null);
+            p.verifyParamName(compiler, env);
         }
+        return env;
     }
 
 }

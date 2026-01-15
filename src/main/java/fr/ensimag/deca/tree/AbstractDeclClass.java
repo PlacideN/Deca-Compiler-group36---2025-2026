@@ -11,25 +11,27 @@ import fr.ensimag.deca.context.ContextualError;
  */
 public abstract class AbstractDeclClass extends Tree {
 
-    /**
-     * Pass 1 of [SyntaxeContextuelle]. Verify that the class declaration is OK
-     * without looking at its content.
+   /**
+     * Implements non-terminal "decl_class" of [SyntaxeContextuelle] in pass 1.
+     * Verify that the class declaration is OK.
+     * @param compiler contains the "env_types" attribute
      */
     protected abstract void verifyClass(DecacCompiler compiler)
             throws ContextualError;
 
     /**
-     * Pass 2 of [SyntaxeContextuelle]. Verify that the class members (fields and
-     * methods) are OK, without looking at method body and field initialization.
+     * Implements non-terminal "decl_class" of [SyntaxeContextuelle] in pass 2.
+     * Verify class members (fields and methods).
+     * @param compiler contains the "env_types" attribute
      */
     protected abstract void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError;
 
     /**
-     * Pass 3 of [SyntaxeContextuelle]. Verify that instructions and expressions
-     * contained in the class are OK.
+     * Implements non-terminal "decl_class" of [SyntaxeContextuelle] in pass 3.
+     * Verify method bodies and field initializations.
+     * @param compiler contains the "env_types" attribute
      */
     protected abstract void verifyClassBody(DecacCompiler compiler)
             throws ContextualError;
-
 }

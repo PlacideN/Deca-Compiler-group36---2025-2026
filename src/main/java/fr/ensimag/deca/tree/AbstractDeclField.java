@@ -14,12 +14,17 @@ import fr.ensimag.deca.context.EnvironmentExp;
 public abstract class AbstractDeclField extends Tree {
 
     /**
-     * Pass 2 of [Syntaxe Contextuelle]. Verify field signature (Rule 2.5).
+     * Implements non-terminal "decl_field" of [SyntaxeContextuelle] in pass 2 (Rule 2.5)
+     * @param compiler contains the "env_types" attribute
+     * @param currentClass corresponds to the "class" attribute contains "super" 
      */
     protected abstract void verifyFieldMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError;
 
+    
     /**
-     * Pass 3 of [Syntaxe Contextuelle]. Verify field initialization.
+     * Implements non-terminal "decl_field" of [SyntaxeContextuelle] in pass 3 (Rule 3.7)
+     * @param compiler contains the "env_types" attribute
+     * @param currentClass corresponds to the "class" attribute
      */
-    protected abstract void verifyFieldRValue(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError;
+    protected abstract void verifyFieldRValue(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError;
 }

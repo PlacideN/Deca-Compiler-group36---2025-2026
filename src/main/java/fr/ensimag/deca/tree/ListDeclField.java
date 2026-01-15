@@ -14,8 +14,11 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
         }
     }
 
-    /** 
-     * Pass 2 of [Syntaxe Contextuelle]. Delegate verification to each field (Rule 2.4)
+    /**
+     * Implements non-terminal "list_decl_field" of [SyntaxeContextuelle] in pass 2 (Rule 2.4).
+     * Delegate verification to each field.
+     * @param compiler contains the "env_types" attribute
+     * @param currentClass corresponds to the "class" attribute and contains "super" attribute
      */
     void verifyListFieldMembers(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
         for (AbstractDeclField f : getList()) {
@@ -24,11 +27,15 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     }
 
     /**
-     * Pass 3 of [Syntaxe Contextuelle]. Delegate verification to each field (Rule 3.6)
+     * Implements non-terminal "list_decl_field" of [SyntaxeContextuelle] in pass 3 (Rule 3.6).
+     * Delegate verification to each field initialization.
+     * @param compiler contains the "env_types" attribute
+     * @param currentClass corresponds to the "class" attribute and contains "super" attribute
+     * @param localEnv corresponds to the "env_exp" attribute
      */
     void verifyListFieldRValue(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
         for (AbstractDeclField f : getList()) {
-            f.verifyFieldRValue(compiler, localEnv, currentClass);
+            f.verifyFieldRValue(compiler, currentClass);
         }
     }
 
