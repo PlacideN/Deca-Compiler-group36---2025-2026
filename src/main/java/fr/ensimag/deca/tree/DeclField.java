@@ -100,7 +100,11 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    protected void verifyFieldRValue(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("Not yet implemented");
+    protected void verifyFieldRValue(DecacCompiler compiler, ClassDefinition currentClass) 
+            throws ContextualError {
+        FieldDefinition fieldDef = (FieldDefinition) fieldName.getFieldDefinition();
+        Type fieldType = fieldDef.getType();
+        EnvironmentExp env = currentClass.getMembers();
+        init.verifyInitialization(compiler, fieldType, env, currentClass);
     }
 }

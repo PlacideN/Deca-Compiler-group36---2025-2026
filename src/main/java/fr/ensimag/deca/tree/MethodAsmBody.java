@@ -11,9 +11,9 @@ import fr.ensimag.deca.context.Type;
  * @date 11/01/2026
  */
 public class MethodAsmBody extends AbstractMethodBody {
-    private final String asmCode;
+    private final AbstractStringLiteral asmCode;
 
-    public MethodAsmBody(String asmCode) {
+    public MethodAsmBody(AbstractStringLiteral asmCode) {
         this.asmCode = asmCode;
     }
 
@@ -21,7 +21,7 @@ public class MethodAsmBody extends AbstractMethodBody {
     public void decompile(fr.ensimag.deca.tools.IndentPrintStream s) {
         s.println("{");
         s.indent();
-        s.println(asmCode);
+        asmCode.decompile(s);
         s.unindent();
         s.println("}");
     }
@@ -38,7 +38,7 @@ public class MethodAsmBody extends AbstractMethodBody {
 
     @Override
     protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
-        throw new UnsupportedOperationException("Not yet implemented");
+        this.asmCode.verifyExpr(compiler, localEnv, currentClass);
     }
 
     @Override

@@ -2,11 +2,13 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.Type;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -90,12 +92,27 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        Type superType = superClassName.verifyType(compiler);
+
+        if (!(superType.isClass())) { 
+            // this should not happen if pass 1 was successful
+            throw new ContextualError("Superclass " + superClassName.getName() + " of class " + className.getName() + " is not a class type.", superClassName.getLocation());
+        }
+        
+        ClassDefinition classDef = (ClassDefinition) compiler.environmentType.defOfType(className.getName());
+
+        fields.verifyListFieldMembers(compiler, classDef);
+        methods.verifyListMethodMembers(compiler, classDef);
+
     }
     
     @Override
     protected void verifyClassBody(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("not yet implemented");
+        ClassDefinition classDef = (ClassDefinition) compiler.environmentType.defOfType(className.getName());
+        EnvironmentExp localEnv = classDef.getMembers();
+
+        fields.verifyListFieldRValue(compiler, localEnv, classDef);
+        methods.verifyListMethodBody(compiler, classDef);
     }
 
 

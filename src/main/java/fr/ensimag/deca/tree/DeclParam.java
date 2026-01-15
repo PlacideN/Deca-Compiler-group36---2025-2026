@@ -5,6 +5,8 @@ import org.apache.commons.lang.Validate;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
 
 /**
@@ -44,12 +46,24 @@ public class DeclParam extends AbstractDeclParam {
 
     @Override
     protected Type verifyParamType(DecacCompiler compiler) throws ContextualError {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Type paramType = type.verifyType(compiler);
+        if (paramType.isVoid()) {
+            throw new ContextualError("Parameter cannot be of type void", getLocation());
+        }
+        return paramType;
     }
 
 
     protected void verifyParamName(DecacCompiler compiler, EnvironmentExp localEnv) throws ContextualError {
-        throw new UnsupportedOperationException("Not yet implemented");
+        Type paramType = type.getType();
+        ParamDefinition paramDef = new ParamDefinition(paramType, getLocation());
+
+        try {
+            localEnv.declare(paramName.getName(), paramDef);
+            paramName.setDefinition(paramDef);
+        } catch (DoubleDefException e) {
+            throw new ContextualError("Parameter " + paramName.getName().getName() + " is already defined", getLocation());
+        }
     }
 
 }

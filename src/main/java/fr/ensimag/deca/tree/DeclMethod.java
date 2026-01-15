@@ -1,22 +1,18 @@
 package fr.ensimag.deca.tree;
 
-import java.lang.reflect.Method;
-
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
-import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.deca.codegen.LabelManager;
-import fr.ensimag.ima.pseudocode.instructions.RTS;
 /**
  * @author gl36
  * @date 11/01/2026
@@ -103,8 +99,18 @@ public class DeclMethod extends AbstractDeclMethod {
     }
 
     @Override
-    protected void verifyMethodBody(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("Not yet implemented");
+    protected void verifyMethodBody(DecacCompiler compiler, ClassDefinition currentClass) 
+            throws ContextualError {
+
+        
+        EnvironmentExp envExpSup = currentClass.getMembers();
+        EnvironmentExp localEnv = params.verifyListParam(compiler, envExpSup);
+
+        // 3. Get the return type (from Pass 2 decoration)
+        Type retType = methodName.getMethodDefinition().getType();
+
+        // 4. Rule 3.14: Verify the body using the combined localEnv (Class -> Params)
+        methodBody.verifyMethodBody(compiler, localEnv, currentClass, retType);
     }
 
 

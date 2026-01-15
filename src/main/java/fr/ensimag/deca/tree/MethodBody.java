@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import java.io.PrintStream;
+
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.DecacCompiler;
@@ -49,8 +50,10 @@ public class MethodBody extends AbstractMethodBody {
     }
 
     @Override
-    protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Type returnType) throws ContextualError {
-        throw new UnsupportedOperationException("Not yet implemented");
+    protected void verifyMethodBody(DecacCompiler compiler, EnvironmentExp localEnv, 
+            ClassDefinition currentClass, Type returnType) throws ContextualError {
+        this.declVariables.verifyListDeclVariable(compiler, localEnv, currentClass);
+        this.insts.verifyListInst(compiler, localEnv, currentClass, returnType);
     }
 
     @Override
