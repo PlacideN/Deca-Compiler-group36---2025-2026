@@ -121,6 +121,21 @@ public class EnvironmentType {
     }
 
     /**
+     * Implements cast_compatible(T1, T2) rule.
+     * Check if a value of type T1 can be cast to type T2
+     */
+    public boolean castCompatible(Type t1, Type t2) {
+        if (t1.isVoid() || t2.isVoid()) {
+            return false;
+        }
+
+        if ((t1.isFloat() && t2.isInt()) || (t1.isInt() && t2.isFloat())) {
+            return true;
+        }
+        return subtype(t1, t2) || subtype(t2, t1);
+    }
+
+    /**
      * Implements the subtype(T1, T2) rule.
      * Check if T1 is a subtype of T2.
      */   
