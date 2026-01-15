@@ -1,15 +1,16 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
+import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.SymbolTable;
 
 /**
@@ -93,4 +94,18 @@ public abstract class AbstractIdentifier extends AbstractLValue {
      *         (corresponds to the "type" attribute)
      */
     public abstract Type verifyType(DecacCompiler compiler) throws ContextualError;
+
+    /**
+     * Implements non-terminal "field_ident" of [SyntaxeContextuelle] in pass 3 (Rule 3.70)
+     * @return the definition of the field
+     */
+    public abstract FieldDefinition verifyFieldIdent(DecacCompiler compiler, 
+            EnvironmentExp localEnv) throws ContextualError;
+
+    /**
+     * Implements non-terminal "method_ident" of [SyntaxeContextuelle] in pass 3 (Rule 3.72)
+     * @return the definition of the method that contains "sig" and "type" attributes
+     */
+    public abstract MethodDefinition verifyMethodIdent(DecacCompiler compiler, 
+            EnvironmentExp localEnv) throws ContextualError;
 }
