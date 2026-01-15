@@ -5,10 +5,12 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.VariableDefinition;
+import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.TypeDefinition;
-import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.context.ClassDefinition;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,8 +27,7 @@ public class TestIdentifier {
     DecacCompiler compiler;
     Symbol symbol;
     
-    @Mock
-    EnvironmentExp env;
+    @Mock EnvironmentExp env;
     
     @BeforeEach
     public void setup() {
@@ -81,5 +82,29 @@ public class TestIdentifier {
             () -> id.verifyExpr(compiler, env, null),
             "Expected ContextualError for undefined identifier"
         );
+    }
+
+    @Test
+    public void testImplicitIdentifier() throws ContextualError, DoubleDefException {
+        // x is not in local env but is a field of the current class
+        Symbol x = compiler.createSymbol("x");
+        Identifier name = new Identifier(x);
+        when(env.get(x)).thenReturn(null); 
+
+        AbstractIdentifier classNameA = mock(AbstractIdentifier.class); // Mock only for this test
+        AbstractIdentifier objectName = mock(AbstractIdentifier.class);
+        when(classNameA.getName()).thenReturn(compiler.createSymbol("A"));
+        when(objectName.getName()).thenReturn(compiler.createSymbol("Object"));
+        when(objectName.verifyType(compiler)).thenReturn(compiler.environmentType.OBJECT);
+
+        DeclClass declA = new DeclClass(classNameA, objectName, new ListDeclField(), new ListDeclMethod());
+        declA.verifyClass(compiler); // declare class A (extends Object)
+        ClassDefinition aDef = (ClassDefinition) compiler.environmentType.defOfType(classNameA.getName());
+
+        FieldDefinition xDef = new FieldDefinition(compiler.environmentType.INT, Location.BUILTIN, Visibility.PUBLIC, aDef, 1);
+        aDef.getMembers().declare(x, xDef);
+
+        assertEquals(compiler.environmentType.INT, name.verifyExpr(compiler, env, aDef));
+        assertEquals(xDef, name.getDefinition());
     }
 }

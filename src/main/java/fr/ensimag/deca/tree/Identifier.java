@@ -172,6 +172,12 @@ public class Identifier extends AbstractIdentifier {
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
         ExpDefinition def = localEnv.get(this.name);
+
+        // check for an implicit field access if not found in localEnv
+        if (def == null && currentClass != null) {
+            def = currentClass.getMembers().get(this.name);
+        }
+
         if (def == null) {
             throw new ContextualError("Identifier " + this.name + " not found", getLocation());
         }
