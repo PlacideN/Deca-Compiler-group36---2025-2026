@@ -9,6 +9,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.mock;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -23,18 +24,12 @@ import fr.ensimag.deca.tools.SymbolTable.Symbol;
 
 public class TestDeclField {
 
-    @Mock
-    AbstractIdentifier fieldType;
-    @Mock
-    AbstractIdentifier fieldName;
-    @Mock
-    ClassDefinition classDef;
-    @Mock
-    ClassDefinition superClassDef;
-    @Mock
-    EnvironmentExp superEnv;
-    @Mock
-    EnvironmentExp env;
+    @Mock AbstractIdentifier fieldType;
+    @Mock AbstractIdentifier fieldName;
+    @Mock ClassDefinition classDef;
+    @Mock ClassDefinition superClassDef;
+    @Mock EnvironmentExp superEnv;
+    @Mock EnvironmentExp env;
 
     DecacCompiler compiler;
 
@@ -51,6 +46,7 @@ public class TestDeclField {
         when(superClassDef.getMembers()).thenReturn(superEnv);
     }
 
+    // Pass 2 of [Syntaxe Contextuelle]
     @Test
     public void testVoidFieldDeclaration() throws ContextualError {
         when(fieldType.verifyType(compiler)).thenReturn(compiler.environmentType.VOID);
@@ -85,7 +81,6 @@ public class TestDeclField {
         when(fieldType.verifyType(compiler)).thenReturn(INT);
         
         MethodDefinition methodDef = new MethodDefinition(INT, Location.BUILTIN, new Signature(), 0);
-
         when(superEnv.get(fieldName.getName())).thenReturn(methodDef);
 
         DeclField declField = new DeclField(Visibility.PUBLIC, fieldType, fieldName, new NoInitialization());
@@ -95,6 +90,44 @@ public class TestDeclField {
             () -> declField.verifyFieldMembers(compiler, classDef),
             "Expected ContextualError when declaring a field that hides a method from the superclass"
         );
+    }
+
+    // Pass 3 of [Syntaxe Contextuelle]
+    @Test
+    public void testInitFieldCompatibility() throws ContextualError {
+        // int x = false;
+        Type INT = compiler.environmentType.INT;
+        when(fieldType.verifyType(compiler)).thenReturn(INT);
+
+        FieldDefinition xDef = new FieldDefinition(INT, Location.BUILTIN, Visibility.PUBLIC, classDef, 1);
+        when(fieldName.getFieldDefinition()).thenReturn(xDef);
+
+        DeclField declField = new DeclField(Visibility.PUBLIC, fieldType, fieldName, new Initialization(new BooleanLiteral(false)));
+
+        assertThrows(
+            ContextualError.class,
+            () -> declField.verifyFieldRValue(compiler, classDef),
+            "Expected ContextualError when initializing a field with an incompatible type"
+        );
+    }
+
+    @Test
+    public void testInitWithOtherField() throws ContextualError, DoubleDefException {
+        // int x = y;
+        Type INT = compiler.environmentType.INT;
+        when(fieldType.verifyType(compiler)).thenReturn(INT);
+
+        Symbol y = compiler.symbolTable.create("y");
+        FieldDefinition yDef = new FieldDefinition(INT, Location.BUILTIN, Visibility.PUBLIC, classDef, 1);
+        env.declare(y, yDef);
+
+        FieldDefinition xDef = new FieldDefinition(INT, Location.BUILTIN, Visibility.PUBLIC, classDef, 2);
+        when(fieldName.getFieldDefinition()).thenReturn(xDef);
+
+        AbstractIdentifier yName = mock(AbstractIdentifier.class);
+        when(yName.verifyExpr(compiler, env, classDef)).thenReturn(INT);
+        DeclField declField = new DeclField(Visibility.PUBLIC, fieldType, fieldName, new Initialization(yName));
+        declField.verifyFieldRValue(compiler, classDef);        
     }
     
 }

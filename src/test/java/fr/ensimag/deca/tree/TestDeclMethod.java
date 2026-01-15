@@ -19,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 
@@ -222,4 +223,24 @@ public class TestDeclMethod {
         method.verifyMethodMembers(compiler, classDef);
         assertEquals(0, equalsMethod.getMethodDefinition().getIndex());
     }
+
+    // Pass 3 of [SyntaxeContextuelle]. Verify the body of method declarations.
+    @Test
+    public void testMethodBodyVerify() throws ContextualError {
+        // mock a method which returns an int type
+        Type INT = compiler.environmentType.INT;
+        MethodDefinition def = new MethodDefinition(INT, Location.BUILTIN, new Signature(), 1);
+        method.setDefinition(def);
+
+        EnvironmentExp classEnv = new EnvironmentExp(null);
+        EnvironmentExp paramEnv = new EnvironmentExp(null);
+        when(classDef.getMembers()).thenReturn(classEnv);
+        when(params.verifyListParam(compiler, classEnv)).thenReturn(paramEnv);
+
+        DeclMethod decl = new DeclMethod(returnType, method, params, methodBody);
+        decl.verifyMethodBody(compiler, classDef);
+
+        verify(methodBody).verifyMethodBody(compiler, paramEnv, classDef, INT);
+    }
+
 }
