@@ -46,7 +46,13 @@ public class Cast extends AbstractExpr {
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        Type targetType = typeName.verifyType(compiler);
+        Type exprType = expr.verifyExpr(compiler, localEnv, currentClass);
+        if (!compiler.environmentType.castCompatible(exprType, targetType)) {
+            throw new ContextualError("Cannot cast from " + exprType + " to " + targetType, getLocation());
+        }
+        this.setType(targetType);
+        return targetType;
     }
 
     @Override
