@@ -4,9 +4,12 @@ import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.context.MethodDefinition;
+import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 
@@ -50,8 +53,23 @@ public class MethodCall extends AbstractExpr {
     }
 
     @Override
-    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("Not implemented yet.");
+    public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, 
+            ClassDefinition currentClass) throws ContextualError {
+        
+        Type type = object.verifyExpr(compiler, localEnv, currentClass);
+        ClassType classType = type.asClassType("Method call must be on a class instance", getLocation());
+        
+        EnvironmentExp envExp = classType.getDefinition().getMembers();
+        MethodDefinition methodDef = methodName.verifyMethodIdent(compiler, envExp);
+        
+        Signature sig = methodDef.getSignature();
+        params.verifyListExprSignature(compiler, localEnv, currentClass, sig);
+
+        // AST decorations
+        methodName.setDefinition(methodDef);
+        this.setType(methodDef.getType());
+        
+        return methodDef.getType();
     }
 
     @Override

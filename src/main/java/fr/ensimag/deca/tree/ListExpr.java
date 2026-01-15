@@ -5,6 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
+import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 
 /**
@@ -26,6 +27,19 @@ public class ListExpr extends TreeList<AbstractExpr> {
             } else {
                 isExpFirst = false;
             }
+        }
+    }
+
+    public void verifyListExprSignature(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass, Signature sig) throws ContextualError {
+        
+        if (getList().size() != sig.size()) {
+            throw new ContextualError("Expected " + sig.size() + " args, got " + getList().size(), getLocation());
+        }
+
+        for (int i = 0; i < getList().size(); i++) {
+            Type expectedType = sig.paramNumber(i);
+            AbstractExpr validParam = getList().get(i).verifyRValue(compiler, localEnv, currentClass, expectedType);
+            this.set(i, validParam);
         }
     }
 }
