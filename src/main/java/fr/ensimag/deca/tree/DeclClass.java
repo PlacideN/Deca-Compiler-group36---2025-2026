@@ -15,6 +15,10 @@ import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
+import fr.ensimag.ima.pseudocode.instructions.SUBSP;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.deca.context.ClassType;
@@ -198,7 +202,25 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
 	protected void codeGenInit(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("Not implemented yet."); 
+        String name = className.getName().getName();
+        Label initLabel = compiler.getLabelManager().getInitLabel(name);
+        compiler.addComment("Initialisation des champs de " + name);
+        compiler.addLabel(initLabel);
+
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+        fields.codeGenListDefaultInits(compiler); // initialize fields to default values
+
+        // init fields from superclass
+        ClassDefinition superClassDef = className.getClassDefinition().getSuperClass();
+        if (superClassDef != null && !superClassDef.getType().isObjectClass()) {
+            compiler.addInstruction(new PUSH(Register.R1));
+            Label superInitLabel = compiler.getLabelManager().getInitLabel(superClassDef.getType().getName().getName());
+            compiler.addInstruction(new BSR(superInitLabel));
+            compiler.addInstruction(new SUBSP(1));
+        }
+
+        fields.codeGenListExplicitInits(compiler);
+        compiler.addInstruction(new RTS());
     }
 
     @Override
