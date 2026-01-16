@@ -68,4 +68,8 @@ public class LabelManager {
     public Label getObjectEqualsLabel() {
         return new Label("code.Object.equals");
     }
+
+    public Label getInitLabel(String className) {
+        return new Label("init." + className);
+    }
 }
