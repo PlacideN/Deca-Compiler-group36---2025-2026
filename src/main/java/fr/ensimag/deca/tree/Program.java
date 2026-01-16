@@ -41,11 +41,17 @@ public class Program extends AbstractProgram {
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
         this.classes.verifyListClass(compiler);
+        this.classes.verifyListClassMembers(compiler);
+        this.classes.verifyListClassBody(compiler);
         this.main.verifyMain(compiler);
     }
 
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
+
+        compiler.getVTableManager().codeGenObjectVTable(compiler);
+        classes.codeGenListVTable(compiler);
+
         IMAProgram body = new IMAProgram();
         IMAProgram init = compiler.getProgram();
         compiler.setProgram(body);
