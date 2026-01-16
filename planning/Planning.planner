@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
-<project name="Projet GL - 36" company="Ensimag" manager="" phase="" project-start="20251215T000000Z" mrproject-version="2" calendar="2">
+<project name="Projet GL - 36" company="Ensimag" manager="" phase="" project-start="20251215T000000Z" mrproject-version="2" calendar="4">
   <properties/>
   <phases/>
   <calendars>
     <day-types>
-      <day-type id="0" name="Travaill&#xE9;" description="Un jour de travail normal"/>
-      <day-type id="1" name="Ch&#xF4;m&#xE9;" description="Un jour ch&#xF4;m&#xE9; normal"/>
-      <day-type id="2" name="Utiliser la base" description="Utilise un jour du calendrier de base"/>
-      <day-type id="3" name="Rush" description=""/>
-      <day-type id="4" name="Chill Work" description=""/>
+      <day-type id="0" name="Working" description="A default working day"/>
+      <day-type id="1" name="Nonworking" description="A default non working day"/>
+      <day-type id="2" name="Use base" description="Use day from base calendar"/>
+      <day-type id="3" name="Chill Work" description=""/>
+      <day-type id="4" name="Rush" description=""/>
     </day-types>
-    <calendar id="1" name="Default">
+    <calendar id="1" name="D&#xE9;faut">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
       <overridden-day-types>
         <overridden-day-type id="0">
@@ -24,20 +24,29 @@
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
       <overridden-day-types>
         <overridden-day-type id="0">
-          <interval start="0930" end="1230"/>
-          <interval start="1400" end="1730"/>
-          <interval start="1830" end="1900"/>
-        </overridden-day-type>
-        <overridden-day-type id="4">
-          <interval start="0930" end="1230"/>
-        </overridden-day-type>
-        <overridden-day-type id="3">
           <interval start="0800" end="1200"/>
-          <interval start="1300" end="1800"/>
-          <interval start="1900" end="2200"/>
+          <interval start="1300" end="1700"/>
         </overridden-day-type>
       </overridden-day-types>
-      <days/>
+      <days>
+        <day date="20251230" type="day-type" id="3"/>
+        <day date="20251228" type="day-type" id="3"/>
+        <day date="20261204" type="day-type" id="3"/>
+        <day date="20261203" type="day-type" id="3"/>
+        <day date="20251227" type="day-type" id="3"/>
+        <day date="20261202" type="day-type" id="3"/>
+        <day date="20251226" type="day-type" id="0"/>
+        <day date="20261201" type="day-type" id="1"/>
+        <day date="20251225" type="day-type" id="1"/>
+        <day date="20251224" type="day-type" id="1"/>
+        <day date="20251223" type="day-type" id="1"/>
+        <day date="20251222" type="day-type" id="3"/>
+        <day date="20260104" type="day-type" id="3"/>
+        <day date="20260103" type="day-type" id="3"/>
+        <day date="20260102" type="day-type" id="3"/>
+        <day date="20260101" type="day-type" id="1"/>
+        <day date="20251231" type="day-type" id="1"/>
+      </days>
     </calendar>
     <calendar id="3" name="Default">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
@@ -63,32 +72,33 @@
     <calendar id="4" name="Default">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
       <overridden-day-types>
+        <overridden-day-type id="3">
+          <interval start="0930" end="1230"/>
+        </overridden-day-type>
+        <overridden-day-type id="0">
+          <interval start="0930" end="1230"/>
+          <interval start="1400" end="1730"/>
+          <interval start="1830" end="1900"/>
+        </overridden-day-type>
+        <overridden-day-type id="4">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1800"/>
+          <interval start="1900" end="2200"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
+    </calendar>
+    <calendar id="5" name="Default">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
+      <overridden-day-types>
         <overridden-day-type id="0">
           <interval start="0800" end="1200"/>
           <interval start="1300" end="1700"/>
         </overridden-day-type>
       </overridden-day-types>
-      <days>
-        <day date="20251230" type="day-type" id="4"/>
-        <day date="20251228" type="day-type" id="4"/>
-        <day date="20261204" type="day-type" id="4"/>
-        <day date="20261203" type="day-type" id="4"/>
-        <day date="20251227" type="day-type" id="4"/>
-        <day date="20261202" type="day-type" id="4"/>
-        <day date="20251226" type="day-type" id="0"/>
-        <day date="20261201" type="day-type" id="1"/>
-        <day date="20251225" type="day-type" id="1"/>
-        <day date="20251224" type="day-type" id="1"/>
-        <day date="20251223" type="day-type" id="1"/>
-        <day date="20251222" type="day-type" id="4"/>
-        <day date="20260104" type="day-type" id="4"/>
-        <day date="20260103" type="day-type" id="4"/>
-        <day date="20260102" type="day-type" id="4"/>
-        <day date="20260101" type="day-type" id="1"/>
-        <day date="20251231" type="day-type" id="1"/>
-      </days>
+      <days/>
     </calendar>
-    <calendar id="5" name="D&#xE9;faut">
+    <calendar id="6" name="Default">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
       <overridden-day-types>
         <overridden-day-type id="0">
@@ -100,7 +110,7 @@
     </calendar>
   </calendars>
   <tasks>
-    <task id="1" name="Phase 1 - Hello World" note="" work="345600" duration="117600" start="20251215T000000Z" end="20251219T154000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="1" name="Phase 1 - Hello World" note="" work="324000" duration="117600" start="20251215T000000Z" end="20251219T154000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <task id="2" name="Lexer &amp; Parser (Hello World)" note="2 days" work="115200" duration="38400" start="20251215T000000Z" end="20251216T144000Z" work-start="20251215T093000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work"/>
       <task id="3" name="Contextual Verification (print)" note="1 day" work="50400" duration="25200" start="20251216T144000Z" end="20251217T144000Z" work-start="20251216T144000Z" percent-complete="100" priority="0" type="normal" scheduling="fixed-work">
         <predecessors>
@@ -121,7 +131,7 @@
           <predecessor id="1" predecessor-id="6" type="FS"/>
         </predecessors>
       </task>
-      <task id="10" name="Pr&#xE9;paration Suivi 1" note="" work="100800" duration="114000" start="20251215T000000Z" end="20251219T144000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="10" name="Pr&#xE9;paration Suivi 1" note="" work="79200" duration="88800" start="20251216T000000Z" end="20251219T144000Z" work-start="20251216T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <task id="11" name="R&#xE9;diger la charte d'&#xE9;quipe" note="" work="25200" duration="25200" start="20251217T000000Z" end="20251217T190000Z" work-start="20251217T093000Z" percent-complete="90" priority="0" type="normal" scheduling="fixed-work">
           <constraint type="start-no-earlier-than" time="20251217T000000Z"/>
         </task>
@@ -134,7 +144,9 @@
         <task id="13" name="Planning pr&#xE9;visionnel" note="" work="25200" duration="12600" start="20251217T000000Z" end="20251217T143000Z" work-start="20251217T093000Z" percent-complete="80" priority="0" type="normal" scheduling="fixed-work">
           <constraint type="start-no-earlier-than" time="20251217T000000Z"/>
         </task>
-        <task id="14" name="Pr&#xE9;sentation de l'extension (d&#xE9;but biblio)" note="" work="25200" duration="25200" start="20251215T000000Z" end="20251215T190000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+        <task id="14" name="Pr&#xE9;sentation de l'extension (d&#xE9;but biblio)" note="" work="3600" duration="3600" start="20251216T000000Z" end="20251216T103000Z" work-start="20251216T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+          <constraint type="start-no-earlier-than" time="20251216T000000Z"/>
+        </task>
       </task>
     </task>
     <task id="15" name="Suivi 1 - Hello World Review" note="" work="0" duration="0" start="20251218T170000Z" end="20251218T170000Z" work-start="20251218T170000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
@@ -181,7 +193,7 @@
     <task id="28" name="Rendu final compiler" note="16:00" work="0" duration="0" start="20260119T160000Z" end="20260119T160000Z" work-start="20260119T160000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
       <constraint type="must-start-on" time="20260119T160000Z"/>
     </task>
-    <task id="29" name="Phase 4 - Extension (parallel)" note="" work="277200" duration="690000" start="20251215T000000Z" end="20260121T121000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+    <task id="29" name="Phase 4 - Extension (parallel)" note="" work="302400" duration="690000" start="20251215T000000Z" end="20260121T121000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
       <task id="30" name="Extension research" note="2-3 days, flexible" work="115200" duration="115200" start="20251215T000000Z" end="20251219T150000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
       <task id="31" name="Extension implementation" note="3-4 days, flexible" work="75600" duration="75600" start="20260115T184000Z" end="20260120T184000Z" work-start="20260115T184000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <predecessors>
@@ -193,12 +205,12 @@
           <predecessor id="1" predecessor-id="23" type="FS"/>
         </predecessors>
       </task>
+      <task id="33" name="Documentation extension" note="" work="25200" duration="25200" start="20251215T000000Z" end="20251215T190000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
     </task>
-    <task id="33" name="Phase 5 - Documentation" note="" work="518400" duration="144000" start="20251215T000000Z" end="20251222T160000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-      <task id="34" name="Manuel utilisateur" note="2 days" work="115200" duration="115200" start="20251215T000000Z" end="20251219T150000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="35" name="Documentation de conception" note="2-3 days" work="144000" duration="144000" start="20251215T000000Z" end="20251222T160000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="36" name="Documentation de validation" note="1-2 days" work="86400" duration="86400" start="20251215T000000Z" end="20251218T123000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
-      <task id="37" name="Documentation extension" note="1 day" work="57600" duration="57600" start="20251215T000000Z" end="20251217T113000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+    <task id="34" name="Phase 5 - Documentation" note="" work="460800" duration="144000" start="20251215T000000Z" end="20251222T160000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="35" name="Manuel utilisateur" note="2 days" work="115200" duration="115200" start="20251215T000000Z" end="20251219T150000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="36" name="Documentation de conception" note="2-3 days" work="144000" duration="144000" start="20251215T000000Z" end="20251222T160000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
+      <task id="37" name="Documentation de validation" note="1-2 days" work="86400" duration="86400" start="20251215T000000Z" end="20251218T123000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
       <task id="38" name="Analyse impact &#xE9;nerg&#xE9;tique" note="1 day" work="57600" duration="57600" start="20251215T000000Z" end="20251217T113000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
       <task id="39" name="Bilan gestion &#xE9;quipe &amp; projet" note="1 day" work="57600" duration="57600" start="20251215T000000Z" end="20251217T113000Z" work-start="20251215T093000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work"/>
     </task>
