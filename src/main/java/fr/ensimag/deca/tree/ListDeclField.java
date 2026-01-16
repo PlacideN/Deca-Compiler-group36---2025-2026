@@ -57,5 +57,23 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     
         classDef.setNumberOfFields(offset - 1); // update the number of fields in the class for any later subclasses    
     }
+
+    /**
+     * Pass 2 of Gencode. Delegate to each field the generation of its default initialization.
+     */
+    public void codeGenListDefaultInits(DecacCompiler compiler) {
+        for (AbstractDeclField f : getList()) {
+            f.codeGenDefaultInit(compiler);
+        }
+    }
+
+    /**
+     * Pass 2 of Gencode. Delegate to each field the generation of its explicit initialization.
+     */
+    public void codeGenListExplicitInits(DecacCompiler compiler) {
+        for (AbstractDeclField f : getList()) {
+            f.codeGenExplicitInit(compiler);
+        }
+    }
     
 }

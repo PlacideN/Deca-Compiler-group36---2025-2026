@@ -115,12 +115,12 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    protected void codeGenDefaultFieldInit(DecacCompiler compiler) {
+    protected void codeGenDefaultInit(DecacCompiler compiler) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    protected void codeGenExplicitFieldInit(DecacCompiler compiler) {
+    protected void codeGenExplicitInit(DecacCompiler compiler) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 }

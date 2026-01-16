@@ -36,10 +36,10 @@ public abstract class AbstractDeclField extends Tree {
     /** 
      * Pass 2 of Gencode. Generate assembly code for the default field initialization.
      */
-    protected abstract void codeGenDefaultFieldInit(DecacCompiler compiler);
+    protected abstract void codeGenDefaultInit(DecacCompiler compiler);
 
     /**
      * Pass 2 of Gencode. Generate assembly code for the field initialization with explicit initialization.
      */
-    protected abstract void codeGenExplicitFieldInit(DecacCompiler compiler);
+    protected abstract void codeGenExplicitInit(DecacCompiler compiler);
 }
