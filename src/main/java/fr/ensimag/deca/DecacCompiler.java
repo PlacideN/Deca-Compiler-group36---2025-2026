@@ -3,6 +3,7 @@ package fr.ensimag.deca;
 import fr.ensimag.deca.codegen.LabelManager;
 import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.codegen.StackManager;
+import fr.ensimag.deca.codegen.VTableManager;
 import fr.ensimag.deca.codegen.RuntimeErrorManager;
 import fr.ensimag.deca.context.EnvironmentType;
 import fr.ensimag.deca.syntax.DecaLexer;
@@ -56,6 +57,7 @@ public class DecacCompiler {
         int count = (compilerOptions != null) ? compilerOptions.getRegisterCount() : 16;
         this.registerManager = new RegisterManager(this, count);
         this.errorManager = new RuntimeErrorManager(this, labelManager);
+        this.vTableManager = new VTableManager(this);
     }
 
     /**
@@ -155,7 +157,8 @@ public class DecacCompiler {
     // initialized in the constructor due to runtime dependencies (compilerOptions)
     private final RegisterManager registerManager;
     private final RuntimeErrorManager errorManager;
-
+    private final VTableManager vTableManager;
+    
     private final StackManager stackManager = new StackManager();
     private final LabelManager labelManager = new LabelManager();
 
@@ -178,6 +181,13 @@ public class DecacCompiler {
      */
     public LabelManager getLabelManager() {
         return this.labelManager;
+    }
+
+    /**
+     * Get the VTable manager.
+     */
+    public VTableManager getVTableManager() {
+        return this.vTableManager;
     }
 
     /**
