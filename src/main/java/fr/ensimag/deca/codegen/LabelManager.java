@@ -60,4 +60,12 @@ public class LabelManager {
     public Label runtimeErrorLabel(String error) {
         return new Label(error + "_error");
     }
+
+    public Label getMethodLabel(String className, String methodName) {
+        return new Label("code." + className + "." + methodName);
+    }
+
+    public Label getObjectEqualsLabel() {
+        return new Label("code.Object.equals");
+    }
 }
