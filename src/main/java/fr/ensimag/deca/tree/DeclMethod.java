@@ -11,8 +11,10 @@ import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
+import fr.ensimag.deca.codegen.VTableLayout;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Label;
+
 /**
  * @author gl36
  * @date 11/01/2026
@@ -101,40 +103,45 @@ public class DeclMethod extends AbstractDeclMethod {
     @Override
     protected void verifyMethodBody(DecacCompiler compiler, ClassDefinition currentClass) 
             throws ContextualError {
-
-        
         EnvironmentExp envExpSup = currentClass.getMembers();
         EnvironmentExp localEnv = params.verifyListParam(compiler, envExpSup);
 
-        // 3. Get the return type (from Pass 2 decoration)
         Type retType = methodName.getMethodDefinition().getType();
 
-        // 4. Rule 3.14: Verify the body using the combined localEnv (Class -> Params)
         methodBody.verifyMethodBody(compiler, localEnv, currentClass, retType);
     }
 
+    @Override
+    protected void codeGenVTable(DecacCompiler compiler, VTableLayout layout, AbstractIdentifier className) {
+        String methodName = this.methodName.getName().getName();
+        String currentClass = className.getName().getName();
+    
+        Label label = compiler.getLabelManager().getMethodLabel(currentClass, methodName);
+        layout.addMethod(methodName, label.toString());
+    }
 
 
     @Override
     protected void codeGenMethod(DecacCompiler compiler) {
-        // 1. On crée l'étiquette
-        Label endLabel = new Label("end." + methodName.getName().getName());
+        throw new UnsupportedOperationException("Not yet implemented");
+        // // 1. On crée l'étiquette
+        // Label endLabel = new Label("end." + methodName.getName().getName());
         
-        // 2. MODIFICATION : On l'enregistre dans le LabelManager
-        compiler.getLabelManager().setMethodEndLabel(endLabel);
+        // // 2. MODIFICATION : On l'enregistre dans le LabelManager
+        // compiler.getLabelManager().setMethodEndLabel(endLabel);
 
-        // 3. Corps de la méthode
-        this.methodBody.codeGenMethodBody(compiler);
+        // // 3. Corps de la méthode
+        // this.methodBody.codeGenMethodBody(compiler);
 
-        // 4. Le piège pour le return manquant
-        if (!returnType.getType().isVoid()) {
-            Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(
-                    fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType.NO_RETURN);
-            compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.BRA(errorLabel));
-        }
+        // // 4. Le piège pour le return manquant
+        // if (!returnType.getType().isVoid()) {
+        //     Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(
+        //             fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType.NO_RETURN);
+        //     compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.BRA(errorLabel));
+        // }
 
-        // 5. Fin de la méthode
-        compiler.addLabel(endLabel);
-        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.RTS());
+        // // 5. Fin de la méthode
+        // compiler.addLabel(endLabel);
+        // compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.RTS());
     }
 }

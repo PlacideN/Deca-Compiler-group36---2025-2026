@@ -107,4 +107,10 @@ public class DeclField extends AbstractDeclField {
         EnvironmentExp env = currentClass.getMembers();
         init.verifyInitialization(compiler, fieldType, env, currentClass);
     }
+
+    @Override
+    protected void codeGenFieldOffset(int offset) {
+        FieldDefinition fieldDef = (FieldDefinition) fieldName.getFieldDefinition();
+        fieldDef.setIndex(offset);
+    }
 }

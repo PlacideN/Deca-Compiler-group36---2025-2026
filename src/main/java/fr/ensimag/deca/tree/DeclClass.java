@@ -1,11 +1,22 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.VTableLayout;
+import fr.ensimag.deca.codegen.VTableManager;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.TypeDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.instructions.LEA;
+import fr.ensimag.ima.pseudocode.LabelOperand;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.Label;
 import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.Type;
@@ -92,11 +103,13 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-        Type superType = superClassName.verifyType(compiler);
-
-        if (!(superType.isClass())) { 
-            // this should not happen if pass 1 was successful
-            throw new ContextualError("Superclass " + superClassName.getName() + " of class " + className.getName() + " is not a class type.", superClassName.getLocation());
+        if (superClassName != null) {
+            Type superType = superClassName.verifyType(compiler);
+                    
+            if (!(superType.isClass())) { 
+                // this should not happen if pass 1 was successful
+                throw new ContextualError("Superclass " + superClassName.getName() + " of class " + className.getName() + " is not a class type.", superClassName.getLocation());
+            }
         }
         
         ClassDefinition classDef = (ClassDefinition) compiler.environmentType.defOfType(className.getName());
@@ -136,4 +149,60 @@ public class DeclClass extends AbstractDeclClass {
         methods.iter(f);
     }
 
+    @Override
+    protected void codeGenVTable(DecacCompiler compiler) {
+        VTableManager vm = compiler.getVTableManager();
+        ClassDefinition classDef = className.getClassDefinition();
+        ClassDefinition superClassDef = classDef.getSuperClass();
+
+        VTableLayout layout = vm.reserveLayout(classDef, superClassDef);
+        VTableLayout superLayout = vm.getClassLayout(superClassDef);
+
+        fields.codeGenListFieldOffsets(classDef);
+        methods.codeGenListVTable(compiler, layout, className);
+        vm.updateLayoutGBOffset(layout);
+
+        compiler.addComment("Code de la table des méthodes de " + className.getName());
+        // store superclass VTable address
+        int offset = superLayout.getGBOffset();
+        DAddr addr = new RegisterOffset(offset, Register.GB);
+        compiler.addInstruction(new LEA(addr, GPRegister.R0)); 
+        DAddr vtableAddr = new RegisterOffset(layout.getGBOffset(), Register.GB);
+        compiler.addInstruction(new STORE(GPRegister.R0, vtableAddr)); 
+
+        // store methods addresses
+        for (int index = 0; index < layout.getSize(); index++) {
+            String label = layout.getLabel(index);
+            LOAD inst = new LOAD(new LabelOperand(new Label(label)), GPRegister.R0);
+
+            String[] split = label.split("\\.");
+            String origin = split[1];
+            String methodName = split[2];
+
+            if (label.contains(className.getName().getName())){
+                if (index < superLayout.getSize()) {
+                        inst.setComment("Redéfinition de la méthode " + methodName);
+                }
+            }
+            else {
+                inst.setComment("Héritage de la méthode " + methodName + " de " + origin);
+            }
+            
+
+            compiler.addInstruction(inst);
+            DAddr methodAddr = new RegisterOffset(layout.getGBOffset() + 1 + index, Register.GB);
+            compiler.addInstruction(new STORE(GPRegister.R0, methodAddr));
+        }
+            
+    }
+
+    @Override
+	protected void codeGenInit(DecacCompiler compiler) {
+        throw new UnsupportedOperationException("Not implemented yet."); 
+    }
+
+    @Override
+	protected void codeGenMethods(DecacCompiler compiler) {
+        throw new UnsupportedOperationException("Not implemented yet."); 
+    }
 }
