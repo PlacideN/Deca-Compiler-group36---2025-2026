@@ -50,17 +50,35 @@ public class ClassType extends Type {
         super(className);
     }
     
-
+    /**
+     * Compares this class type with another type.
+     */
     @Override
     public boolean sameType(Type otherType) {
-        throw new UnsupportedOperationException("not yet implemented");
+        if (!otherType.isClass()) {
+            return false;
+        }
+        try {
+            ClassType otherClassType = otherType.asClassType("Internal error: not a class type.", null);
+            return this.getName().equals(otherClassType.getName());
+        } catch (ContextualError e) {
+            throw new fr.ensimag.deca.tools.DecacInternalError("Should not happen: isClass() was true but asClassType failed.");
+        }
     }
 
     /**
      * Return true if potentialSuperClass is a superclass of this class.
      */
     public boolean isSubClassOf(ClassType potentialSuperClass) {
-        throw new UnsupportedOperationException("not yet implemented"); 
+        if (this.sameType(potentialSuperClass)) {
+            return true;
+        }
+        ClassDefinition superClassDef = this.getDefinition().getSuperClass(); // on accède directement au parent de notre classe
+        if (superClassDef == null){
+            return false;
+        }
+        return superClassDef.getType().isSubClassOf(potentialSuperClass);
+        
     }
 
 

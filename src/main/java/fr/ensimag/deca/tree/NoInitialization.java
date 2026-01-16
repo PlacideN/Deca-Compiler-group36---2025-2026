@@ -44,11 +44,11 @@ public class NoInitialization extends AbstractInitialization {
 
     @Override
     protected void codeGenInit(DecacCompiler compiler, DAddr address) {
-        GPRegister r = compiler.getRegisterManager().allocateRegister();
-        compiler.addInstruction(new LOAD(0, r));
-        compiler.addInstruction(new STORE(r, address));
-        compiler.getRegisterManager().freeRegister(r);
-    }
+        //GPRegister r = compiler.getRegisterManager().allocateRegister();
+        //compiler.addInstruction(new LOAD(0, r));
+        //compiler.addInstruction(new STORE(r, address));
+        //compiler.getRegisterManager().freeRegister(r);
+            }
 
     @Override
     protected void iterChildren(TreeFunction f) {
