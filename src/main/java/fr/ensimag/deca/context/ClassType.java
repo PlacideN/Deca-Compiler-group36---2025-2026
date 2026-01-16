@@ -49,6 +49,11 @@ public class ClassType extends Type {
     protected ClassType(Symbol className) {
         super(className);
     }
+
+    @Override
+    public boolean isObjectClass() {
+        return getName().getName().equals("Object");
+    }
     
     /**
      * Compares this class type with another type.
