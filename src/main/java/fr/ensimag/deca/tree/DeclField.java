@@ -113,4 +113,14 @@ public class DeclField extends AbstractDeclField {
         FieldDefinition fieldDef = (FieldDefinition) fieldName.getFieldDefinition();
         fieldDef.setIndex(offset);
     }
+
+    @Override
+    protected void codeGenDefaultFieldInit(DecacCompiler compiler) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    protected void codeGenExplicitFieldInit(DecacCompiler compiler) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }
