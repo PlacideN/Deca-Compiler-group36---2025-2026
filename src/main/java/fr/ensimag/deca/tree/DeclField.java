@@ -13,6 +13,11 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.DAddr;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
  * @author gl36
@@ -116,11 +121,28 @@ public class DeclField extends AbstractDeclField {
 
     @Override
     protected void codeGenDefaultInit(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        FieldDefinition fieldDef = fieldName.getFieldDefinition();
+        String className = fieldDef.getContainingClass().getType().getName().getName();
+        String name = fieldName.getName().getName();
+
+        compiler.addComment("Initialisation de " + className + "." + name);
+        compiler.addInstruction(new LOAD(0, Register.R0));
+        int offset = fieldDef.getIndex();
+        compiler.addInstruction(new STORE(Register.R0, new RegisterOffset(offset, Register.R1)));        
     }
 
     @Override
     protected void codeGenExplicitInit(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        // only if there is an explicit initialization
+        if (init instanceof Initialization) { 
+            FieldDefinition fieldDef = fieldName.getFieldDefinition();
+            String className = fieldDef.getContainingClass().getType().getName().getName();
+            String name = fieldName.getName().getName();
+            compiler.addComment("Initialisation explicite de " + className + "." + name);
+
+            int offset = fieldName.getFieldDefinition().getIndex(); // pass 1 calculated offset
+            DAddr fieldAddr = new RegisterOffset(offset, Register.R1);
+            init.codeGenInit(compiler, fieldAddr);
+        }
     }
 }
