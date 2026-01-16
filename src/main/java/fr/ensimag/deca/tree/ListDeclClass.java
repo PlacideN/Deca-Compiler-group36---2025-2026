@@ -49,5 +49,32 @@ public class ListDeclClass extends TreeList<AbstractDeclClass> {
         }
     }
 
+    /**
+     * Pass 1 of Gencode. Delegate VTable generation to each class.
+     */
+    public void codeGenListVTable(DecacCompiler compiler) {
+        for (AbstractDeclClass c : getList()) {
+            c.codeGenVTable(compiler);
+        }
+    }
+
+    /**
+     * Pass 2 of Gencode. Delegate fields initialization to each class.
+     */
+    public void codeGenListInit(DecacCompiler compiler) {
+        for (AbstractDeclClass c : getList()) {
+            c.codeGenInit(compiler);
+        }
+    }
+
+    /**
+     * Pass 3 of Gencode. Delegate code generation for method bodies to each class.
+     */
+    public void codeGenListMethods(DecacCompiler compiler) {
+        for (AbstractDeclClass c : getList()) {
+            c.codeGenMethods(compiler);
+        }
+    }
+
 
 }

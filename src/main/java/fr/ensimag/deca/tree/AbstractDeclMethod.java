@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
+import fr.ensimag.deca.codegen.VTableLayout;
 
 /**
  * Method declaration.
@@ -27,9 +28,14 @@ public abstract class AbstractDeclMethod extends Tree {
      */
     protected abstract void verifyMethodBody(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError;
 
-    /** Generate code for method.
-     * @param compiler 
+    /** 
+     * Add method label to VTable layout.
      */
-    protected abstract void codeGenMethod(DecacCompiler compiler) throws ContextualError;
+    protected abstract void codeGenVTable(DecacCompiler compiler, VTableLayout layout, AbstractIdentifier className);
+
+    /** 
+     * Generate code for method.
+     */
+    protected abstract void codeGenMethod(DecacCompiler compiler);
 
 }

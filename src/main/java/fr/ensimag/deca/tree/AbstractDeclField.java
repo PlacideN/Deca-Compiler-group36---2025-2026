@@ -27,4 +27,9 @@ public abstract class AbstractDeclField extends Tree {
      * @param currentClass corresponds to the "class" attribute
      */
     protected abstract void verifyFieldRValue(DecacCompiler compiler, ClassDefinition currentClass) throws ContextualError;
+
+    /**
+     * Pass 1 of Gencode. Assign an index to the field definition.
+     */
+    protected abstract void codeGenFieldOffset(int offset);
 }
