@@ -165,6 +165,7 @@ public class DeclClass extends AbstractDeclClass {
         ClassDefinition superClassDef = classDef.getSuperClass();
 
         VTableLayout layout = vm.reserveLayout(classDef, superClassDef);
+        classDef.setVTableOffset(layout.getGBOffset());
         VTableLayout superLayout = vm.getClassLayout(superClassDef);
 
         methods.codeGenListVTable(compiler, layout, className);
@@ -207,8 +208,11 @@ public class DeclClass extends AbstractDeclClass {
     @Override
 	protected void codeGenInit(DecacCompiler compiler) {
         String name = className.getName().getName();
+        compiler.addComment("--------------------------------------------------");
+        compiler.addComment("              Classe " + name +"               ");
+        compiler.addComment("--------------------------------------------------");
         Label initLabel = compiler.getLabelManager().getInitLabel(name);
-        compiler.addComment("Initialisation des champs de " + name);
+        compiler.addComment("---------- Initialisation des champs de " + name);
         compiler.addLabel(initLabel);
 
         IMAProgram program = compiler.getProgram();

@@ -1,8 +1,7 @@
 package fr.ensimag.deca.context;
 
+import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.deca.tree.Location;
-import fr.ensimag.ima.pseudocode.Label;
-import org.apache.commons.lang.Validate;
 
 /**
  * Definition of a method
@@ -17,18 +16,16 @@ public class MethodDefinition extends ExpDefinition {
         return true;
     }
 
-    public Label getLabel() {
-        Validate.isTrue(label != null,
-                "setLabel() should have been called before");
-        return label;
-    }
-
-    public void setLabel(Label label) {
-        this.label = label;
-    }
-
     public int getIndex() {
         return index;
+    }
+
+    public void setClassName(Symbol className) {
+        this.className = className;
+    }
+
+    public Symbol getClassName() {
+        return className;
     }
 
     private int index;
@@ -40,7 +37,8 @@ public class MethodDefinition extends ExpDefinition {
     }
 
     private final Signature signature;
-    private Label label;
+    private Symbol className;
+
     
     /**
      * 
