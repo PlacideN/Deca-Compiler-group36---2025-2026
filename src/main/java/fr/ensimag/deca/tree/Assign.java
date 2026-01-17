@@ -3,12 +3,19 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
-import fr.ensimag.deca.context.Definition;
+import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 
 /**
@@ -59,12 +66,29 @@ public class Assign extends AbstractBinaryExpr {
 
         //load the value of the right operand into target
         this.getRightOperand().codeGenExpr(compiler, target); 
-
         ExpDefinition def = this.getLeftOperand().getExpDefinition();
-        DAddr addr = def.getOperand(); // get the address on the stack
-        
-        // store the value in the address
-        compiler.addInstruction(new STORE(target, addr));
+
+        if (def.isField()) {
+            FieldDefinition fieldDef = (FieldDefinition) def;
+            
+            // load 'this' (stored at -2(LB)) into a register
+            GPRegister temp = compiler.getRegisterManager().allocateRegister();
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), temp));
+            
+            // check for null dereference
+            if (!compiler.getCompilerOptions().getNoCheck()) {
+                compiler.addInstruction(new CMP(new NullOperand(), temp));
+                compiler.addInstruction(new BEQ(compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.NULL_DEREFERENCE)));
+            }
+            
+            // store target value into the field
+            compiler.addInstruction(new STORE(target, new RegisterOffset(fieldDef.getIndex(), temp)));
+            compiler.getRegisterManager().freeRegister(temp);
+            
+        } else {
+            // store the value in the address
+            compiler.addInstruction(new STORE(target, def.getOperand()));
+        }
     }
 
 }
