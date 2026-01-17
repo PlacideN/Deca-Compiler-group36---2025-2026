@@ -1,0 +1,15 @@
+// Description:
+//    Test basique de déclaration de classe et appel de méthode.
+//
+// Resultats:
+//
+// Historique:
+//    cree le 17/01/2026
+
+class A {
+    int x;
+
+    int setX(int v) {
+        return v;
+    }
+}

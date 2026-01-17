@@ -1,0 +1,29 @@
+// Description:
+//    Test d'une classe avec méthodes utilisant 'this' explicitement.
+//    Vérifie l'accès à un champ via 'this' pour lever l'ambiguïté avec un paramètre.
+//
+// Resultats:
+//    42
+//
+// Historique:
+//    cree le 17/01/2026
+
+class A {
+    protected int x;
+
+    // Utilisation de this pour distinguer le champ 'x' du paramètre 'x'
+    void setX(int x) {
+        this.x = x;
+    }
+
+    int getX() {
+        // Utilisation explicite de this (facultatif ici, mais valide)
+        return this.x;
+    }
+}
+
+{
+    A a = new A();
+    a.setX(42);
+    println(a.getX());
+}
