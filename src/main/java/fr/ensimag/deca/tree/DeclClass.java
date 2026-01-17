@@ -1,6 +1,8 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.VTableLayout;
+import fr.ensimag.deca.codegen.VTableManager;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.TypeDefinition;
@@ -105,11 +107,14 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-        Type superType = superClassName.verifyType(compiler);
+        if (superClassName != null) {
 
-        if (!(superType.isClass())) { 
-            // this should not happen if pass 1 was successful
-            throw new ContextualError("Superclass " + superClassName.getName() + " of class " + className.getName() + " is not a class type.", superClassName.getLocation());
+            Type superType = superClassName.verifyType(compiler);
+
+            if (!(superType.isClass())) { 
+                // this should not happen if pass 1 was successful
+                throw new ContextualError("Superclass " + superClassName.getName() + " of class " + className.getName() + " is not a class type.", superClassName.getLocation());
+            }
         }
         
         ClassDefinition classDef = (ClassDefinition) compiler.environmentType.defOfType(className.getName());
