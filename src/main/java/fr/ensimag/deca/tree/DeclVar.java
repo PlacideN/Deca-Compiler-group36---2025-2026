@@ -37,7 +37,7 @@ public class DeclVar extends AbstractDeclVar {
 
     @Override
     protected void verifyDeclVar(DecacCompiler compiler,
-            EnvironmentExp localEnv, ClassDefinition currentClass)
+            EnvironmentExp localEnv, ClassDefinition currentClass, int index, Register reg)
             throws ContextualError {
         Type varType = this.type.verifyType(compiler);
 
@@ -48,6 +48,7 @@ public class DeclVar extends AbstractDeclVar {
         this.initialization.verifyInitialization(compiler, varType, localEnv, currentClass);
 
         VariableDefinition varDef = new VariableDefinition(varType, this.getLocation());
+        varDef.setOperand(new RegisterOffset(index, reg));
 
         try {
             localEnv.declare(this.varName.getName(), varDef);

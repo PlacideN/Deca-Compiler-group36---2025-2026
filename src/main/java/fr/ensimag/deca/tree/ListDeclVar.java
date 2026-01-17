@@ -5,6 +5,7 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.Register;
 
 /**
  * List of declarations (e.g. int x; float y,z).
@@ -36,8 +37,19 @@ public class ListDeclVar extends TreeList<AbstractDeclVar> {
      */    
     void verifyListDeclVariable(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass) throws ContextualError {
+        int index;
+        Register reg;
         for (AbstractDeclVar declVar : getList()) {
-            declVar.verifyDeclVar(compiler, localEnv, currentClass);
+            if (currentClass == null) {
+                // in main
+                index = compiler.getStackManager().allocate(); // GB
+                reg = Register.GB;
+            } else {
+                // in a method block
+                index = compiler.getStackManager().allocateLB();
+                reg = Register.LB;
+            }
+            declVar.verifyDeclVar(compiler, localEnv, currentClass, index, reg);
         }
     }
 

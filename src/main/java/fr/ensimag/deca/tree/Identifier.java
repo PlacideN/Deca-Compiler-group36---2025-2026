@@ -1,7 +1,6 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
@@ -15,9 +14,9 @@ import fr.ensimag.deca.tools.DecacInternalError;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.DAddr;
-
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 import org.apache.log4j.Logger;
@@ -218,8 +217,12 @@ public class Identifier extends AbstractIdentifier {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        DAddr addr = this.getExpDefinition().getOperand();
-        compiler.addInstruction(new LOAD(addr, target));
+        ExpDefinition def = this.getExpDefinition();
+        if (def.isField()) {
+            // 'this' is stored at -2(LB) 
+            compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
+        }
+        compiler.addInstruction(new LOAD(def.getOperand(), target));
     }
 
     @Override

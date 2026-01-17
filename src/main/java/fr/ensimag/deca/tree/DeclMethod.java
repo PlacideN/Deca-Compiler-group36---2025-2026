@@ -103,6 +103,7 @@ public class DeclMethod extends AbstractDeclMethod {
     @Override
     protected void verifyMethodBody(DecacCompiler compiler, ClassDefinition currentClass) 
             throws ContextualError {
+        compiler.getStackManager().resetLB();
         EnvironmentExp envExpSup = currentClass.getMembers();
         EnvironmentExp localEnv = params.verifyListParam(compiler, envExpSup);
 

@@ -9,6 +9,7 @@ package fr.ensimag.deca.codegen;
  */
 public class StackManager {
     private int currentGBOffset = 0;
+    private int currentLBOffset = 0;
 
     /**
      * Allocate a new global variable on the stack.
@@ -21,6 +22,15 @@ public class StackManager {
     }
 
     /**
+     * Allocate a new local variable on the stack.
+     * @return the word offset of the allocated LB
+     */
+    public int allocateLB() {
+        currentLBOffset++;
+        return currentLBOffset;   
+    }
+
+    /**
      * Get the total number of slots (global variables) allocated on the stack.
      * @return the total number of slots allocated
      */
@@ -29,4 +39,20 @@ public class StackManager {
     }
 
     // No deallocation needed for GB as they live for the entire duration of the program
+
+    /**
+     * Get the current LB offset.
+     * @return the current LB offset
+     */
+    public int getCurrentLBOffset() {
+        return currentLBOffset;
+    }
+
+    /**
+     * Reset the LB offset to 0.
+     */
+    public void resetLB() {
+        currentLBOffset = 0;
+    }
+
 }
