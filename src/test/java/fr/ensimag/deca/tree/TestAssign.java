@@ -5,6 +5,7 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.Register;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ public class TestAssign {
 
     @Test
     public void testSuccessfulAssign() throws ContextualError {
-        xDecl.verifyDeclVar(compiler, env, null); // Declare x in env
+        xDecl.verifyDeclVar(compiler, env, null, 1, Register.GB); // Declare x in env
 
         Assign assign = new Assign(xVar, new IntLiteral(5)); // x = 5;
         assign.verifyExpr(compiler, env, null);
@@ -44,7 +45,7 @@ public class TestAssign {
 
     @Test
     public void testIncompatibleAssign() throws ContextualError {
-        xDecl.verifyDeclVar(compiler, env, null); // Declare x in env
+        xDecl.verifyDeclVar(compiler, env, null, 1, Register.GB); // Declare x in env
 
         Assign assign = new Assign(xVar, new BooleanLiteral(true)); // x = true;
         assertThrows(
@@ -73,7 +74,7 @@ public class TestAssign {
 
         Identifier fVar = new Identifier(compiler.createSymbol("f"));
         DeclVar fDecl = new DeclVar(floatType, fVar, new NoInitialization());
-        fDecl.verifyDeclVar(compiler, env, null);
+        fDecl.verifyDeclVar(compiler, env, null, 1, Register.GB); // Declare f in env
 
         Assign assign = new Assign(fVar, new IntLiteral(10));
         assign.verifyExpr(compiler, env, null);

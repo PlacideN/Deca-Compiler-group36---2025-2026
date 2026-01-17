@@ -63,7 +63,7 @@ public class TestDeclParam {
         when(type.verifyType(compiler)).thenReturn(FLOAT);
 
         DeclParam declParam = new DeclParam(type, paramName);
-        declParam.verifyParamName(compiler, env);
+        declParam.verifyParamName(compiler, env, -3);
 
         // definition is created inside the declare method => use matchers
         verify(env).declare(eq(name), any(ParamDefinition.class));
@@ -82,7 +82,7 @@ public class TestDeclParam {
         
         assertThrows(
             ContextualError.class,
-            () -> { declParam.verifyParamName(compiler, env); },
+            () -> { declParam.verifyParamName(compiler, env, -3); },
             "Expected ContextualError after double definition of parameter in the same method");
     }
 }

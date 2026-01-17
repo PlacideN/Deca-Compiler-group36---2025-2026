@@ -7,7 +7,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
 import fr.ensimag.deca.context.VariableDefinition;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-
+import fr.ensimag.ima.pseudocode.Register;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class TestDeclVar {
@@ -52,7 +55,7 @@ public class TestDeclVar {
     @Test
     public void testDeclareVar() throws ContextualError, DoubleDefException {
 
-        declVar.verifyDeclVar(compiler, env, null);
+        declVar.verifyDeclVar(compiler, env, null, 1, Register.GB);
 
         // Capture the VariableDefinition (name, type) passed to declare
         ArgumentCaptor<VariableDefinition> captor = ArgumentCaptor.forClass(VariableDefinition.class);
@@ -76,7 +79,7 @@ public class TestDeclVar {
 
         assertThrows(
             ContextualError.class, 
-            () -> declVar.verifyDeclVar(compiler, env, null),
+            () -> declVar.verifyDeclVar(compiler, env, null, 1, Register.GB),
             "Expected ContextualError when caught DoubleDefException"
         );
     }
@@ -87,7 +90,7 @@ public class TestDeclVar {
 
         assertThrows(
             ContextualError.class,
-            () -> declVar.verifyDeclVar(compiler, env, null),
+            () -> declVar.verifyDeclVar(compiler, env, null, 1, Register.GB),
             "Expected ContextualError when declaring a variable of void type"
         );
     }
