@@ -12,15 +12,14 @@ import org.apache.commons.lang.Validate;
  */
 public class ClassDefinition extends TypeDefinition {
 
-    private Label vTableLabel;
+    private int vTableOffset;
 
-    
-    public void setVTableLabel(Label vTableLabel) {
-        this.vTableLabel = vTableLabel;
+    public void setVTableOffset(int offset) {
+        this.vTableOffset = offset;
     }
 
-    public Label getVTableLabel() {
-        return vTableLabel;
+    public int getVTableOffset() {
+        return vTableOffset;
     }
 
     public void setNumberOfFields(int numberOfFields) {
