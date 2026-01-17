@@ -11,7 +11,18 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.instructions.BNE;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
 
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.LEA;
+import fr.ensimag.ima.pseudocode.LabelOperand;
+import fr.ensimag.ima.pseudocode.Label;
 /**
  * @author gl36
  * @date 12/01/2026
@@ -64,7 +75,52 @@ public class InstanceOf extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        //affiche en ass ima :  A instance of B avec A une expr
+
+        // adresse en mémoire de la table des méthodes de B
+        int right_Offset = typeName.getClassDefinition().getVTableOffset();
+
+        //Label creation that depends on the column and line of the InstanceOf to have unique labels
+        String suffix = "_" + this.getLocation().getLine() + "_" + this.getLocation().getPositionInLine();
+        Label startLoop = new Label("instanceof_loop_" + suffix);
+        Label isInstance = new Label("instanceof_true_" + suffix);
+        Label endLabel = new Label("end_instanceof" + suffix);
+
+        // mets dans R2 l'objet à gauche du instanceof (new A() instanceof B ou juste A instance of B ...)
+        expr.codeGenExpr(compiler, target); 
+        // on verifie que l'adresse n'est pas null
+        compiler.addInstruction(new CMP(new NullOperand(), target));
+        compiler.addInstruction(new BEQ(endLabel));
+
+        // on met vtable dans target(avant target contenait l'adresse de l'objet)
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, target), target));
+
+
+        compiler.addLabel(startLoop);
+
+        // on compare l'adresse de la vtable de l'objet avec celle de la classe cible si égale alors c'est une instance
+        compiler.addInstruction(new CMP(right_Offset, target));
+        compiler.addInstruction(new BEQ(isInstance));
+
+        // on remonte dans la hiérarchie des classes, la classe mère est à l'offset 0 de la vtable
+        compiler.addInstruction(new LOAD(new RegisterOffset(0, target),target));
+
+        // on revient au début de la boucle si l'addresse n'est pas nulle
+        compiler.addInstruction(new CMP(new NullOperand(),target));
+        compiler.addInstruction(new BNE(startLoop));
+
+        // Si l'adresse est nulle, on met 0 dans target (faux)
+        compiler.addInstruction(new LOAD(0,target));
+        compiler.addInstruction(new BRA(endLabel));
+
+        // Si c'est une instance, on met 1 dans target (vrai)
+        compiler.addLabel(isInstance);
+        compiler.addInstruction(new LOAD(1, target));
+
+        compiler.addLabel(endLabel);
+
+
+
     }
 
 
