@@ -14,6 +14,15 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.BEQ;
+import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+
+
+
 
 /**
  * @author gl36
@@ -89,7 +98,20 @@ public class Selection extends AbstractLValue {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        // on evalue l'expression à gauche, on a dans target l'adresse de l'objet
+        object.codeGenExpr(compiler, target);
+
+        //S'il est null, on saute vers une erreur
+        compiler.addInstruction(new CMP(new NullOperand(),target) );
+        compiler.addInstruction(new BEQ(compiler.getLabelManager().getNullDereferenceLabel()));
+
+        // on recupere l'adresse du champ 
+        int index = fieldName.getFieldDefinition().getIndex();
+
+        // puis on charge la valeur du champ dans target
+        compiler.addInstruction(new LOAD(new RegisterOffset(index, target), target));
+
+        
     }
 
 }

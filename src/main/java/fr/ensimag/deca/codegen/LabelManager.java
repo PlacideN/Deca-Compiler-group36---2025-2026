@@ -61,6 +61,10 @@ public class LabelManager {
         return new Label(error + "_error");
     }
 
+    public Label getNullDereferenceLabel() {
+        return new Label("null_dereference_error");
+    }
+    
     public Label getMethodLabel(String className, String methodName) {
         return new Label("code." + className + "." + methodName);
     }
