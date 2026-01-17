@@ -9,6 +9,7 @@ import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.context.FieldDefinition;
+import fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType;
 
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
@@ -103,7 +104,8 @@ public class Selection extends AbstractLValue {
 
         //S'il est null, on saute vers une erreur
         compiler.addInstruction(new CMP(new NullOperand(),target) );
-        compiler.addInstruction(new BEQ(compiler.getLabelManager().getNullDereferenceLabel()));
+        Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.NULL_DEREFERENCE);
+        compiler.addInstruction(new BEQ(errorLabel));
 
         // on recupere l'adresse du champ 
         int index = fieldName.getFieldDefinition().getIndex();

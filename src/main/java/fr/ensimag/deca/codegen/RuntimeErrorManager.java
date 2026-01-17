@@ -27,7 +27,8 @@ public class RuntimeErrorManager {
         STACK_OVERFLOW("Error: Stack overflow"),
         IO("Error: Input/Output error"),
         OVERFLOW("Error: Overflow during arithmetic operation"),
-        NO_RETURN("Error: No return statement in function with non-void return type");
+        NO_RETURN("Error: No return statement in function with non-void return type"),
+        NULL_DEREFERENCE("Error: Null pointer dereference");    
 
         private final String message;
 
