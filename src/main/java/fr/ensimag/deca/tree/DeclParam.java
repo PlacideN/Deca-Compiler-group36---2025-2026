@@ -6,6 +6,8 @@ import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.deca.context.ParamDefinition;
 import fr.ensimag.deca.context.Type;
 
@@ -54,9 +56,10 @@ public class DeclParam extends AbstractDeclParam {
     }
 
 
-    protected void verifyParamName(DecacCompiler compiler, EnvironmentExp localEnv) throws ContextualError {
-        Type paramType = type.getType();
+    protected void verifyParamName(DecacCompiler compiler, EnvironmentExp localEnv, int index) throws ContextualError {
+        Type paramType = type.verifyType(compiler);
         ParamDefinition paramDef = new ParamDefinition(paramType, getLocation());
+        paramDef.setOperand(new RegisterOffset(index, Register.LB));
 
         try {
             localEnv.declare(paramName.getName(), paramDef);
