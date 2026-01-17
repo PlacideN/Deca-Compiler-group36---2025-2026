@@ -7,7 +7,10 @@ import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.BRA;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
@@ -53,8 +56,13 @@ public class Return extends AbstractInst {
 
     @Override
     protected void codeGenInst(DecacCompiler compiler) {
-        expr.codeGenExpr(compiler, Register.R0);
-        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.BRA(compiler.getLabelManager().getMethodEndLabel()));
+        GPRegister target = compiler.getRegisterManager().allocateRegister();
+        expr.codeGenExpr(compiler, target);
+        
+        compiler.addInstruction(new LOAD(target, Register.R0));
+        Label endLabel = compiler.getLabelManager().getCurrentMethodEndLabel();
+        compiler.addInstruction(new BRA(endLabel));
+        compiler.getRegisterManager().freeRegister(target);
     }  
     
 }
