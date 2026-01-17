@@ -45,8 +45,10 @@ public class ListDeclParam extends TreeList<AbstractDeclParam> {
      */
     public EnvironmentExp verifyListParam(DecacCompiler compiler, EnvironmentExp parentEnv) throws ContextualError {
         EnvironmentExp env = new EnvironmentExp(parentEnv);
+        int index  = -3; // params start at offset -3, -2 is for 'this', -1 for return address
         for (AbstractDeclParam p : getList()) {
-            p.verifyParamName(compiler, env);
+            p.verifyParamName(compiler, env, index);
+            index--;
         }
         return env;
     }
