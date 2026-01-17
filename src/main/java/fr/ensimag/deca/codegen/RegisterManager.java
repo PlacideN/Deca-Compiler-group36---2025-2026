@@ -14,6 +14,7 @@ import fr.ensimag.ima.pseudocode.instructions.POP;
 public class RegisterManager {
     
     private final int maxRegisterIndex;
+    private int maxUsedRegisterIndex = 1; // R0 and R1 are reserved
     private int nextFree = 2; // R0 and R1 are reserved
 
     private int currentTempStackUsage = 0;
@@ -37,7 +38,11 @@ public class RegisterManager {
      */
     public GPRegister allocateRegister() {
         if (nextFree <= maxRegisterIndex) {
-            return GPRegister.getR(nextFree++);
+            GPRegister reg = GPRegister.getR(nextFree++);
+            if (reg.getNumber() > maxUsedRegisterIndex) {
+                maxUsedRegisterIndex = reg.getNumber();
+            }
+            return reg;
         } else {
             GPRegister last = GPRegister.getR(maxRegisterIndex);
             PUSH inst = new PUSH(last);
@@ -86,6 +91,62 @@ public class RegisterManager {
      */
     public void resetMaxTempStackUsage() {
         this.maxTempStackUsage = 0;
+    }
+
+    /**
+     * Returns how many registers (R2 and up) were used.
+     * If maxUsedRegisterIndex is 3, we used R2 and R3, so returns 2.
+     */
+    public int getNbSavedRegisters() {
+        return Math.max(0, maxUsedRegisterIndex - 1);
+    }
+
+    /**
+     * Save all used registers (in a block) onto the stack.
+     */
+    public void saveRegisters(DecacCompiler compiler) {
+        for (int i = 2; i <= maxUsedRegisterIndex; i++) { 
+            compiler.addInstruction(new PUSH(GPRegister.getR(i)));
+        }
+    }
+
+    /**
+     * Restore all used registers (in a block) from the stack.
+     */
+    public void restoreRegisters(DecacCompiler compiler) {
+        for (int i = maxUsedRegisterIndex; i >= 2; i--) {
+            compiler.addInstruction(new POP(GPRegister.getR(i)));
+        }
+    }
+
+    /**
+     * Reset the register manager to its initial state.
+     */
+    public void reset() {
+        nextFree = 2;
+        currentTempStackUsage = 0;
+        maxTempStackUsage = 0;
+        maxUsedRegisterIndex = 1;
+    }
+
+    /**
+     * Records a big temporary increase in stack usage (e.g., for method parameters).
+     * @param n the number of stack slots to increase by
+     */
+    public void trackMethodCallStackIncrease(int n) {
+        this.currentTempStackUsage += n;
+        if (this.currentTempStackUsage > this.maxTempStackUsage) {
+            this.maxTempStackUsage = this.currentTempStackUsage;
+        }
+        // the params stay on the stack until the SUBSP, after which we call releaseMethodCallStack
+    }
+
+    /**
+     * Release the temporary stack increase after a method call.
+     * @param n the number of stack slots to decrease by
+     */
+    public void freeMethodStackIncrease(int n) {
+        this.currentTempStackUsage -= n;
     }
 
 }

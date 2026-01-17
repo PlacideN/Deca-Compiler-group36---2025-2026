@@ -49,26 +49,34 @@ public class Program extends AbstractProgram {
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
 
+        compiler.addComment("--------------------------------------------------");
+        compiler.addComment("       Construction des tables des methodes       ");
+        compiler.addComment("--------------------------------------------------");
         compiler.getVTableManager().codeGenObjectVTable(compiler);
         classes.codeGenListVTable(compiler);
 
-        int nextGBslot = compiler.getVTableManager().getNextGBSlot();
-        compiler.getStackManager().setGBOffset(nextGBslot -1);
+        int vTableSize = compiler.getVTableManager().getNextGBSlot() - 1;
+        compiler.getStackManager().setGBOffset(vTableSize);
 
         IMAProgram body = new IMAProgram();
-        IMAProgram init = compiler.getProgram();
+        IMAProgram head = compiler.getProgram();
         compiler.setProgram(body);
         
         
-        compiler.addComment("Main program");
+        compiler.addComment("--------------------------------------------------");
+        compiler.addComment("            Code du programme principal           ");
+        compiler.addComment("--------------------------------------------------");
         main.codeGenMain(compiler);
         compiler.addInstruction(new HALT());
         
-        compiler.setProgram(init);
+        IMAProgram preamble = new IMAProgram();
+        compiler.setProgram(preamble);
         
         int stackSize = compiler.getStackManager().getStackSize();
         if (!compiler.getCompilerOptions().getNoCheck()) {
-            int tsto = compiler.getRegisterManager().getMaxTempStackUsage() + stackSize;
+            int nbSavedRegs = compiler.getRegisterManager().getNbSavedRegisters(); // registers saved for method calls
+            int maxTemp = compiler.getRegisterManager().getMaxTempStackUsage(); // method call / expression spilling
+            int tsto = nbSavedRegs + maxTemp + stackSize;
             if (tsto > 0) {
                 compiler.addInstruction(new TSTO(tsto));
                 Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.STACK_OVERFLOW);
@@ -78,11 +86,16 @@ public class Program extends AbstractProgram {
         if (stackSize > 0) {
             compiler.addInstruction(new ADDSP(stackSize));
         }
-        
-        init.append(body);
-        compiler.getRuntimeErrorManager().generateErrorHandlers(); // generate error assembly code
+
+        IMAProgram full = new IMAProgram();
+        full.append(preamble);
+        full.append(head);
+        full.append(body);
+    
+        compiler.setProgram(full);
         classes.codeGenListInit(compiler);
-        // classes.codeGenListMethods(compiler);
+        classes.codeGenListMethods(compiler);
+        compiler.getRuntimeErrorManager().generateErrorHandlers(); // generate error assembly code
 
     }
 

@@ -3,17 +3,26 @@ package fr.ensimag.deca.tree;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.VTableLayout;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
+import fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.context.MethodDefinition;
 import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.context.Type;
-import fr.ensimag.deca.codegen.VTableLayout;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.instructions.ADDSP;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
+import fr.ensimag.ima.pseudocode.instructions.ERROR;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
+import fr.ensimag.ima.pseudocode.instructions.WNL;
+import fr.ensimag.ima.pseudocode.instructions.WSTR;
 
 /**
  * @author gl36
@@ -91,6 +100,7 @@ public class DeclMethod extends AbstractDeclMethod {
         }
 
         MethodDefinition methodDef = new MethodDefinition(type, getLocation(), sig, index);
+        methodDef.setClassName(currentClass.getType().getName());
         try {
             currentClass.getMembers().declare(methodName.getName(), methodDef);
         } catch (DoubleDefException e) {
@@ -124,25 +134,58 @@ public class DeclMethod extends AbstractDeclMethod {
 
     @Override
     protected void codeGenMethod(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("Not yet implemented");
-        // // 1. On crée l'étiquette
-        // Label endLabel = new Label("end." + methodName.getName().getName());
+        String name = methodName.getName().getName();
+        String className = methodName.getMethodDefinition().getClassName().getName();
+        Label methodLabel = compiler.getLabelManager().getMethodLabel(className, name);
+        Label endLabel = compiler.getLabelManager().getMethodEndLabel(className, name);
+        compiler.getLabelManager().setCurrentMethodEndLabel(endLabel);
+        compiler.addLabel(methodLabel);
+
+        compiler.getRegisterManager().reset();
+        compiler.getStackManager().resetLB();
+
+        IMAProgram body = new IMAProgram();
+        IMAProgram init = compiler.getProgram();
+        IMAProgram registerSave = new IMAProgram();
+        compiler.setProgram(body);
+
+        methodBody.codeGenMethodBody(compiler);
+
+        // case where no return is found in the method body
+        Type returnType = methodName.getMethodDefinition().getType();
+        if (!returnType.isVoid()) {
+            compiler.addInstruction(new WSTR("Error: Exit method " + name + " without return"));
+            compiler.addInstruction(new WNL());
+            compiler.addInstruction(new ERROR());
+        }
+
+        compiler.addLabel(endLabel);
+        compiler.setProgram(registerSave);
+        compiler.addComment("Sauvegarde des registres");
+        compiler.getRegisterManager().saveRegisters(compiler);
+        compiler.setProgram(init);
+
+        int localVariablesSize = compiler.getStackManager().getCurrentLBOffset();
+        int nbSavedRegs = compiler.getRegisterManager().getNbSavedRegisters();
+        int maxTempSpace = compiler.getRegisterManager().getMaxTempStackUsage();
+        int totalStackDepth = nbSavedRegs + maxTempSpace + localVariablesSize;
+
+        // tsto
+        if (!compiler.getCompilerOptions().getNoCheck() && totalStackDepth > 0) {
+            compiler.addInstruction(new TSTO(totalStackDepth));
+            compiler.addInstruction(new BOV(compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.STACK_OVERFLOW)));
+        }
         
-        // // 2. MODIFICATION : On l'enregistre dans le LabelManager
-        // compiler.getLabelManager().setMethodEndLabel(endLabel);
+        // addsp
+        if (localVariablesSize > 0) {
+            compiler.addInstruction(new ADDSP(localVariablesSize));
+        }
 
-        // // 3. Corps de la méthode
-        // this.methodBody.codeGenMethodBody(compiler);
-
-        // // 4. Le piège pour le return manquant
-        // if (!returnType.getType().isVoid()) {
-        //     Label errorLabel = compiler.getRuntimeErrorManager().getErrorLabel(
-        //             fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType.NO_RETURN);
-        //     compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.BRA(errorLabel));
-        // }
-
-        // // 5. Fin de la méthode
-        // compiler.addLabel(endLabel);
-        // compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.RTS());
+        init.append(registerSave);    
+        init.append(body);  
+        
+        compiler.addComment("Restauration des registres");
+        compiler.getRegisterManager().restoreRegisters(compiler); 
+        compiler.addInstruction(new RTS());
     }
 }

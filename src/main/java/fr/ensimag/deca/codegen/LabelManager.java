@@ -13,6 +13,16 @@ public class LabelManager {
     private int boolOpCount = 0;
     private int whileCount = 0;
 
+    private Label currentMethodEndLabel;
+
+    public void setCurrentMethodEndLabel(Label label) {
+        this.currentMethodEndLabel = label;
+    }
+
+    public Label getCurrentMethodEndLabel() {
+        return this.currentMethodEndLabel;
+    }
+
     public int getNextIfLabel() {
         return ifCount++;
     }
@@ -24,18 +34,6 @@ public class LabelManager {
     public int getNextWhileLabel() {
         return whileCount++;
     }
-
-    
-    private Label currentMethodEndLabel;
-
-    public void setMethodEndLabel(Label label) {
-        this.currentMethodEndLabel = label;
-    }
-
-    public Label getMethodEndLabel() {
-        return this.currentMethodEndLabel;
-    }
-    
 
     public Label ifEndLabel(int ifNumber) {
         return new Label("if_end_" + ifNumber);
@@ -63,6 +61,10 @@ public class LabelManager {
 
     public Label getMethodLabel(String className, String methodName) {
         return new Label("code." + className + "." + methodName);
+    }
+
+    public Label getMethodEndLabel(String className, String methodName) {
+        return new Label("fin." + className + "." + methodName);
     }
 
     public Label getObjectEqualsLabel() {
