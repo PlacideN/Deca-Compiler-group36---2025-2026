@@ -38,6 +38,10 @@ public class VTableManager {
         nextGBSlot = layout.getGBOffset() + 1 + layout.getSize(); // one slot is for superclass vtable address
     }
 
+    public int getNextGBSlot() {
+        return nextGBSlot;
+    }
+
     
     public VTableLayout getClassLayout(ClassDefinition classDef) {
         return classLayouts.get(classDef);

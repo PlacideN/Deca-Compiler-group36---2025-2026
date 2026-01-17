@@ -51,18 +51,21 @@ public class Program extends AbstractProgram {
 
         compiler.getVTableManager().codeGenObjectVTable(compiler);
         classes.codeGenListVTable(compiler);
-        classes.codeGenListInit(compiler);
+
+        int nextGBslot = compiler.getVTableManager().getNextGBSlot();
+        compiler.getStackManager().setGBOffset(nextGBslot -1);
 
         IMAProgram body = new IMAProgram();
         IMAProgram init = compiler.getProgram();
         compiler.setProgram(body);
-
+        
+        
         compiler.addComment("Main program");
         main.codeGenMain(compiler);
         compiler.addInstruction(new HALT());
-
+        
         compiler.setProgram(init);
-
+        
         int stackSize = compiler.getStackManager().getStackSize();
         if (!compiler.getCompilerOptions().getNoCheck()) {
             int tsto = compiler.getRegisterManager().getMaxTempStackUsage() + stackSize;
@@ -75,9 +78,12 @@ public class Program extends AbstractProgram {
         if (stackSize > 0) {
             compiler.addInstruction(new ADDSP(stackSize));
         }
-
-
+        
         init.append(body);
+        compiler.getRuntimeErrorManager().generateErrorHandlers(); // generate error assembly code
+        classes.codeGenListInit(compiler);
+        // classes.codeGenListMethods(compiler);
+
     }
 
     @Override

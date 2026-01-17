@@ -38,6 +38,13 @@ public class StackManager {
         return currentGBOffset;
     }
 
+    /**
+     * Set the current GB offset.
+     */
+    public void setGBOffset(int offset) {
+        this.currentGBOffset = offset;
+    }
+
     // No deallocation needed for GB as they live for the entire duration of the program
 
     /**
