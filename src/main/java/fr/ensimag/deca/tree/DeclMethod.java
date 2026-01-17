@@ -153,7 +153,7 @@ public class DeclMethod extends AbstractDeclMethod {
 
         // case where no return is found in the method body
         Type returnType = methodName.getMethodDefinition().getType();
-        if (!returnType.isVoid()) {
+        if (!returnType.isVoid() && !compiler.getCompilerOptions().getNoCheck()) {
             compiler.addInstruction(new WSTR("Error: Exit method " + name + " without return"));
             compiler.addInstruction(new WNL());
             compiler.addInstruction(new ERROR());
