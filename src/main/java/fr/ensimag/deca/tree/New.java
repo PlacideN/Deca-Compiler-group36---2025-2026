@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.RegisterManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -11,6 +12,18 @@ import java.io.PrintStream;
 import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.Register;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.instructions.NEW;
+import fr.ensimag.ima.pseudocode.instructions.STORE;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.LEA;
+import fr.ensimag.ima.pseudocode.instructions.BSR;
+import fr.ensimag.ima.pseudocode.instructions.PUSH;
+import fr.ensimag.ima.pseudocode.instructions.POP;
+
+
+
 
 public class New extends AbstractExpr {
     private final AbstractIdentifier className;
@@ -49,7 +62,35 @@ public class New extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+
+
+        
+
+        //on doit tout d'abord allouer l'espace mémoire nécessaire:
+        // 1 (la vtable qui stocke les infos de la classe) + le nombre de champs de la classe
+        compiler.addInstruction(new NEW(1 + className.getClassDefinition().getNumberOfFields(),target));
+
+        // on récupere l'adresse de la vtable, elle est en RegisterOffset(vtableoffset,target)
+        int vtableoffset = className.getClassDefinition().getVTableOffset();
+
+        // on la charge dans un registre temporaire pour pouvoir ensuite la mettre dans target 0(GB)
+        GPRegister vtablereg = compiler.getRegisterManager().allocateRegister();
+        compiler.addInstruction(new LEA(new RegisterOffset(vtableoffset, Register.GB),vtablereg));
+
+        // on store grâce à l'adresse obtenu dans vtablereg la vtable en 0(GB)
+        compiler.addInstruction(new STORE(vtablereg, new RegisterOffset(0, target)));
+
+
+        // on libère le registre temporaire
+        compiler.getRegisterManager().freeRegister(vtablereg);
+ 
+        //on doit construire avec un appel à la classe constructeur
+        // on pousse l'adresse de l'objet (dans target) sur la pile
+        compiler.addInstruction(new PUSH(target));
+        // pour pouvoir appeler le constructeur avec BSR et que les this. aient la bonne adresse
+        compiler.addInstruction(new BSR(compiler.getLabelManager().getInitLabel(className.getName().getName())));
+        // on dépile l'adresse de l'objet
+        compiler.addInstruction(new POP(target));
     }
     
 }
