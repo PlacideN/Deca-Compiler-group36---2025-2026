@@ -23,6 +23,7 @@ public abstract class AbstractDeclParam extends Tree {
      * Implements non-terminal "decl_param" of [SyntaxeContextuelle] in pass 3 (Rule 3.13).
      * @param compiler contains the "env_types" attribute
      * @param localEnv corresponds to the "env_exp" attribute (params)
+     * @param index index of the parameter on the stack (used for code generation)
      */
-    protected abstract void verifyParamName(DecacCompiler compiler, EnvironmentExp localEnv) throws ContextualError;
+    protected abstract void verifyParamName(DecacCompiler compiler, EnvironmentExp localEnv, int index) throws ContextualError;
 }
