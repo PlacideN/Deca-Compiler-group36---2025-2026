@@ -13,7 +13,6 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
-import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -90,8 +89,16 @@ public class DeclField extends AbstractDeclField {
         }
 
         // declaration
-        int index = currentClass.getNumberOfFields() + 1;
+        int superFields = 0;
+        if (currentClass.getSuperClass() != null) {
+            superFields = currentClass.getSuperClass().getNumberOfFields();
+        }
+        // first field is at 1 (0 is VTable) then add superclass fields
+        int index = superFields + currentClass.getNumberOfFields() + 1;
+
         FieldDefinition fieldDef = new FieldDefinition(fieldType, getLocation(), visibility, currentClass, index);
+        fieldDef.setOperand(new RegisterOffset(index, Register.R1));
+        
         try {
             currentClass.getMembers().declare(name, fieldDef);
         } catch (DoubleDefException e) {
@@ -114,12 +121,6 @@ public class DeclField extends AbstractDeclField {
     }
 
     @Override
-    protected void codeGenFieldOffset(int offset) {
-        FieldDefinition fieldDef = (FieldDefinition) fieldName.getFieldDefinition();
-        fieldDef.setIndex(offset);
-    }
-
-    @Override
     protected void codeGenDefaultInit(DecacCompiler compiler) {
         FieldDefinition fieldDef = fieldName.getFieldDefinition();
         String className = fieldDef.getContainingClass().getType().getName().getName();
@@ -127,8 +128,7 @@ public class DeclField extends AbstractDeclField {
 
         compiler.addComment("Initialisation de " + className + "." + name);
         compiler.addInstruction(new LOAD(0, Register.R0));
-        int offset = fieldDef.getIndex();
-        compiler.addInstruction(new STORE(Register.R0, new RegisterOffset(offset, Register.R1)));        
+        compiler.addInstruction(new STORE(Register.R0, fieldDef.getOperand()));        
     }
 
     @Override
@@ -139,10 +139,7 @@ public class DeclField extends AbstractDeclField {
             String className = fieldDef.getContainingClass().getType().getName().getName();
             String name = fieldName.getName().getName();
             compiler.addComment("Initialisation explicite de " + className + "." + name);
-
-            int offset = fieldName.getFieldDefinition().getIndex(); // pass 1 calculated offset
-            DAddr fieldAddr = new RegisterOffset(offset, Register.R1);
-            init.codeGenInit(compiler, fieldAddr);
+            init.codeGenInit(compiler, fieldDef.getOperand());
         }
     }
 }

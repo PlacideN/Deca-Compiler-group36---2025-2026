@@ -40,25 +40,6 @@ public class ListDeclField extends TreeList<AbstractDeclField> {
     }
 
     /**
-     * Pass 1 of Gencode. Delegate to each field the calculation of its offset.
-     */
-    public void codeGenListFieldOffsets(ClassDefinition classDef) {
-        ClassDefinition superClassDef = classDef.getSuperClass();
-        int offset = 1; // 0 stores the VTable pointer
-    
-        if (superClassDef != null) {
-            offset += superClassDef.getNumberOfFields();
-        }
-
-        for (AbstractDeclField f : getList()) {
-            f.codeGenFieldOffset(offset);
-            offset++;
-        }
-    
-        classDef.setNumberOfFields(offset - 1); // update the number of fields in the class for any later subclasses    
-    }
-
-    /**
      * Pass 2 of Gencode. Delegate to each field the generation of its default initialization.
      */
     public void codeGenListDefaultInits(DecacCompiler compiler) {

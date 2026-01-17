@@ -167,7 +167,6 @@ public class DeclClass extends AbstractDeclClass {
         VTableLayout layout = vm.reserveLayout(classDef, superClassDef);
         VTableLayout superLayout = vm.getClassLayout(superClassDef);
 
-        fields.codeGenListFieldOffsets(classDef);
         methods.codeGenListVTable(compiler, layout, className);
         vm.updateLayoutGBOffset(layout);
 
@@ -249,6 +248,6 @@ public class DeclClass extends AbstractDeclClass {
 
     @Override
 	protected void codeGenMethods(DecacCompiler compiler) {
-        throw new UnsupportedOperationException("Not implemented yet."); 
+        methods.codeGenListMethods(compiler);
     }
 }
