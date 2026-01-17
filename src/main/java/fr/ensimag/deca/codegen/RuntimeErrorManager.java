@@ -28,7 +28,8 @@ public class RuntimeErrorManager {
         IO("Error: Input/Output error"),
         OVERFLOW("Error: Overflow during arithmetic operation"),
         NO_RETURN("Error: No return statement in function with non-void return type"),
-        NULL_DEREFERENCE("Error: Null pointer dereference");    
+        NULL_DEREFERENCE("Error: Null pointer dereference"),   
+        HEAP_OVERFLOW("Error: Heap overflow");
 
         private final String message;
 
@@ -62,6 +63,9 @@ public class RuntimeErrorManager {
      */
     public void generateErrorHandlers() {
         for (ErrorType type : triggeredErrors) {
+            compiler.addComment("--------------------------------------------------");
+            compiler.addComment("             Message d'erreur : " + type.getMessage().replace("Error: ", ""));
+            compiler.addComment("--------------------------------------------------");
             Label errorLabel = getErrorLabel(type);
             compiler.addLabel(errorLabel);
             compiler.addInstruction(new WSTR(type.getMessage()));
