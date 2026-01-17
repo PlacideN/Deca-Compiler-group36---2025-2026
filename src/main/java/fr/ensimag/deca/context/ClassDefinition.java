@@ -12,6 +12,16 @@ import org.apache.commons.lang.Validate;
  */
 public class ClassDefinition extends TypeDefinition {
 
+    private Label vTableLabel;
+
+    
+    public void setVTableLabel(Label vTableLabel) {
+        this.vTableLabel = vTableLabel;
+    }
+
+    public Label getVTableLabel() {
+        return vTableLabel;
+    }
 
     public void setNumberOfFields(int numberOfFields) {
         this.numberOfFields = numberOfFields;
@@ -76,5 +86,7 @@ public class ClassDefinition extends TypeDefinition {
         members = new EnvironmentExp(parent);
         this.superClass = superClass;
     }
+
+
     
 }
