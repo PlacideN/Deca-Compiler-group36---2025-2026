@@ -3,6 +3,7 @@ package fr.ensimag.deca.tree;
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.codegen.VTableLayout;
 import fr.ensimag.deca.codegen.VTableManager;
+import fr.ensimag.deca.codegen.RuntimeErrorManager.ErrorType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.TypeDefinition;
@@ -10,12 +11,15 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
 import fr.ensimag.ima.pseudocode.DAddr;
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.IMAProgram;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
 import fr.ensimag.ima.pseudocode.instructions.SUBSP;
+import fr.ensimag.ima.pseudocode.instructions.TSTO;
+import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.BSR;
 import fr.ensimag.ima.pseudocode.instructions.PUSH;
 import fr.ensimag.ima.pseudocode.instructions.RTS;
@@ -208,6 +212,12 @@ public class DeclClass extends AbstractDeclClass {
         compiler.addComment("Initialisation des champs de " + name);
         compiler.addLabel(initLabel);
 
+        IMAProgram program = compiler.getProgram();
+        IMAProgram block = new IMAProgram();
+
+        compiler.setProgram(block);
+        compiler.getRegisterManager().resetMaxTempStackUsage();
+
         compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
         fields.codeGenListDefaultInits(compiler); // initialize fields to default values
 
@@ -222,6 +232,19 @@ public class DeclClass extends AbstractDeclClass {
 
         fields.codeGenListExplicitInits(compiler);
         compiler.addInstruction(new RTS());
+
+        compiler.setProgram(program);
+        int maxStackUsage = compiler.getRegisterManager().getMaxTempStackUsage();
+        if (superClassDef != null && !superClassDef.getType().isObjectClass()) {
+            maxStackUsage += 2; // PUSH and SUBSP for superclass init
+        }
+
+        if (!compiler.getCompilerOptions().getNoCheck() && maxStackUsage > 0) {
+            compiler.addInstruction(new TSTO(maxStackUsage));
+            Label errLabel = compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.STACK_OVERFLOW);
+            compiler.addInstruction(new BOV(errLabel));
+        }
+        program.append(block);
     }
 
     @Override

@@ -51,6 +51,7 @@ public class Program extends AbstractProgram {
 
         compiler.getVTableManager().codeGenObjectVTable(compiler);
         classes.codeGenListVTable(compiler);
+        classes.codeGenListInit(compiler);
 
         IMAProgram body = new IMAProgram();
         IMAProgram init = compiler.getProgram();
