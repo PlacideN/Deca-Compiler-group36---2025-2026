@@ -1,0 +1,29 @@
+// Description:
+//    Test de l'accès aux champs 'protected'.
+//    Vérifie qu'une sous-classe peut accéder au champ protégé de sa super-classe.
+//
+// Resultats:
+//    42
+//
+// Historique:
+//    cree le 17/01/2026
+
+class Mere {
+    protected int x;
+}
+
+class Fille extends Mere {
+    void set(int i) {
+        this.x = i;
+    }
+    
+    int get() {
+        return this.x;
+    }
+}
+
+{
+    Fille f = new Fille();
+    f.set(42);
+    println(f.get());
+}

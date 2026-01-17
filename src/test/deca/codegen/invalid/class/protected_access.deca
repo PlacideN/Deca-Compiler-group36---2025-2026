@@ -1,0 +1,18 @@
+// Description:
+//    Test d'accès illégal à un champ protégé depuis le programme principal (Main).
+//
+// Resultats:
+//    Ligne 17 : Erreur contextuelle : Le champ 'x' est protégé et n'est pas accessible ici.
+//
+// Historique:
+//    cree le 17/01/2026
+
+class A {
+    protected int x;
+}
+
+{
+    A a = new A();
+    // Erreur : x est protected, accès interdit hors de la classe ou sous-classe
+    println(a.x);
+}

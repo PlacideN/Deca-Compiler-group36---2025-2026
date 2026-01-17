@@ -1,0 +1,30 @@
+// Description:
+//    Test de l'utilisation de 'this' explicite et implicite dans une méthode.
+//
+// Resultats:
+//    5
+//    5
+//
+// Historique:
+//    cree le 17/01/2026
+
+class A {
+    int x;
+    
+    void init() {
+        this.x = 5;
+    }
+    
+    void printX() {
+        // Accès explicite via this
+        println(this.x);
+        // Accès implicite
+        println(x);
+    }
+}
+
+{
+    A a = new A();
+    a.init();
+    a.printX();
+}

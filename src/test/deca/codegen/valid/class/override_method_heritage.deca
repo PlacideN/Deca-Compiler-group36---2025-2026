@@ -1,0 +1,30 @@
+// Description:
+//    Test de l'héritage et de la surcharge (override) de méthode.
+//    La méthode 'action' est redéfinie dans B.
+//
+// Resultats:
+//    1
+//    2
+//
+// Historique:
+//    cree le 17/01/2026
+
+class A {
+    int action() {
+        return 1;
+    }
+}
+
+class B extends A {
+    int action() {
+        return 2;
+    }
+}
+
+{
+    A a = new A();
+    A b = new B();
+    
+    println(a.action());
+    println(b.action());
+}

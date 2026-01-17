@@ -1,0 +1,22 @@
+// Description:
+//    Test de masquage invalide.
+//    On essaie de déclarer un champ 'm' qui masque une méthode 'm' héritée.
+//
+// Resultats:
+//    Ligne 18 : Erreur contextuelle : L'identificateur 'm' est déjà défini comme méthode dans la super-classe.
+//
+// Historique:
+//    cree le 17/01/2026
+
+class A {
+    void m() {
+    }
+}
+
+class B extends A {
+    // Erreur : conflit de nom avec la méthode m() de A
+    int m;
+}
+
+{
+}

@@ -1,0 +1,27 @@
+// Description:
+//    Test des opérateurs instanceof et du cast (transtypage).
+//
+// Resultats:
+//    ok
+//    ok cast
+//
+// Historique:
+//    cree le 17/01/2026
+
+class A {
+}
+
+class B extends A {
+    void hello() {
+        println("ok cast");
+    }
+}
+
+{
+    A a = new B();
+    if (a instanceof B) {
+        println("ok");
+        // Cast explicite vers B pour appeler la méthode de B
+        ( (B) (a) ).hello();
+    }
+}

@@ -1,0 +1,23 @@
+// Description:
+//    Test d'une surcharge invalide : changement de signature.
+//    La méthode 'm' dans B prend un argument alors que A.m n'en prend pas.
+//
+// Resultats:
+//    Ligne 18 : Erreur contextuelle : La signature de la méthode 'm' n'est pas compatible avec celle héritée de 'A'.
+//
+// Historique:
+//    cree le 17/01/2026
+
+class A {
+    void m() {
+    }
+}
+
+class B extends A {
+    // Erreur : signature différente
+    void m(int i) {
+    }
+}
+
+{
+}

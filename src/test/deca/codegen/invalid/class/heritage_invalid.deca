@@ -1,0 +1,14 @@
+// Description:
+//    Test d'héritage invalide : extension d'une classe non déclarée.
+//
+// Resultats:
+//    Ligne 13 : Erreur contextuelle : La classe 'Inexistante' n'existe pas.
+//
+// Historique:
+//    cree le 17/01/2026
+
+class A extends Inexistante {
+}
+
+{
+}
