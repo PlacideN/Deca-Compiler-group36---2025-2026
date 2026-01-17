@@ -91,7 +91,7 @@ public class DeclField extends AbstractDeclField {
 
         // declaration
         int index = currentClass.getNumberOfFields() + 1;
-        FieldDefinition fieldDef = new FieldDefinition(fieldType, getLocation(), visibility, currentClass.getSuperClass(), index);
+        FieldDefinition fieldDef = new FieldDefinition(fieldType, getLocation(), visibility, currentClass, index);
         try {
             currentClass.getMembers().declare(name, fieldDef);
         } catch (DoubleDefException e) {
