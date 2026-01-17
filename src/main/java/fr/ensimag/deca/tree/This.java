@@ -7,6 +7,10 @@ import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.Type;
 import fr.ensimag.deca.tools.IndentPrintStream;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.RegisterOffset;
+import fr.ensimag.ima.pseudocode.Register;
+
 
 import java.io.PrintStream;
 
@@ -41,7 +45,8 @@ public class This extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        // This est dans la pile à l'offset -2:
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), target));
     }
     
 }
