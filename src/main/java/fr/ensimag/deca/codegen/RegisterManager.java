@@ -81,4 +81,11 @@ public class RegisterManager {
         return maxTempStackUsage;
     }
 
+    /**
+     * Reset the maximum temporary stack usage counter.
+     */
+    public void resetMaxTempStackUsage() {
+        this.maxTempStackUsage = 0;
+    }
+
 }
