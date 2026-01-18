@@ -1,0 +1,19 @@
+// Description:
+//    Test de comparaison invalide. Types incompatibles pour l'opérateur '==' (int et A).
+//
+// Resultats:
+//    Erreur contextuelle
+//    Ligne 17 : Incompatible types for comparison: A and int
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {}
+
+{
+    A a = new A();
+    int i = 0;
+    
+    if (a == i) {
+    }
+}

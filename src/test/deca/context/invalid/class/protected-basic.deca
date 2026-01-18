@@ -4,7 +4,8 @@
 //    si cette instance n'est pas (statiquement) du type de la sous-classe.
 //
 // Resultats:
-//    Ligne 18 : Erreur contextuelle : Accès interdit au champ protégé 'x'.
+//    Erreur contextuelle
+//    Ligne 21 : Access to protected field 'x' is not allowed here. The object type (Mere) must be a subtype of the current class (Fille)
 //
 // Historique:
 //    cree le 18/01/2026

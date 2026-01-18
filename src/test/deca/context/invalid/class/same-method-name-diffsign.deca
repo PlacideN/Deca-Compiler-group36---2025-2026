@@ -3,7 +3,8 @@
 //    A a m(), B essaie de définir m(int) -> Interdit car même nom mais signature différente.
 //
 // Resultats:
-//    Ligne 15 : Erreur contextuelle : La méthode 'm' existe déjà avec une signature différente.
+//    Erreur contextuelle
+//    Ligne 19 : Method 'm' signature does not match inherited method.
 //
 // Historique:
 //    cree le 18/01/2026

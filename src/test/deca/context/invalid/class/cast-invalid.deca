@@ -1,8 +1,10 @@
 // Description:
 //    Test de cast invalide entre deux classes disjointes.
+//    Impossible de caster 'A' en 'B' (types disjoints).
 //
 // Resultats:
-//    Ligne 15 : Erreur contextuelle : Impossible de caster 'A' en 'B' (types disjoints).
+//    Erreur contextuelle
+//    Ligne 18 : Cannot cast from A to B
 //
 // Historique:
 //    cree le 18/01/2026

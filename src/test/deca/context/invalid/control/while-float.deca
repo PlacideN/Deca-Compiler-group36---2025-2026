@@ -3,7 +3,7 @@
 //
 // Resultats:
 //    Erreur contextuelle (Règle 3.29)
-//    Ligne 12 : While loop condition must be boolean
+//    Ligne 12 : Condition must be a boolean.
 //
 // Historique:
 //    cree le 10/01/2026

@@ -1,0 +1,18 @@
+// Description:
+//    Test de retour invalide : une méthode 'void' ne peut pas retourner de valeur.
+//
+// Resultats:
+//    Erreur contextuelle
+//    Ligne 13 : Return expression cannot be of void type
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {
+    void m() {
+        return 5;
+    }
+}
+
+{
+}

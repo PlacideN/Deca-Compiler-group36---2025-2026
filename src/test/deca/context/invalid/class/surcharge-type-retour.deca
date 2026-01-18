@@ -1,9 +1,11 @@
 // Description:
 //    Test d'une surcharge invalide : type de retour incompatible.
-//    A.m retourne int, B.m retourne float.
+//    A.m retourne int, B.m retourne float. Le type de retour 'float' 
+//    n'est pas un sous-type du type de retour hérité 'int'.
 //
 // Resultats:
-//    Ligne 19 : Erreur contextuelle : Le type de retour 'float' n'est pas un sous-type du type de retour hérité 'int'.
+//    Erreur contextuelle
+//    Ligne 21 : Method 'm' return type is not a valid subtype of inherited method.
 //
 // Historique:
 //    cree le 17/01/2026

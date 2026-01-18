@@ -1,9 +1,11 @@
 // Description:
 //    Test d'une surcharge invalide : changement de signature.
 //    La méthode 'm' dans B prend un argument alors que A.m n'en prend pas.
+//    La signature de la méthode 'm' n'est pas compatible avec celle héritée de 'A'.
 //
 // Resultats:
-//    Ligne 18 : Erreur contextuelle : La signature de la méthode 'm' n'est pas compatible avec celle héritée de 'A'.
+//    Erreur contextuelle
+//    Ligne 20 : Method 'm' signature does not match inherited method.
 //
 // Historique:
 //    cree le 17/01/2026

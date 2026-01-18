@@ -1,9 +1,11 @@
 // Description:
 //    Test d'accès protected invalide entre classes "soeurs".
 //    B ne peut pas accéder au champ protected de C, même s'ils héritent tous deux de A.
+//    Accès interdit au champ protégé 'x' sur une instance de 'C'.
 //
 // Resultats:
-//    Ligne 17 : Erreur contextuelle : Accès interdit au champ protégé 'x' sur une instance de 'C'.
+//    Erreur contextuelle
+//    Ligne 22 : Access to protected field 'x' is not allowed here.
 //
 // Historique:
 //    cree le 18/01/2026

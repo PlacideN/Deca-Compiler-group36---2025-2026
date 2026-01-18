@@ -3,7 +3,8 @@
 //    On essaie de déclarer un champ 'm' qui masque une méthode 'm' héritée.
 //
 // Resultats:
-//    Ligne 18 : Erreur contextuelle : L'identificateur 'm' est déjà défini comme méthode dans la super-classe.
+//    Erreur contextuelle
+//    Ligne 19 : Field name collides with an inherited method
 //
 // Historique:
 //    cree le 17/01/2026

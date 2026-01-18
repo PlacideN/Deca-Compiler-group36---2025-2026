@@ -1,0 +1,13 @@
+// Description:
+//    Test de déclaration invalide : une variable ne peut pas être de type 'void'.
+//
+// Resultats:
+//    Erreur contextuelle
+//    Ligne 12 : Variable type cannot be void
+//
+// Historique:
+//    cree le 18/01/2026
+
+{
+    void x;
+}

@@ -2,7 +2,8 @@
 //    Test d'accès illégal à un champ protégé depuis le programme principal (Main).
 //
 // Resultats:
-//    Ligne 17 : Erreur contextuelle : Le champ 'x' est protégé et n'est pas accessible ici.
+//    Erreur contextuelle
+//    Ligne 18 : Protected field 'x' cannot be accessed in main
 //
 // Historique:
 //    cree le 17/01/2026

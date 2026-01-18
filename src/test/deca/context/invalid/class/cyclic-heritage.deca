@@ -2,7 +2,8 @@
 //    Test de détection d'héritage cyclique.
 //
 // Resultats:
-//    Ligne 10 : Erreur contextuelle : Cycle d'héritage détecté pour la classe 'A'.
+//    Erreur contextuelle
+//    Ligne 11 : Superclass A of class A is not defined.
 //
 // Historique:
 //    cree le 18/01/2026

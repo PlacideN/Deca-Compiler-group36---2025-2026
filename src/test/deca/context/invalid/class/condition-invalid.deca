@@ -1,8 +1,10 @@
 // Description:
 //    Test de condition invalide (Objet au lieu de booléen).
+//    (La condition doit être de type boolean, type 'A' trouvé.)
 //
 // Resultats:
-//    Ligne 13 : Erreur contextuelle : La condition doit être de type boolean, type 'A' trouvé.
+//    Erreur contextuelle.
+//    Ligne 16 : Condition must be a boolean. Found: A
 //
 // Historique:
 //    cree le 18/01/2026

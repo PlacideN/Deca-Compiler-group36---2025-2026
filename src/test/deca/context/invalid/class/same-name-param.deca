@@ -1,8 +1,10 @@
 // Description:
 //    Test de déclaration de méthode invalide : paramètres de même nom.
+//    Le paramètre 'a' est déclaré plusieurs fois.
 //
 // Resultats:
-//    Ligne 14 : Erreur contextuelle : Le paramètre 'a' est déclaré plusieurs fois.
+//    Erreur contextuelle
+//    Ligne 13 : Parameter a is already defined
 //
 // Historique:
 //    cree le 18/01/2026
