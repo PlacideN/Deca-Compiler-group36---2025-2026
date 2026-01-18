@@ -1,0 +1,31 @@
+// Description:
+//    Test du masquage de champs (field shadowing).
+//    La classe B déclare un attribut 'x' qui masque celui de A.
+//
+// Resultats:
+//    1
+//    2
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {
+    int x = 1;
+}
+
+class B extends A {
+    int x = 2; // Masque A.x
+    
+    int getAX() {
+        // En Deca standard sans 'super', on ne peut plus accéder facilement à A.x 
+        // sauf par cast, mais vérifions juste l'accès local.
+        return x; 
+    }
+}
+
+{
+    A a = new A();
+    B b = new B();
+    println(a.x);
+    println(b.x);
+}

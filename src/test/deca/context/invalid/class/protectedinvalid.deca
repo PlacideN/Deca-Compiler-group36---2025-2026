@@ -1,0 +1,25 @@
+// Description:
+//    Test d'accès protected invalide (Restriction de visibilité).
+//    Une sous-classe ne peut pas accéder au champ protected d'une instance de sa super-classe
+//    si cette instance n'est pas (statiquement) du type de la sous-classe.
+//
+// Resultats:
+//    Ligne 18 : Erreur contextuelle : Accès interdit au champ protégé 'x'.
+//
+// Historique:
+//    cree le 18/01/2026
+
+class Mere {
+    protected int x;
+}
+
+class Fille extends Mere {
+    void test(Mere m) {
+        // Erreur : m n'est pas forcément un 'Fille'.
+        // m pourrait être une instance de 'Mere' ou 'AutreFille'.
+        println(m.x); 
+    }
+}
+
+{
+}

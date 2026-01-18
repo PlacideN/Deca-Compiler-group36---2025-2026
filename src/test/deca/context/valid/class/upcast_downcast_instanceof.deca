@@ -1,0 +1,32 @@
+// Description:
+//    Test des casts valides (Upcast et Downcast) et instanceof.
+//
+// Resultats:
+//    true
+//    42
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {
+    int x = 42;
+}
+class B extends A {}
+
+{
+    A a = new B();
+    B b;
+    
+    // instanceof
+    if (a instanceof B) {
+        println("true");
+    }
+    
+    // Downcast (A -> B) : Valide contextuellement (vérifié à l'exec)
+    b = (B) (a);
+    
+    // Upcast (B -> A) : Toujours valide
+    a = (A) (b);
+    
+    println(a.x);
+}

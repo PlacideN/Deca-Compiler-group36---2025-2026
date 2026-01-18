@@ -1,0 +1,16 @@
+// Description:
+//    Test de déclaration de méthode invalide : paramètres de même nom.
+//
+// Resultats:
+//    Ligne 14 : Erreur contextuelle : Le paramètre 'a' est déclaré plusieurs fois.
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {
+    void m(int a, float a) {
+    }
+}
+
+{
+}

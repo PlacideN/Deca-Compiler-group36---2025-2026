@@ -1,0 +1,39 @@
+// Description:
+//    Test des compatibilités de types dans les appels de méthodes.
+//    - Conversion implicite int -> float
+//    - Sous-typage (passer B alors que A est attendu)
+//
+// Resultats:
+//    1.50000e+00
+//    ok
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {
+}
+
+class B extends A {
+}
+
+class Test {
+    void printFloat(float f) {
+        println(f);
+    }
+    
+    void processA(A a) {
+        println("ok");
+    }
+}
+
+{
+    Test t = new Test();
+    B b = new B();
+    int i = 3;
+    
+    // Appel avec conversion int -> float (3 -> 3.0) / 2.0 = 1.5
+    t.printFloat(i / 2.0);
+    
+    // Appel avec sous-type (B est un A)
+    t.processA(b);
+}

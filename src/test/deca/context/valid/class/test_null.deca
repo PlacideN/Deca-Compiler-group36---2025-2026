@@ -1,0 +1,29 @@
+// Description:
+//    Test de l'utilisation de 'null'.
+//    Comparaison, initialisation et passage en paramètre.
+//
+// Resultats:
+//    egal
+//    non nul
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {
+}
+
+{
+    A a = null;
+    A b = new A();
+    
+    if (a == null) {
+        println("egal");
+    }
+    
+    if (b != null) {
+        println("non nul");
+    }
+    
+    // Réaffectation
+    b = null;
+}
