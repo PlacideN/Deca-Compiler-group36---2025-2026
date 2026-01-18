@@ -61,4 +61,20 @@ public class VTableManager {
         compiler.addInstruction(new LOAD(new LabelOperand(compiler.getLabelManager().getObjectEqualsLabel()), Register.R0));
         compiler.addInstruction(new STORE(Register.R0, new RegisterOffset(base + 1, Register.GB)));
     }
+
+    /**
+     * Generate the code for the equals method of the Object class.
+     */
+    public void codeGenObjectEquals(DecacCompiler compiler) {
+        compiler.addComment("--------------------------------------------------");
+        compiler.addComment("                  Classe Object                    ");
+        compiler.addComment("--------------------------------------------------");
+        compiler.addComment("---------- Code de la methode equals dans la classe Object");
+        compiler.addLabel(compiler.getLabelManager().getObjectEqualsLabel());
+        
+        compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R0));
+        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.CMP(new RegisterOffset(-3, Register.LB), Register.R0));
+        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.SEQ(Register.R0)); // put result in R0
+        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.RTS());
+    }
 }
