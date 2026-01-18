@@ -104,7 +104,7 @@ public class DeclMethod extends AbstractDeclMethod {
         try {
             currentClass.getMembers().declare(methodName.getName(), methodDef);
         } catch (DoubleDefException e) {
-            throw new ContextualError("Method '" + methodName.getName() + "' is already defined in class '" + currentClass.getClass().getName() + "'.", getLocation()); 
+            throw new ContextualError("Method '" + methodName.getName() + "' is already defined in class '" + currentClass.getType().getName().getName() + "'.", getLocation()); 
         }
 
         methodName.setDefinition(methodDef);

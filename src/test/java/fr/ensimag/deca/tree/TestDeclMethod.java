@@ -2,6 +2,7 @@ package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
 import fr.ensimag.deca.context.ClassDefinition;
+import fr.ensimag.deca.context.ClassType;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
 import fr.ensimag.deca.context.EnvironmentExp.DoubleDefException;
@@ -31,6 +32,7 @@ public class TestDeclMethod {
     @Mock EnvironmentExp env;
     @Mock EnvironmentExp superEnv;
     @Mock AbstractMethodBody methodBody;
+    @Mock ClassType classType;
     
     DecacCompiler compiler;
     Symbol name;
@@ -55,6 +57,10 @@ public class TestDeclMethod {
         when(classDef.getMembers()).thenReturn(env);
         when(classDef.getSuperClass()).thenReturn(superClassDef);
         when(superClassDef.getMembers()).thenReturn(superEnv);
+
+        Symbol classSymbol = compiler.symbolTable.create("A");
+        when(classDef.getType()).thenReturn(classType);
+        when(classType.getName()).thenReturn(classSymbol);
     }
 
     @Test
