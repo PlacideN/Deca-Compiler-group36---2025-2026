@@ -1,0 +1,27 @@
+// Description:
+//    Test d'accès protected invalide entre classes "soeurs".
+//    B ne peut pas accéder au champ protected de C, même s'ils héritent tous deux de A.
+//
+// Resultats:
+//    Ligne 17 : Erreur contextuelle : Accès interdit au champ protégé 'x' sur une instance de 'C'.
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {
+    protected int x;
+}
+
+class B extends A {
+    void m() {
+        C c = new C();
+        // INTERDIT : On est dans B. 'c' est de type C.
+        // C n'est pas un sous-type de B (classe courante).
+        println(c.x); 
+    }
+}
+
+class C extends A {}
+
+{
+}

@@ -1,0 +1,39 @@
+// Description:
+//    Test de l'utilisation de 'this' pour le chaînage de méthodes 
+//    et le passage en paramètre (polymorphisme).
+//
+// Resultats:
+//    15
+//
+// Historique:
+//    cree le 18/01/2026
+
+class Calculateur {
+    int val;
+
+    // Retourne 'Calculateur' pour permettre le chaînage (a.add().add())
+    Calculateur add(int i) {
+        val = val + i;
+        return this; // this doit être compatible avec Calculateur
+    }
+    
+    void printRes() {
+        println(val);
+    }
+}
+
+class Printer {
+    void printCalc(Calculateur c) {
+        c.printRes();
+    }
+}
+
+{
+    Calculateur c = new Calculateur();
+    Printer p = new Printer();
+    
+    // Test chaînage + passage de 'this' implicite
+    c.add(5).add(10);
+    
+    p.printCalc(c);
+}

@@ -1,0 +1,30 @@
+// Description:
+//    Test avancé de covariance des types de retour sur 3 niveaux d'héritage.
+//    A.m() -> Object
+//    B.m() -> A (Valide car A < Object)
+//    C.m() -> B (Valide car B < A)
+//
+// Resultats:
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {
+    Object getVal() {
+        return new Object();
+    }
+}
+
+class B extends A {
+    // Redéfinition valide : A est un sous-type de Object
+    A getVal() {
+        return new A();
+    }
+}
+
+class C extends B {
+    // Redéfinition valide : B est un sous-type de A
+    B getVal() {
+        return new B();
+    }
+}

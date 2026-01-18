@@ -1,0 +1,13 @@
+// Description:
+//    Test de détection d'héritage cyclique.
+//
+// Resultats:
+//    Ligne 10 : Erreur contextuelle : Cycle d'héritage détecté pour la classe 'A'.
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A extends A {}
+
+{
+}

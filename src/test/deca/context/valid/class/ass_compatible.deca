@@ -1,0 +1,34 @@
+// Description:
+//    Test de comparaisons d'égalité entre types liés par héritage
+//    et casts dynamiques.
+//
+// Resultats:
+//    true
+//    true
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {}
+class B extends A {}
+
+{
+    Object o = new B();
+    A a = new A();
+    B b = new B();
+
+    // Valide : Object et B sont compatibles
+    if (o == b) {
+        println("false (ref diff)");
+    } else {
+        println("true");
+    }
+
+    // Valide : A et B sont compatibles
+    if (a != b) {
+        println("true");
+    }
+    
+    // Cast de Object vers B 
+    b = (B) (o);
+}

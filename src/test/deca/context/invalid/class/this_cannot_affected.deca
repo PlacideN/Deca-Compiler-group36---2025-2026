@@ -1,0 +1,17 @@
+// Description:
+//    Test d'affectation invalide sur 'this'.
+//
+// Resultats:
+//    Ligne 13 : Erreur contextuelle : 'this' n'est pas une 'Left Value', affectation impossible.
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {
+    void m() {
+        this = new A();
+    }
+}
+
+{
+}

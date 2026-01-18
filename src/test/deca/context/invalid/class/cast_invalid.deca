@@ -1,0 +1,17 @@
+// Description:
+//    Test de cast invalide entre deux classes disjointes.
+//
+// Resultats:
+//    Ligne 15 : Erreur contextuelle : Impossible de caster 'A' en 'B' (types disjoints).
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {}
+class B {}
+
+{
+    A a = new A();
+    // Erreur : A n'est pas sous-type de B, et B n'est pas sous-type de A
+    B b = (B) (a);
+}

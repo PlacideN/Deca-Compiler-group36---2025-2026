@@ -1,0 +1,16 @@
+// Description:
+//    Test de condition invalide (Objet au lieu de booléen).
+//
+// Resultats:
+//    Ligne 13 : Erreur contextuelle : La condition doit être de type boolean, type 'A' trouvé.
+//
+// Historique:
+//    cree le 18/01/2026
+
+class A {}
+
+{
+    A a = new A();
+    if (a) { // Il faut écrire (a != null)
+    }
+}
