@@ -43,4 +43,9 @@ public class Signature {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return args.hashCode();
+    }
+
 }
