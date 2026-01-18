@@ -48,12 +48,13 @@ public abstract class AbstractOpArith extends AbstractBinaryExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target){
-        compiler.addComment("Binary arithmetic operation: " + this.getOperatorName());
         
         this.getLeftOperand().codeGenExpr(compiler, target);
         GPRegister temp = compiler.getRegisterManager().allocateRegister();
         this.getRightOperand().codeGenExpr(compiler, temp);
-
+        
+        compiler.addComment("Binary arithmetic operation: " + this.getOperatorName());
+        
         // if both operands are in the same register (ie. spilling on stack)
         // we need to move one of the values
         if (target.getNumber() == temp.getNumber()) {
