@@ -9,7 +9,7 @@
 //    cree le 13/01/2026
 
 #include "file.ref"
-invalid; 
+@
 {
-    println("Never print")
+    println("Never print");
 }

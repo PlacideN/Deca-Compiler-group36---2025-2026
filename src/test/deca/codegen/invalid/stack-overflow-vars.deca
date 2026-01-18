@@ -10,5 +10,5 @@
 //    cree le 09/01/2026
 
 {
-    int a, b, c, d, e;
+    int a, b, c;
 }
