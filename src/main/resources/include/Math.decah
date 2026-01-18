@@ -1,5 +1,6 @@
 // Grenoble INP - Ensimag projet GL -*- mode: java -*-
 // Library for class Math of Deca, coded in Deca
+// Author : gl36
 
 class Math {
 
@@ -90,9 +91,12 @@ class Math {
             return 0.0;
         }
 
-        y = 1.0;  
-        for (i = 0; i < 15; i = i + 1) {
+        y = 1.0;
+
+        i = 0;
+        while (i < 15) {
             y = 0.5 * (y + f / y);
+            i = i + 1;
         }
 
         return y;
