@@ -29,7 +29,11 @@ public class Null extends AbstractExpr {
 
     @Override
     public Type verifyExpr(DecacCompiler compiler, EnvironmentExp localEnv, ClassDefinition currentClass) throws ContextualError {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        Type type = compiler.environmentType.NULL;
+
+        this.setType(type);
+
+        return type;
     }
 
     @Override

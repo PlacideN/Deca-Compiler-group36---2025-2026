@@ -18,12 +18,25 @@ public abstract class AbstractOpExactCmp extends AbstractOpCmp {
     @Override
     protected Type verifyExtraTypes(fr.ensimag.deca.DecacCompiler compiler, Type t1, Type t2) 
             throws ContextualError {
+
+        // comparaison de bool
         if (t1.isBoolean() && t2.isBoolean()) {
             return compiler.environmentType.BOOLEAN;
         }
 
-        // TODO: Check for class types compatibility
+        // comparaison d'objets et de null
+        // règle : On peut comparer (Classe ou Null) avec (Classe ou Null)
+        boolean t1IsObjOrNull = t1.isClass() || t1.isNull();
+        boolean t2IsObjOrNull = t2.isClass() || t2.isNull();
 
+        if (t1IsObjOrNull && t2IsObjOrNull) {
+            // on vérifie la compatibilité 
+            if (compiler.environmentType.assignCompatible(t1, t2) || 
+                compiler.environmentType.assignCompatible(t2, t1)) {
+                return compiler.environmentType.BOOLEAN;
+            }
+        }
+        // si incompatible
         return null;
     }
 
