@@ -46,6 +46,9 @@ public class Program extends AbstractProgram {
         this.classes.verifyListClass(compiler);
         LOG.debug("verify Program: Passe 2 (Verify fields and method signatures)");
         this.classes.verifyListClassMembers(compiler);
+        int vTableSize = compiler.getVTableManager().getNextGBSlot(); 
+        compiler.getStackManager().setGBOffset(vTableSize);
+        
         LOG.debug("verify Program: Passe 3 (Verify method bodies and main instructions)");
         this.classes.verifyListClassBody(compiler);
         this.main.verifyMain(compiler);
