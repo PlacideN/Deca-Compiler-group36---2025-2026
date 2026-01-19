@@ -27,25 +27,32 @@ for f in $VALID_FILES; do
             continue 
             ;;
     esac
+
+    filename=$(basename "$f" .deca)
     
-    decac -p "$f" > "$f.decompiled" 2> "$f.error"
+    DECOMPILED="${filename}-decompiled.deca"
+    AST_ORIGINAL="${filename}-AST-original.txt"
+    AST_DECOMPILED="${filename}-AST-decompiled.txt"
+    ERROR="${filename}-error.txt"
+    
+    decac -p "$f" > "$DECOMPILED" 2> "$ERROR"
     if [ $? -ne 0 ]; then
         failure "Should not fail to decompile valid file: $f"
-        rm -f "$f.decompiled" "$f.error"
+        rm -f "$DECOMPILED" "$ERROR"
         continue
     fi
 
-    test_synt "$f" | sed 's/\[[0-9]*, [0-9]*\]//g' > "$f-AST-from-original" 2>&1
-    test_synt "$f.decompiled" | sed 's/\[[0-9]*, [0-9]*\]//g' > "$f-AST-from-decompiled" 2>&1
+    test_synt "$f" | sed 's/\[[0-9]*, [0-9]*\]//g' > "$AST_ORIGINAL" 2>&1
+    test_synt "$DECOMPILED" | sed 's/\[[0-9]*, [0-9]*\]//g' > "$AST_DECOMPILED" 2>&1
     
-    if diff -b -B -Z "$f-AST-from-original" "$f-AST-from-decompiled" > /dev/null; then
+    if diff -b -B -Z "$AST_ORIGINAL" "$AST_DECOMPILED" > /dev/null; then
         success "Decompilation preserved the AST structure for: $f"
     else
         failure "Decompilation changed the AST structure for: $f"
-        diff -u "$f-AST-from-original" "$f-AST-from-decompiled"
+        diff -u "$AST_ORIGINAL" "$AST_DECOMPILED"
     fi
 
-    rm -f "$f.decompiled" "$f.error" "$f-AST-from-original" "$f-AST-from-decompiled"
+    rm -f "$DECOMPILED" "$ERROR" "$AST_ORIGINAL" "$AST_DECOMPILED"
 done
 
 
