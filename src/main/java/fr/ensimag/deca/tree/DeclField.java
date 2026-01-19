@@ -88,13 +88,12 @@ public class DeclField extends AbstractDeclField {
             throw new ContextualError("Field name collides with an inherited method", getLocation());
         }
 
-        // declaration
-        int superFields = 0;
-        if (currentClass.getSuperClass() != null) {
-            superFields = currentClass.getSuperClass().getNumberOfFields();
-        }
+        
         // first field is at 1 (0 is VTable) then add superclass fields
-        int index = superFields + currentClass.getNumberOfFields() + 1;
+        int index = currentClass.getNumberOfFields() + 1;
+
+        currentClass.setNumberOfFields(index);
+
 
         FieldDefinition fieldDef = new FieldDefinition(fieldType, getLocation(), visibility, currentClass, index);
         fieldDef.setOperand(new RegisterOffset(index, Register.R1));
@@ -105,7 +104,6 @@ public class DeclField extends AbstractDeclField {
             throw new ContextualError("Field " + name + " already defined in class", getLocation());
         }
 
-        currentClass.setNumberOfFields(index);
         
         fieldName.setDefinition(fieldDef);
         fieldName.setType(fieldType);

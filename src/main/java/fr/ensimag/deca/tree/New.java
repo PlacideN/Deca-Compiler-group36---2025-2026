@@ -63,6 +63,11 @@ public class New extends AbstractExpr {
         int nbFields = className.getClassDefinition().getNumberOfFields();
         int size = 1 + nbFields;
 
+
+        ClassDefinition def = this.className.getClassDefinition();
+        System.out.println("Classe : " + this.className.getName());
+        System.out.println("  -> Nombre de champs : " + def.getNumberOfFields());
+
         //on doit tout d'abord allouer l'espace mémoire nécessaire:
         // 1 (la vtable qui stocke les infos de la classe) + le nombre de champs de la classe
         compiler.addInstruction(new NEW(size, target));

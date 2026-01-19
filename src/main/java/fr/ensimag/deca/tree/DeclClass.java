@@ -111,21 +111,25 @@ public class DeclClass extends AbstractDeclClass {
     @Override
     protected void verifyClassMembers(DecacCompiler compiler)
             throws ContextualError {
-        if (superClassName != null) {
-
-            Type superType = superClassName.verifyType(compiler);
-
-            if (!(superType.isClass())) { 
-                // this should not happen if pass 1 was successful
-                throw new ContextualError("Superclass " + superClassName.getName() + " of class " + className.getName() + " is not a class type.", superClassName.getLocation());
-            }
-        }
         
         ClassDefinition classDef = (ClassDefinition) compiler.environmentType.defOfType(className.getName());
 
+        if (superClassName != null) {
+            Type superType = superClassName.verifyType(compiler);
+
+            if (!(superType.isClass())) { 
+                throw new ContextualError("Superclass " + superClassName.getName() + " is not a class type.", superClassName.getLocation());
+            }
+
+            ClassDefinition superClassDef = (ClassDefinition) compiler.environmentType.defOfType(superClassName.getName());
+            
+            classDef.setNumberOfFields(superClassDef.getNumberOfFields());
+        } else {
+            classDef.setNumberOfFields(0);
+        }
+
         fields.verifyListFieldMembers(compiler, classDef);
         methods.verifyListMethodMembers(compiler, classDef);
-
     }
     
     @Override
