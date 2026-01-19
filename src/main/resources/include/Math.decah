@@ -107,6 +107,10 @@ class Math {
         float r;
         int k;
         int quadrant;
+
+        if (f > -0.0007 && f < 0.0007){
+            return f;
+        }
         
         // On ramène le float f à l'intrvalle [-π/4, π/4]
         r = _reduced_angle(f);
@@ -180,7 +184,7 @@ class Math {
             return -asin(-f);
         }
         // On utilise la formule : asin(f) = atan(f / sqrt(1 - f²))
-        float x = _sqrt(1.0 - f * f);
+        x = _sqrt(1.0 - f * f);
         return atan(f / x);
     }
 
