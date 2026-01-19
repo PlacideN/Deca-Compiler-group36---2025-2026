@@ -5,11 +5,11 @@
 // Resultats:
 //    --- Test Champs ---
 //    X (GrandParent) = 10
-//    Y (Parent) = 20.5
+//    Y (Parent) = 2.05000e+01
 //    Z (Enfant) = 30
 //    --- Test Methodes ---
 //    Identite : Je suis l'Enfant
-//    Calcul : 60.5
+//    Calcul : 6.05000e+01
 //    --- Test InstanceOf & Cast ---
 //    Check 1: OK
 //    Check 2: OK
