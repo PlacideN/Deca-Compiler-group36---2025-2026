@@ -54,6 +54,7 @@ public class DecacCompiler {
         this.compilerOptions = compilerOptions;
         this.source = source;
 
+        this.environmentType = new EnvironmentType(this);
         int count = (compilerOptions != null) ? compilerOptions.getRegisterCount() : 16;
         this.registerManager = new RegisterManager(this, count);
         this.errorManager = new RuntimeErrorManager(this, labelManager);
@@ -148,7 +149,7 @@ public class DecacCompiler {
 
     /** The global environment for types (and the symbolTable) */
     public final SymbolTable symbolTable = new SymbolTable();
-    public final EnvironmentType environmentType = new EnvironmentType(this);
+    public final EnvironmentType environmentType;
 
     public Symbol createSymbol(String name) {
         return symbolTable.create(name);
