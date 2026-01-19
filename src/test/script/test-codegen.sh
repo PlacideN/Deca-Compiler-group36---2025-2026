@@ -16,7 +16,7 @@ PATH="./src/test/script/launchers:./src/main/bin:$PATH"
 section "Running CodeGen Test Suite"
 
 # Test valid test files
-VALID_SUBFOLDERS="arithmetic boolean comparison control print variables special"
+VALID_SUBFOLDERS="class object arithmetic boolean comparison control print variables special"
 
 for sub in $VALID_SUBFOLDERS; do
     dir="$ROOT_DIR/src/test/deca/codegen/valid/$sub"
@@ -43,21 +43,29 @@ done
 
 # Test invalid files
 step "Testing semantic invalid test cases (Runtime Errors)"
-for f in "$ROOT_DIR/src/test/deca/codegen/invalid/arithmetic/"*.deca; do
+INVALID_SUBFOLDERS="arithmetic object"
+for sub in $INVALID_SUBFOLDERS; do
+    dir="$ROOT_DIR/src/test/deca/codegen/invalid/$sub"
+    [ -d "$dir" ] || continue; # Skip if directory doesn't exist
+
+    step "Testing $sub invalid test cases"
     [ -f "$f" ] || continue # Skip if file doesn't exist
     
-    decac "$f"
+    for f in $dir/*.deca; do
+        [ -f "$f" ] || continue # Skip if file doesn't exist
+        decac "$f"
 
-    ass_file=${f%.deca}.ass 
+        ass_file=${f%.deca}.ass 
 
-    result=$(ima "$ass_file")
-    expected_res=$(sed -n '/Resultats:/,/Historique:/p' "$f" | grep -vE 'Resultats:|Historique:' | sed 's/\/\/\s*//g' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' ) # extract only result from .deca file
-    
-    if [ "$result" = "$expected_res" ]; then
-        success "Execution correctly raised an error for $(basename "$f")"
-    else
-        failure "Execution result for $(basename "$f"): $result (Expected $expected_res)"
-    fi
+        result=$(ima "$ass_file")
+        expected_res=$(sed -n '/Resultats:/,/Historique:/p' "$f" | grep -vE 'Resultats:|Historique:' | sed 's/\/\/\s*//g' | sed 's/^[[:space:]]*//; s/[[:space:]]*$//' ) # extract only result from .deca file
+        
+        if [ "$result" = "$expected_res" ]; then
+            success "Execution correctly raised an error for $(basename "$f")"
+        else
+            failure "Execution result for $(basename "$f"): $result (Expected $expected_res)"
+        fi
+    done
 done
 
 # Manually test stack overflow invalid cases
