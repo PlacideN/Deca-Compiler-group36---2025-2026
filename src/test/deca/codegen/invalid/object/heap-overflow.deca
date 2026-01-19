@@ -4,7 +4,7 @@
 //    rapidement avant que la pile ne déborde par récursion.
 //
 // Resultats:
-//    Erreur : Heap overflow.
+//    Error: Heap overflow
 //
 // Historique:
 //    cree le 19/01/2026

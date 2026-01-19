@@ -1,5 +1,12 @@
-// Test for AsmMethodBody
-// This method returns 42 using raw assembly.
+// Description:
+//    Test d'une méthode avec des instructions en assembleur directement.
+//    Vérifie que les instructions sont correctement ajoutées au fichier .ass.
+//
+// Resultats:
+//    success
+//
+// Historique:
+//    cree le 19/01/2026
 
 class A {
     int loadConstant() asm ("
