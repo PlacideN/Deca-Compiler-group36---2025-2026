@@ -1,0 +1,17 @@
+// Description:
+//    Test d'accès aux paramètres d'une méthode.
+//    Vérifie que le bon paramètre est récupéré dans la pile.
+// Resultats:
+//    1
+// Historique:
+//    17/01/2026
+
+class A {
+    int returnFirstParam(int a, int b) {
+        return a;
+    }
+}
+{
+    A a = new A();
+    println(a.returnFirstParam(1, 2));
+}

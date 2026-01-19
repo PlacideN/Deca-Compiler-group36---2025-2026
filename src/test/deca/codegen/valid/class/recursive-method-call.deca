@@ -1,0 +1,22 @@
+// Description:
+//    Test de récursivité dans l'appel de méthode.
+//    Vérifie la gestion du pointeur de base locale (LB) et de la pile.
+//
+// Resultats:
+//    120
+//
+// Historique:
+//    19/01/2026
+
+class A {
+    int factorial(int n) {
+        if (n <= 1) {
+            return 1;
+        }
+        return n * factorial(n - 1);
+    }
+}
+{
+    A a = new A();
+    println(a.factorial(5));
+}

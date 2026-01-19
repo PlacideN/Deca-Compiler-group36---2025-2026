@@ -1,0 +1,17 @@
+// Description:
+//    Test de l'héritage des champs et du masquage d'un champ au sein d'une sous-classe.
+//    Vérifie que les décalages en mémoire sont corrects.
+// Resultats:
+//
+// Historique:
+//    17/01/2026
+
+class C {
+    int x;
+    int y = 1;
+}
+
+class D extends C {
+    int x = 3;
+    int z;   
+}

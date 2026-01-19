@@ -1,9 +1,0 @@
-class C {
-    int x;
-    int y = 1;
-}
-
-class D extends C {
-    int x = 3;
-    int z;   
-}

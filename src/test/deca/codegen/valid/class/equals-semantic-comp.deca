@@ -1,0 +1,43 @@
+// Description:
+//    Test de redéfinition de la méthode equals pour utiliser une comparaison sémantique 
+//    au lieu d'une comparaison de références. Vérifie que l'appel utilise la version de P,
+//    et non pas la méthode par défaut d'Object.
+// Resultats:
+//    true
+//    false
+//
+// Historique:
+//    cree le 19/01/2026
+
+class P {
+    int name;
+
+    void setName(int name) {
+        this.name = name;
+    }
+
+    boolean equals(Object other) {
+        if (other instanceof P) {
+            return this.name == ((P)(other)).name;
+        }
+        return false;
+    }
+}
+
+{
+    P p1 = new P();
+    P p2 = new P();
+    P p3 = new P();
+
+    p1.setName(1);
+    p2.setName(1);
+    p3.setName(3);
+
+    if (p1.equals(p2)) {
+        println("true");
+    }
+
+    if (!p1.equals(p3)) {
+        println("false");
+    }
+}

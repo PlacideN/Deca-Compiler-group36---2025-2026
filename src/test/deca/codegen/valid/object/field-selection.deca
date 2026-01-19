@@ -1,0 +1,22 @@
+// Description:
+//    Test de sélection d'un attribut de classe public.
+//    Vérifie que l'attribut est accessible et contient la bonne valeur.
+//
+// Resultats:
+//    1
+//
+// Historique:
+//    cree le 19/01/2026
+
+
+class A {
+    int x = 0;
+    void increment() {
+        x = x + 1;
+    }
+}
+{
+    A a = new A();
+    a.increment();
+    println(a.x);
+}

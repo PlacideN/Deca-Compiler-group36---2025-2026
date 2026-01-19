@@ -1,0 +1,19 @@
+// Description:
+//    Test de transtypage par une classe.
+//    Vérifie que l'objet est manipulé avec la référence correcte.
+//
+// Resultats:
+//    10
+//
+// Historique:
+//    cree le 19/01/2026
+
+class A {}
+class B extends A {
+    int x = 10;
+}
+{
+    A a = new B();
+    B b = (B)(a);
+    println(b.x);
+}

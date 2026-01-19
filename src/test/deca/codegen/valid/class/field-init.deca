@@ -1,0 +1,31 @@
+// Description:
+//    Test de l'initiatialisation par défaut des champs.
+//
+// Resultats:
+//    0
+//    0.00000e+00
+//    false
+//    null
+//
+// Historique:
+//    19/01/2026
+
+class A {}
+class Init {
+    int x;
+    float f;
+    boolean b;
+    A a;
+}
+{
+    Init i = new Init();
+    println(i.x);
+    println(i.f);
+    if (!i.b) {
+        println("false");
+    }
+    if (i.a == null) {
+        println("null");
+    }
+
+}

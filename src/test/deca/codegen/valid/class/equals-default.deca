@@ -1,0 +1,27 @@
+// Description:
+//    Test de la méthode par défaut equals() de Object qui compare les adresses.
+//    Vérifie que deux références pointant vers le même objet sont égales 
+//    et que deux objets différents ne le sont pas.
+//
+// Resultats:
+//    true
+//    false
+//
+// Historique:
+//    cree le 19/01/2026
+
+class Test {}
+
+{
+    Test a = new Test();
+    Test b = a;
+    Test c = new Test();
+
+    if (a.equals(b)) {
+        println("true");
+    } 
+
+    if (!a.equals(c)) {
+        println("false");
+    } 
+}

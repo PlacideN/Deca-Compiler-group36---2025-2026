@@ -1,0 +1,21 @@
+// Description:
+//    Test d'un appel de méthode au sein d'une classe avec un 'this'.
+//
+// Resultats:
+//    2
+//
+// Historique:
+//    19/01/2026
+
+
+class A {
+    int getConstant() { return 1; }
+
+    int getDouble() {
+        return this.getConstant() + this.getConstant();
+    }
+}
+{
+    A a = new A();
+    println(a.getDouble());
+}

@@ -1,0 +1,22 @@
+// Description:
+//    Test de polymorphisme plus complexe. 
+//    Vérifie qu'une classe C peut apperler une méthode définie dans A.
+//
+// Resultats:
+//    Affichage dans A
+//
+// Historique:
+//    19/01/2026
+
+class A {
+    void afficher() { 
+        println("Affichage dans A"); 
+    }
+}
+class B extends A {}
+class C extends B {}
+
+{
+    A a = new C();
+    a.afficher(); 
+}

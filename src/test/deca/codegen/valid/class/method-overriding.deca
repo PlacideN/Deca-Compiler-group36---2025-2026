@@ -1,0 +1,24 @@
+// Description:
+//    Test de la redéfinition d'une méthode
+//    Vérifie l'appel de méthode et de la gestion de la table des méthode.
+//
+// Resultats:
+//    Affichage dans B
+//
+// Historique:
+//    cree le 19/01/2026
+
+class A {
+    void afficher() {
+        println("Affichage dans A");
+    }
+}
+class B extends A {
+    void afficher() {
+        println("Affichage dans B");
+    }
+}
+{
+    A a = new B();
+    a.afficher();
+}

@@ -1,0 +1,22 @@
+// Description:
+//    Test d'un 'instanceof'
+//    Vérifie que les classes sont correctement liées au sein de la Vtable.
+//
+// Resultats:
+//    a is B
+//    a is A
+//
+// Historique:
+//    cree le 19/01/2026
+
+class A {}
+class B extends A {}
+{
+    A a = new B();
+    if (a instanceof B) {
+        println("a is B");
+    }
+    if (a instanceof A) {
+        println("a is A");
+    }
+}

@@ -1,0 +1,18 @@
+// Description:
+//    Test de gestion de champs (this à -2(LB)), paramètres et variables locales.
+//    Vérifie que les objets sont sauvegardés aux bons endroits (GB ou LB)
+// Resultats:
+//
+// Historique:
+//    17/01/2026
+
+class A {
+    int x = 10; 
+    
+    int test(int p) {
+        int v = this.x + p;
+        return v;
+    }
+}
+
+{}

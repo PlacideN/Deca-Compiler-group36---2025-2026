@@ -1,0 +1,19 @@
+// Description:
+//    Test du passage de plusieurs paramètres dans une méthode.
+//    Vérifie que les paramètres sont affectés des valeurs correctes.
+//
+// Resultats:
+//    2
+//
+// Historique:
+//    cree le 19/01/2026
+
+class A {
+    int add(int a, int b) {
+        return a + b;
+    }
+}
+{
+    A a = new A();
+    println(a.add(1, 1));
+}

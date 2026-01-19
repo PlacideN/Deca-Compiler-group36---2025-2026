@@ -1,0 +1,20 @@
+// Description:
+//    Test de l'héritage et de la redéfinition de méthodes (gestion de la VTable) fourni 
+//    comme exemple dans le poly. 
+//    Vérifie que la classe fille possède ses propres méthodes et celles héritées.
+// Resultats:
+//
+// Historique:
+//    17/01/2026
+
+class A {
+    void m() {}
+    void p() {}
+}
+
+class B extends A {
+    void p() {}
+    void q() {}
+}
+
+{}

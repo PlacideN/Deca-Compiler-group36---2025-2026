@@ -1,0 +1,25 @@
+// Description:
+//    Test de l'utilisation du mot 'null'.
+//    Vérifie l'affectation et le passage de null en paramètre à equals.
+//
+// Resultats:
+//    true
+//    false
+//
+// Historique:
+//    cree le 19/01/2026
+
+class A {}
+
+{
+    A a = null;
+    A b = new A();
+
+    if (a == null) {
+        println("true");
+    }
+
+    if (!b.equals(null)) {
+        println("false");
+    }
+}
