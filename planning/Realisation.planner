@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<project name="Projet GL" company="Ensimag" manager="" phase="" project-start="20251215T000000Z" mrproject-version="2" calendar="5">
+<project name="Projet GL" company="Ensimag" manager="" phase="" project-start="20251215T000000Z" mrproject-version="2" calendar="4">
   <properties/>
   <phases/>
   <calendars>
     <day-types>
-      <day-type id="0" name="Working" description="A default working day"/>
-      <day-type id="1" name="Nonworking" description="A default non working day"/>
-      <day-type id="2" name="Use base" description="Use day from base calendar"/>
+      <day-type id="0" name="Travaill&#xE9;" description="Un jour de travail normal"/>
+      <day-type id="1" name="Ch&#xF4;m&#xE9;" description="Un jour ch&#xF4;m&#xE9; normal"/>
+      <day-type id="2" name="Utiliser la base" description="Utilise un jour du calendrier de base"/>
     </day-types>
     <calendar id="1" name="Default">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
@@ -38,17 +38,7 @@
       </overridden-day-types>
       <days/>
     </calendar>
-    <calendar id="4" name="D&#xE9;faut">
-      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
-      <overridden-day-types>
-        <overridden-day-type id="0">
-          <interval start="0800" end="1200"/>
-          <interval start="1300" end="1700"/>
-        </overridden-day-type>
-      </overridden-day-types>
-      <days/>
-    </calendar>
-    <calendar id="5" name="Default">
+    <calendar id="4" name="Default">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
       <overridden-day-types>
         <overridden-day-type id="0">
@@ -68,6 +58,16 @@
         <day date="20260103" type="day-type" id="1"/>
         <day date="20251231" type="day-type" id="1"/>
       </days>
+    </calendar>
+    <calendar id="5" name="D&#xE9;faut">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1700"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
     </calendar>
     <calendar id="6" name="Default">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
@@ -90,6 +90,16 @@
       <days/>
     </calendar>
     <calendar id="8" name="Default">
+      <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
+      <overridden-day-types>
+        <overridden-day-type id="0">
+          <interval start="0800" end="1200"/>
+          <interval start="1300" end="1700"/>
+        </overridden-day-type>
+      </overridden-day-types>
+      <days/>
+    </calendar>
+    <calendar id="9" name="D&#xE9;faut">
       <default-week mon="0" tue="0" wed="0" thu="0" fri="0" sat="1" sun="1"/>
       <overridden-day-types>
         <overridden-day-type id="0">
@@ -189,9 +199,9 @@
         <constraint type="start-no-earlier-than" time="20260116T000000Z"/>
       </task>
     </task>
-    <task id="31" name="Extension TRIGO" note="" work="460800" duration="288000" start="20260105T000000Z" end="20260116T170000Z" work-start="20260105T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-      <task id="32" name="Documentation" note="" work="86400" duration="86400" start="20260105T000000Z" end="20260107T170000Z" work-start="20260105T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
-        <constraint type="start-no-earlier-than" time="20260105T000000Z"/>
+    <task id="31" name="Extension TRIGO" note="" work="489600" duration="345600" start="20260105T000000Z" end="20260120T170000Z" work-start="20260105T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="32" name="Documentation" note="" work="115200" duration="115200" start="20260115T000000Z" end="20260120T170000Z" work-start="20260115T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260115T000000Z"/>
       </task>
       <task id="33" name="Implementation" note="" work="86400" duration="86400" start="20260112T000000Z" end="20260114T170000Z" work-start="20260112T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
         <constraint type="start-no-earlier-than" time="20260112T000000Z"/>
@@ -200,17 +210,22 @@
         <constraint type="start-no-earlier-than" time="20260105T000000Z"/>
       </task>
     </task>
-    <task id="35" name="Rendu Final" note="" work="0" duration="0" start="20260119T000000Z" end="20260119T000000Z" work-start="20260119T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
-      <constraint type="must-start-on" time="20260119T000000Z"/>
-    </task>
-    <task id="36" name="Rendu Bilan" note="" work="0" duration="0" start="20260121T000000Z" end="20260121T000000Z" work-start="20260121T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
-      <constraint type="must-start-on" time="20260121T000000Z"/>
-    </task>
-    <task id="37" name="Rendu documentation" note="" work="0" duration="0" start="20260112T000000Z" end="20260112T000000Z" work-start="20260112T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
-      <constraint type="must-start-on" time="20260112T000000Z"/>
-    </task>
-    <task id="38" name="Soutenance" note="" work="0" duration="0" start="20260122T000000Z" end="20260122T000000Z" work-start="20260122T080000Z" percent-complete="0" priority="0" type="milestone" scheduling="fixed-work">
-      <constraint type="must-start-on" time="20260122T000000Z"/>
+    <task id="35" name="Documentation" note="" work="86400" duration="46800" start="20260119T000000Z" end="20260120T140000Z" work-start="20260119T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+      <task id="36" name="Manuel utilisateur" note="" work="18000" duration="18000" start="20260119T000000Z" end="20260119T140000Z" work-start="20260119T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260119T000000Z"/>
+      </task>
+      <task id="37" name="Documentation de conception" note="" work="14400" duration="14400" start="20260119T000000Z" end="20260119T120000Z" work-start="20260119T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260119T000000Z"/>
+      </task>
+      <task id="38" name="Documentation de validation" note="" work="18000" duration="18000" start="20260120T000000Z" end="20260120T140000Z" work-start="20260120T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260120T000000Z"/>
+      </task>
+      <task id="39" name="Analyse impact &#xE9;nerg&#xE9;tique" note="" work="18000" duration="18000" start="20260120T000000Z" end="20260120T140000Z" work-start="20260120T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260120T000000Z"/>
+      </task>
+      <task id="40" name="Bilan gestion &#xE9;quipe &amp; projet" note="" work="18000" duration="18000" start="20260120T000000Z" end="20260120T140000Z" work-start="20260120T080000Z" percent-complete="0" priority="0" type="normal" scheduling="fixed-work">
+        <constraint type="start-no-earlier-than" time="20260120T000000Z"/>
+      </task>
     </task>
   </tasks>
   <resource-groups/>
