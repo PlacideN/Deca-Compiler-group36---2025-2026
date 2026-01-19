@@ -16,7 +16,7 @@ REPORTS = user design validation
 .PHONY: all $(addprefix report-,$(REPORTS)) deps 
 
 # Define custom filenames (spaces are allowed)
-FILENAME_user   = manuel-utilisateur
+FILENAME_user   = Manuel-Utilisateur
 FILENAME_design = documentation-conception
 FILENAME_validation = documentation-validation
 
