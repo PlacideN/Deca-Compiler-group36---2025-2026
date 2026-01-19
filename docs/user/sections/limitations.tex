@@ -1,0 +1,20 @@
+\section{Limitations et Choix d'Implémentation}
+
+\subsection{Langage Sans Objet}
+Le compilateur gère toutes les structures procédurales :
+\begin{itemize}[label=\textbullet]
+    \item Types de base : \texttt{int}, \texttt{float}, \texttt{boolean}.
+    \item Structures de contrôle : \texttt{if}, \texttt{else}, \texttt{while}.
+    \item Opérations arithmétiques, logiques et comparaisons.
+    \item Entrées/Sorties : \texttt{print}, \texttt{println}, \texttt{printx}.
+\end{itemize}
+
+\subsection{Langage Objet (Complet)}
+L'extension Objet est pleinement fonctionnelle :
+\begin{itemize}[label=\textbullet]
+    \item \textbf{Déclaration de classes} et héritage simple (\texttt{extends}).
+    \item \textbf{Méthodes virtuelles} : Appel dynamique via VTable (dispatch dynamique).
+    \item \textbf{Encapsulation} : Champs \texttt{protected} et visibilité publique des méthodes.
+    \item \textbf{Opérateurs} : \texttt{instanceof}, cast de classe, \texttt{new}, \texttt{this}, sélection (\texttt{obj.field}), appel (\texttt{obj.method()}).
+    \item \textbf{Gestion mémoire} : Allocation dynamique dans le tas (Heap) avec vérification de débordement.
+\end{itemize}

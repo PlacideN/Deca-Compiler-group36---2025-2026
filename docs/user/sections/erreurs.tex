@@ -1,0 +1,52 @@
+\section{Gestion des Messages d'Erreur}
+Le compilateur \texttt{decac} effectue une analyse rigoureuse pour retourner des messages explicites à l'utilisateur.
+
+\subsection{Erreurs de Compilation}
+\begin{description}
+    \item[Lexicographie/Syntaxe :] Détectées durant la phase de Parsing. Elles indiquent une structure de code invalide ou un caractère inattendu.
+    \item[Syntaxe Contextuelle :] Détectées durant la Passe 2 et 3. 
+    \begin{itemize}
+        \item \textit{Type mismatch} : Affectation d'une valeur incompatible à une variable.
+        \item \textit{Undeclared identifier} : Utilisation d'une variable ou d'une méthode non définie.
+    \end{itemize}
+\end{description}
+
+\subsection{Erreurs d'Exécution (Runtime)}
+Gérées par le code assembleur, elles provoquent l'arrêt du simulateur \texttt{ima} :
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{|l|X|}
+\hline
+\rowcolor{gray!20} \textbf{Erreur} & \textbf{Configuration déclenchante} \\
+\hline
+\texttt{Stack Overflow} & Appels récursifs trop profonds ou trop de variables locales. \\
+\hline
+\texttt{Heap Overflow} & Mémoire saturée lors de l'instanciation d'un objet via \texttt{new}. \\
+\hline
+\texttt{Null Dereference} & Accès à un champ ou une méthode d'un objet valant \texttt{null}. \\
+\hline
+\texttt{Division by zero} & Division entière ou flottante par zéro. \\
+\hline
+\end{tabularx}
+\end{table}
+
+
+\section{Gestion des Erreurs}
+
+Le compilateur détecte et signale deux types d'erreurs :
+
+\begin{enumerate}
+    \item \textbf{Erreurs de compilation (Contextuelles et Syntaxiques) :}
+    Affichées lors de l'exécution de \texttt{decac}. Elles indiquent le numéro de ligne et la nature du problème (ex: \textit{Type mismatch}, \textit{Undeclared identifier}).
+    
+    \item \textbf{Erreurs à l'exécution (Runtime) :}
+    Gérées par le code assembleur généré. Le programme s'arrête proprement avec un message d'erreur explicite :
+    \begin{itemize}[label=\textbullet]
+        \item \texttt{Error: Stack Overflow} (Débordement de pile).
+        \item \texttt{Error: Heap Overflow} (Tas plein lors d'un \texttt{new}).
+        \item \texttt{Error: Null Dereference} (Tentative d'accès à un objet null).
+        \item \texttt{Error: Division by zero}.
+        \item \texttt{Error: Overflow} (Débordement arithmétique sur flottants).
+    \end{itemize}
+\end{enumerate}
+

@@ -1,52 +1,9 @@
 \documentclass[a4paper,11pt]{article}
 
-% --- Paquets ---
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[french]{babel}
-\usepackage{geometry}
-\usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{listings}
-\usepackage{xcolor}
-\usepackage{fancyhdr}
-\usepackage{titlesec}
+\input{../common/preamble.tex}
 
-% --- Configuration de la page ---
-\geometry{hmargin=2.5cm,vmargin=2.5cm}
-\pagestyle{fancy}
-\fancyhf{}
-\rhead{Documentation Utilisateur - Projet GL}
-\lhead{Compilateur Deca}
-\cfoot{\thepage}
+\usepackage[table]{xcolor} 
 
-% --- Configuration des listings (Code) ---
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
-
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple},
-    basicstyle=\ttfamily\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2
-}
-\lstset{style=mystyle}
-
-% --- Titre ---
 \title{
     \vspace{-2cm}
     \textbf{\Huge Manuel Utilisateur}\\
@@ -58,146 +15,20 @@
     \textit{Ensimag - Projet Génie Logiciel}
 }
 \date{\today}
-
 \begin{document}
-
 \maketitle
+
+\begin{abstract}
+Ce document constitue le manuel d'utilisation du compilateur \textbf{Deca}, développé dans le cadre du projet de Génie Logiciel. Ce compilateur permet de transformer des fichiers sources écrits en langage Deca (extension \texttt{.deca}) en code assembleur pour la machine abstraite \textbf{IMA} (extension \texttt{.ass}).
+\end{abstract}
+
 \tableofcontents
 \newpage
 
-% -------------------------------------------------------------------
-\section{Introduction}
-Ce document constitue le manuel d'utilisation du compilateur **Deca**, développé dans le cadre du projet de Génie Logiciel. Ce compilateur permet de transformer des fichiers sources écrits en langage Deca (extension \texttt{.deca}) en code assembleur pour la machine abstraite **IMA** (extension \texttt{.ass}).
-
-Le compilateur supporte l'intégralité des fonctionnalités du langage Deca (« Sans Objet »), ainsi que l'extension **Objet** et une bibliothèque mathématique.
-
-% -------------------------------------------------------------------
-\section{Installation et Prérequis}
-
-\subsection{Prérequis}
-Pour utiliser le compilateur, votre environnement doit disposer de :
-\begin{itemize}
-    \item **Java OpenJDK** (version 17 ou supérieure recommandée).
-    \item **Maven** (pour la compilation du projet).
-    \item L'utilitaire **sim** (simulateur IMA) doit être accessible pour exécuter le code généré.
-\end{itemize}
-
-\subsection{Compilation du projet}
-Avant la première utilisation, il est nécessaire de compiler les sources Java du compilateur. Placez-vous à la racine du projet et exécutez :
-
-\begin{lstlisting}[language=bash]
-$ mvn clean compile
-$ mvn package
-\end{lstlisting}
-
-Une fois la compilation terminée (\textit{BUILD SUCCESS}), le script exécutable \texttt{decac} est disponible. Il est recommandé d'ajouter le dossier \texttt{src/main/bin} à votre variable d'environnement \texttt{PATH}.
-
-% -------------------------------------------------------------------
-\section{Utilisation du Compilateur (decac)}
-
-La commande principale pour invoquer le compilateur est \texttt{decac}.
-
-\subsection{Syntaxe de base}
-\begin{lstlisting}[language=bash]
-decac [options] <fichier_source.deca>
-\end{lstlisting}
-
-Cette commande génère un fichier portant le même nom mais avec l'extension \texttt{.ass} dans le même répertoire.
-
-\subsection{Options disponibles}
-Le compilateur supporte plusieurs options pour contrôler son comportement :
-
-\begin{center}
-\begin{tabular}{|l|p{10cm}|}
-\hline
-\textbf{Option} & \textbf{Description} \\
-\hline
-\texttt{-b} & Affiche la bannière de l'équipe. \\
-\hline
-\texttt{-p} & Arrête le processus après l'étape de parsing. Affiche l'arbre abstrait décompilé sur la sortie standard. \\
-\hline
-\texttt{-v} & Arrête le processus après l'étape de vérification contextuelle (vérification des types). Ne génère pas de code. \\
-\hline
-\texttt{-n} & \textbf{No Check} : Supprime les tests de débordement à l'exécution (débordement arithmétique, débordement mémoire, etc.). Utile pour optimiser les performances si le code est sûr. \\
-\hline
-\texttt{-r X} & Limite le nombre de registres banalisés disponibles à \texttt{X} (de 4 à 16). Utile pour tester le "Register Spilling". \\
-\hline
-\texttt{-d} & Active les traces de debug (pour les développeurs). \\
-\hline
-\texttt{-P} & Compilation parallèle de plusieurs fichiers. \\
-\hline
-\end{tabular}
-\end{center}
-
-\subsection{Exemple d'utilisation}
-Pour compiler le fichier \texttt{test\_math.deca} :
-\begin{lstlisting}[language=bash]
-$ decac src/test/deca/context/valid/class/test_math.deca
-\end{lstlisting}
-Si aucune erreur n'est détectée, le fichier \texttt{test\_math.ass} est créé.
-
-% -------------------------------------------------------------------
-\section{Exécution du code (ima)}
-
-Une fois le fichier \texttt{.ass} généré, il doit être exécuté par le simulateur IMA.
-
-\begin{lstlisting}[language=bash]
-$ ima src/test/deca/context/valid/class/test_math.ass
-\end{lstlisting}
-
-Sortie attendue (exemple) :
-\begin{lstlisting}
-sin(0.0) = 0.00000e+00
-cos(0.0) = 1.00000e+00
-\end{lstlisting}
-
-% -------------------------------------------------------------------
-\section{Fonctionnalités implémentées}
-
-\subsection{Langage Sans Objet}
-Le compilateur gère toutes les structures procédurales :
-\begin{itemize}
-    \item Types de base : \texttt{int}, \texttt{float}, \texttt{boolean}.
-    \item Structures de contrôle : \texttt{if}, \texttt{else}, \texttt{while}.
-    \item Opérations arithmétiques, logiques et comparaisons.
-    \item Entrées/Sorties : \texttt{print}, \texttt{println}, \texttt{printx}.
-\end{itemize}
-
-\subsection{Langage Objet (Complet)}
-L'extension Objet est pleinement fonctionnelle :
-\begin{itemize}
-    \item **Déclaration de classes** et héritage simple (\texttt{extends}).
-    \item **Méthodes virtuelles** : Appel dynamique via VTable (dispatch dynamique).
-    \item **Encapsulation** : Champs \texttt{protected} et visibilité publique des méthodes.
-    \item **Opérateurs** : \texttt{instanceof}, cast de classe, \texttt{new}, \texttt{this}, sélection (\texttt{obj.field}), appel (\texttt{obj.method()}).
-    \item **Gestion mémoire** : Allocation dynamique dans le tas (Heap) avec vérification de débordement.
-\end{itemize}
-
-\subsection{Extension Mathématique}
-Le compilateur intègre une extension permettant l'utilisation de fonctions mathématiques natives via la classe \texttt{Math} (ou via inclusion d'un fichier header \texttt{Math.decah}).
-\begin{itemize}
-    \item Fonctions trigonométriques : \texttt{sin}, \texttt{cos}, \texttt{asin}, \texttt{acos}, \texttt{atan}.
-    \item Fonction ulp : \texttt{ulp}.
-\end{itemize}
-
-% -------------------------------------------------------------------
-\section{Gestion des Erreurs}
-
-Le compilateur détecte et signale deux types d'erreurs :
-
-\begin{enumerate}
-    \item **Erreurs de compilation (Contextuelles et Syntaxiques) :**
-    Affichées lors de l'exécution de \texttt{decac}. Elles indiquent le numéro de ligne et la nature du problème (ex: \textit{Type mismatch}, \textit{Undeclared identifier}).
-    
-    \item **Erreurs à l'exécution (Runtime) :**
-    Gérées par le code assembleur généré. Le programme s'arrête proprement avec un message d'erreur explicite :
-    \begin{itemize}
-        \item \texttt{Error: Stack Overflow} (Débordement de pile).
-        \item \texttt{Error: Heap Overflow} (Tas plein lors d'un \texttt{new}).
-        \item \texttt{Error: Null Dereference} (Tentative d'accès à un objet null).
-        \item \texttt{Error: Division by zero}.
-        \item \texttt{Error: Overflow} (Débordement arithmétique sur flottants).
-    \end{itemize}
-\end{enumerate}
+\input{sections/limitations.tex}
+\input{sections/erreurs.tex}
+\input{sections/extension.tex}
+\input{sections/utilisation.tex}
+\input{sections/limites-extension.tex}
 
 \end{document}
