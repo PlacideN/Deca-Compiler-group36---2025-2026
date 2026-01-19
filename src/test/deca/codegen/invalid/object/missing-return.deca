@@ -1,0 +1,17 @@
+// Description:
+//    Test de l'absence de return dans une méthode qui ne return pas un type void.
+//
+// Resultats:
+//    Error: Exit method method without return
+//
+// Historique:
+//    cree le 09/01/2026
+
+class A {
+    int method() {}
+}
+
+{
+    A a = new A();
+    println(a.method());
+}

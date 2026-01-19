@@ -1,0 +1,19 @@
+// Description:
+//    Test de transtypage de classe impossible.
+//    Vérifie qu'un cast vers une classe qui n'est pas héritée échoue à l'exécution.
+//
+// Resultats:
+//    Error: Impossible cast
+//
+// Historique:
+//    cree le 19/01/2026
+
+class A {}
+class B extends A {}
+class C extends A {}
+
+{
+    A a = new A();
+    B b;
+    b = (B)(a);
+}

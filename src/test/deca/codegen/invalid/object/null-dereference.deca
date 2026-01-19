@@ -1,0 +1,17 @@
+// Description:
+//    Test de déréférencement de null lors d'un appel de méthode.
+//
+// Resultats:
+//    Error: Null pointer dereference
+//
+// Historique:
+//    cree le 19/01/2026
+
+class A {
+    void emptyMethod() {}
+}
+
+{
+    A a;
+    a.work();
+}
