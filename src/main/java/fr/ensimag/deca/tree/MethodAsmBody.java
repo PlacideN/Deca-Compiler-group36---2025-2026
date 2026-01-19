@@ -28,12 +28,12 @@ public class MethodAsmBody extends AbstractMethodBody {
 
     @Override
     protected void prettyPrintChildren(java.io.PrintStream s, String prefix) {
-        // leaf node => nothing to print
+        asmCode.prettyPrint(s, prefix, true);
     }
 
     @Override
     protected void iterChildren(TreeFunction f) {
-        // leaf node => nothing to iterate over
+        asmCode.iter(f);
     }
 
     @Override
@@ -44,6 +44,9 @@ public class MethodAsmBody extends AbstractMethodBody {
     @Override
     protected void codeGenMethodBody(DecacCompiler compiler) {
         String Ass = asmCode.getValue();
+        if (Ass.startsWith("\"") && Ass.endsWith("\"")) {
+            Ass = Ass.substring(1, Ass.length() - 1); // remove quotes from string
+        }
         compiler.add(new InlinePortion(Ass));
     }
 

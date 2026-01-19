@@ -1,0 +1,18 @@
+// Test for AsmMethodBody
+// This method returns 42 using raw assembly.
+
+class A {
+    int loadConstant() asm ("
+        LOAD #1, R0
+        RTS
+    ");
+}
+
+{
+    A a = new A();
+    if (a.loadConstant() == 1) {
+        println("success");
+    } else {
+        println("fail");
+    }
+}

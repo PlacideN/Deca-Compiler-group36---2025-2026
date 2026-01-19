@@ -137,55 +137,61 @@ public class DeclMethod extends AbstractDeclMethod {
         String name = methodName.getName().getName();
         String className = methodName.getMethodDefinition().getClassName().getName();
         Label methodLabel = compiler.getLabelManager().getMethodLabel(className, name);
-        Label endLabel = compiler.getLabelManager().getMethodEndLabel(className, name);
-        compiler.getLabelManager().setCurrentMethodEndLabel(endLabel);
         compiler.addLabel(methodLabel);
 
-        compiler.getRegisterManager().reset();
-        compiler.getStackManager().resetLB();
+        if (methodBody instanceof MethodAsmBody) { // user is responsible for correct assembly code
+            methodBody.codeGenMethodBody(compiler);
+        } else {
+                
+            Label endLabel = compiler.getLabelManager().getMethodEndLabel(className, name);
+            compiler.getLabelManager().setCurrentMethodEndLabel(endLabel);
 
-        IMAProgram body = new IMAProgram();
-        IMAProgram init = compiler.getProgram();
-        IMAProgram registerSave = new IMAProgram();
-        compiler.setProgram(body);
+            compiler.getRegisterManager().reset();
+            compiler.getStackManager().resetLB();
 
-        methodBody.codeGenMethodBody(compiler);
+            IMAProgram body = new IMAProgram();
+            IMAProgram init = compiler.getProgram();
+            IMAProgram registerSave = new IMAProgram();
+            compiler.setProgram(body);
 
-        // case where no return is found in the method body
-        Type returnType = methodName.getMethodDefinition().getType();
-        if (!returnType.isVoid() && !compiler.getCompilerOptions().getNoCheck()) {
-            compiler.addInstruction(new WSTR("Error: Exit method " + name + " without return"));
-            compiler.addInstruction(new WNL());
-            compiler.addInstruction(new ERROR());
+            methodBody.codeGenMethodBody(compiler);
+
+            // case where no return is found in the method body
+            Type returnType = methodName.getMethodDefinition().getType();
+            if (!returnType.isVoid() && !compiler.getCompilerOptions().getNoCheck()) {
+                compiler.addInstruction(new WSTR("Error: Exit method " + name + " without return"));
+                compiler.addInstruction(new WNL());
+                compiler.addInstruction(new ERROR());
+            }
+
+            compiler.addLabel(endLabel);
+            compiler.setProgram(registerSave);
+            compiler.addComment("Sauvegarde des registres");
+            compiler.getRegisterManager().saveRegisters(compiler);
+            compiler.setProgram(init);
+
+            int localVariablesSize = compiler.getStackManager().getCurrentLBOffset();
+            int nbSavedRegs = compiler.getRegisterManager().getNbSavedRegisters();
+            int maxTempSpace = compiler.getRegisterManager().getMaxTempStackUsage();
+            int totalStackDepth = nbSavedRegs + maxTempSpace + localVariablesSize;
+
+            // tsto
+            if (!compiler.getCompilerOptions().getNoCheck() && totalStackDepth > 0) {
+                compiler.addInstruction(new TSTO(totalStackDepth));
+                compiler.addInstruction(new BOV(compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.STACK_OVERFLOW)));
+            }
+            
+            // addsp
+            if (localVariablesSize > 0) {
+                compiler.addInstruction(new ADDSP(localVariablesSize));
+            }
+
+            init.append(registerSave);    
+            init.append(body);  
+            
+            compiler.addComment("Restauration des registres");
+            compiler.getRegisterManager().restoreRegisters(compiler); 
+            compiler.addInstruction(new RTS());
         }
-
-        compiler.addLabel(endLabel);
-        compiler.setProgram(registerSave);
-        compiler.addComment("Sauvegarde des registres");
-        compiler.getRegisterManager().saveRegisters(compiler);
-        compiler.setProgram(init);
-
-        int localVariablesSize = compiler.getStackManager().getCurrentLBOffset();
-        int nbSavedRegs = compiler.getRegisterManager().getNbSavedRegisters();
-        int maxTempSpace = compiler.getRegisterManager().getMaxTempStackUsage();
-        int totalStackDepth = nbSavedRegs + maxTempSpace + localVariablesSize;
-
-        // tsto
-        if (!compiler.getCompilerOptions().getNoCheck() && totalStackDepth > 0) {
-            compiler.addInstruction(new TSTO(totalStackDepth));
-            compiler.addInstruction(new BOV(compiler.getRuntimeErrorManager().getErrorLabel(ErrorType.STACK_OVERFLOW)));
-        }
-        
-        // addsp
-        if (localVariablesSize > 0) {
-            compiler.addInstruction(new ADDSP(localVariablesSize));
-        }
-
-        init.append(registerSave);    
-        init.append(body);  
-        
-        compiler.addComment("Restauration des registres");
-        compiler.getRegisterManager().restoreRegisters(compiler); 
-        compiler.addInstruction(new RTS());
     }
 }
