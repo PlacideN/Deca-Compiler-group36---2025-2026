@@ -1,83 +1,35 @@
-\section{Mode Opératoire des Extensions}
-L'utilisation des extensions s'effectue via des options de ligne de commande ou l'inclusion de fichiers prédéfinis.
-
-\subsection{Inclusion Mathématique}
-Pour utiliser les fonctions trigonométriques, l'utilisateur peut inclure le fichier d'en-tête :
-\begin{command}
-// Dans un fichier .deca
-#include "Math.decah"
-\end{command}
-
-\subsection{Exemple d'utilisation}
-Pour compiler le fichier \texttt{test\_math.deca} :
-\begin{command}
-decac src/test/deca/context/valid/class/test_math.deca
-\end{command}
-Si aucune erreur n'est détectée, le fichier \texttt{test\_math.ass} est créé.
-
-Une fois le fichier \texttt{.ass} généré, il doit être exécuté par le simulateur IMA.
-
-\begin{command}
-ima src/test/deca/context/valid/class/test_math.ass
-\end{command}
-
-Sortie attendue (exemple) :
-\begin{lstlisting}[style=boxed]
-sin(0.0) = 0.00000e+00
-cos(0.0) = 1.00000e+00
-\end{lstlisting}
+\section{Mode opératoire}
 
 \subsection{Installation et Prérequis}
-
-Pour utiliser le compilateur, votre environnement doit disposer de :
-\begin{itemize}[label=\textbullet]
-    \item \textbf{Java OpenJDK} (version 17 ou supérieure recommandée).
-    \item \textbf{Maven} (pour la compilation du projet).
-    \item L'utilitaire \textbf{sim} (simulateur IMA) doit être accessible pour exécuter le code généré.
+\noindent
+Pour utiliser le compilateur \texttt{decac}, votre environnement de travail doit disposer des outils suivants :
+\begin{itemize}[label=$\to$]
+    \item Java (version 17 ou supérieure).
+    \item Maven (pour la gestion des dépendances et la construction).
+    \item La machine IMA installée et ajoutée dans votre \texttt{PATH}. 
 \end{itemize}
 
-Avant la première utilisation, il est nécessaire de compiler les sources Java du compilateur. Placez-vous à la racine du projet et exécutez :
-
+\noindent
+Avant votre première utilisation, compilez le projet à la racine :
 \begin{command}
-mvn clean compile
 mvn package
 \end{command}
+\noindent
+Le script \texttt{decac} est alors généré dans le répertoire \texttt{src/main/bin/}. Pour afficher toutes les options disponibles, exécutez simplement la commande \texttt{decac} sans arguments.
 
-Une fois la compilation terminée (\textit{BUILD SUCCESS}), le script exécutable \texttt{decac} est disponible. Il est recommandé d'ajouter le dossier \texttt{src/main/bin} à votre variable d'environnement \texttt{PATH}.
-
-\subsection{Utilisation du Compilateur (decac)}
-
-La commande principale pour invoquer le compilateur est \texttt{decac}.
-
-\subsection{Syntaxe de base}
+\subsection{Utilisation de l'extension Math}
+\noindent
+L'extension mathématique vous permet d'accéder aux fonctions trigonométriques précisées dans la partie précédente. Pour les utiliser, incluez le fichier d'en-tête dédié au début de votre fichier source \texttt{.deca} :
 \begin{command}
-decac [options] <fichier_source.deca>
+#include "Math.decah"
 \end{command}
-
-Cette commande génère un fichier portant le même nom mais avec l'extension \texttt{.ass} dans le même répertoire.
-
-\subsection{Options disponibles}
-Le compilateur supporte plusieurs options pour contrôler son comportement :
-
-\begin{table}[H]
-\centering
-\begin{tabularx}{\textwidth}{|l|X|}
-\hline
-\rowcolor{gray!20} \textbf{Option} & \textbf{Description} \\
-\hline
-\texttt{-b} & Affiche la bannière de l'équipe. \\
-\hline
-\texttt{-p} & Arrête le processus après l'étape de parsing. Affiche l'arbre abstrait décompilé sur la sortie standard. \\
-\hline
-\texttt{-v} & Arrête le processus après l'étape de vérification contextuelle (vérification des types). Ne génère pas de code. \\
-\hline
-\texttt{-n} & \textbf{No Check} : Supprime les tests de débordement à l'exécution (débordement arithmétique, débordement mémoire, etc.). Utile pour optimiser les performances si le code est sûr. \\
-\hline
-\texttt{-r X} & Limite le nombre de registres banalisés disponibles à \texttt{X} (de 4 à 16). Utile pour tester le "Register Spilling". \\
-\hline
-\texttt{-d} & Active les traces de debug (pour les développeurs). \\
-\hline
-\texttt{-P} & Compilation parallèle de plusieurs fichiers. \\
-\hline
-\end{tabularx}
-\end{table}
+\noindent
+Le compilateur résout automatiquement l'inclusion et lie les méthodes nécessaires lors de la génération du code assembleur. Compilez votre fichier utilisant ces fonctions avec la commande :
+\begin{command}
+decac <fichier.deca>
+\end{command}
+\noindent
+Puis, pour exécuter le code assembleur généré sur la machine IMA, utilisez :
+\begin{command}
+ima <fichier.ass>
+\end{command}
