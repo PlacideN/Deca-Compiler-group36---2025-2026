@@ -1,0 +1,28 @@
+// Description :
+//      Tests sur la bibliothèque TRIGO
+//
+// Résultats :
+//      -9.9840e-01
+//      -9.99361e-01
+//      4.99996e-03
+//      2.57641e-01
+//      9.53674e-07
+//      1.00000e+00
+//      0.00000e+00
+
+#include "Math.decah"
+
+{
+    Math m = new Math();
+    float pi = 3.1415926535;
+
+    println(m.sin(50000));
+    println(m.cos(100000));
+    println(m.atan(0.005));
+    println(m.asin(0.2548));
+    println(m.ulp(12.424));
+    println(m.sin(pi/2));
+    println(m.cos(100*pi/2));
+    println(m.cos(101*pi/2));
+
+}
