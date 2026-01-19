@@ -1,20 +1,28 @@
-\section{Limitations et Choix d'Implémentation}
+\section{Limitations de l'implémentation}
 
-\subsection{Langage Sans Objet}
-Le compilateur gère toutes les structures procédurales :
-\begin{itemize}[label=\textbullet]
-    \item Types de base : \texttt{int}, \texttt{float}, \texttt{boolean}.
-    \item Structures de contrôle : \texttt{if}, \texttt{else}, \texttt{while}.
-    \item Opérations arithmétiques, logiques et comparaisons.
-    \item Entrées/Sorties : \texttt{print}, \texttt{println}, \texttt{printx}.
+\subsection{Fonctionnalités implémentées}
+\noindent
+Le compilateur implémenté couvre les aspects suivants du langage Deca :
+\begin{itemize}[label=$\to$]
+    \item Fonctions de base : types élémentaires (\texttt{int}, \texttt{float}, \texttt{boolean}), structures de contrôle (\texttt{if}, \texttt{while}), entrées (\texttt{readInt}, \texttt{readFloat}) et sorties (\texttt{print}, \texttt{println} ainsi que le format hexadécimal \texttt{printx} et \texttt{printlnx}).
+    \item Classes et objets : déclaration de classes, héritage, polymorphisme et accès aux champs (\texttt{protected} et visibilité publique par défaut).
+    \item Gestion de la mémoire : allocation dynamique sur le tas via l'instruction \texttt{new}.
 \end{itemize}
 
-\subsection{Langage Objet (Complet)}
-L'extension Objet est pleinement fonctionnelle :
-\begin{itemize}[label=\textbullet]
-    \item \textbf{Déclaration de classes} et héritage simple (\texttt{extends}).
-    \item \textbf{Méthodes virtuelles} : Appel dynamique via VTable (dispatch dynamique).
-    \item \textbf{Encapsulation} : Champs \texttt{protected} et visibilité publique des méthodes.
-    \item \textbf{Opérateurs} : \texttt{instanceof}, cast de classe, \texttt{new}, \texttt{this}, sélection (\texttt{obj.field}), appel (\texttt{obj.method()}).
-    \item \textbf{Gestion mémoire} : Allocation dynamique dans le tas (Heap) avec vérification de débordement.
-\end{itemize}
+\subsection{Limitations techniques connues}
+\noindent
+Au travers de nos tests, nous avons identifié une limitation technique majeure dans notre implémentation actuelle du compilateur Deca.
+
+\begin{quote}
+    \vspace{5pt}
+    \hrule
+    Un appel à \texttt{equals} qu'il s'agisse de la méthode par défaut ou d'une redéfinition utilisateur provoque un arrêt de l'exécution de la machine IMA.
+    \vspace{5pt}
+    \hrule
+\end{quote}
+
+\noindent
+En interne, notre compilateur gère les adresses des méthodes via des offsets calculés par rapport à une base en mémoire. Lors d'un appel, notre génération de code tente d'effectuer un saut vers la méthode en utilisant cet offset directement avec l'instruction \texttt{BSR}. Il s'avère cependant que l'opérande ainsi calculé n'est pas une adresse valide pour cette instruction spécifique : IMA n'autorise pour le \texttt{BSR} qu'un label ou un registre pur, et rejette tout adressage indirect avec déplacement (\texttt{n(R)}).
+
+\noindent
+Par conséquent, lorsqu'un utilisateur appelle la méthode \texttt{equals(...)}, le comportement est déterministe mais fatal : la machine IMA lève systématiquement l'erreur \texttt{BSR avec operande : adresse memoire}. En l'état, les seules comparaisons d'égalité fonctionnelles sont celles utilisant l'opérateur de comparaison d'adresses \texttt{==}.
