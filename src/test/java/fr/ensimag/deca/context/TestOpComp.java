@@ -7,7 +7,6 @@ import fr.ensimag.deca.tree.LowerOrEqual;
 import fr.ensimag.deca.tree.Greater;
 import fr.ensimag.deca.tree.GreaterOrEqual;
 import fr.ensimag.deca.tree.AbstractExpr;
-import fr.ensimag.deca.tree.AbstractOpArith;
 import fr.ensimag.deca.tree.AbstractOpCmp;
 import fr.ensimag.deca.tree.ConvFloat;
 import fr.ensimag.deca.DecacCompiler;

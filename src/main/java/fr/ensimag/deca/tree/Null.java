@@ -11,8 +11,6 @@ import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import java.io.PrintStream;
 
 import fr.ensimag.ima.pseudocode.GPRegister;
-import fr.ensimag.ima.pseudocode.NullOperand;
-import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 public class Null extends AbstractExpr {
     @Override
