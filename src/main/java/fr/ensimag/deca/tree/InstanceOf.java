@@ -107,9 +107,9 @@ public class InstanceOf extends AbstractExpr {
         // on compare l'adresse de la vtable de l'objet avec celle de la classe cible si égale alors c'est une instance
         GPRegister tempReg = compiler.getRegisterManager().allocateRegister();
 
-        compiler.addInstruction(new LEA(new RegisterOffset(right_Offset, Register.GB), GPRegister.R0));
+        compiler.addInstruction(new LEA(new RegisterOffset(right_Offset, Register.GB), tempReg));
 
-        compiler.addInstruction(new CMP(GPRegister.R0, target));
+        compiler.addInstruction(new CMP(tempReg, target));
         compiler.getRegisterManager().freeRegister(tempReg);
 
 

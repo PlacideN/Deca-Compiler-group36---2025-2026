@@ -7,7 +7,9 @@ import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,6 +63,21 @@ public class VTableManager {
         compiler.addInstruction(new LOAD(new LabelOperand(compiler.getLabelManager().getObjectEqualsLabel()), Register.R0));
         compiler.addInstruction(new STORE(Register.R0, new RegisterOffset(base + 1, Register.GB)));
     }
+
+    /**
+     * Generate the code for the init method of the Object class.
+     */
+
+    public void codeGenObjectInit(DecacCompiler compiler) {
+    compiler.addComment("--------------------------------------------------");
+    compiler.addComment("                Classe Object                     ");
+    compiler.addComment("--------------------------------------------------");
+    
+    compiler.addComment("---------- Code de la methode init dans la classe Object");    
+    compiler.addLabel(compiler.getLabelManager().getInitLabel(compiler.environmentType.OBJECT.getName().getName()));
+    compiler.addInstruction(new RTS()); 
+}
+
 
     /**
      * Generate the code for the equals method of the Object class.

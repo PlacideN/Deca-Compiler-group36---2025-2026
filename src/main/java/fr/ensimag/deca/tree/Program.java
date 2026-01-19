@@ -95,6 +95,7 @@ public class Program extends AbstractProgram {
         compiler.setProgram(full);
         classes.codeGenListInit(compiler);
         classes.codeGenListMethods(compiler);
+        compiler.getVTableManager().codeGenObjectInit(compiler);
         compiler.getVTableManager().codeGenObjectEquals(compiler);
         compiler.getRuntimeErrorManager().generateErrorHandlers(); // generate error assembly code
 
