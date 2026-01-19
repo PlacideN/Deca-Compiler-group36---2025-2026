@@ -25,6 +25,8 @@ import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.Label;
+import fr.ensimag.ima.pseudocode.Register;
+
 /**
  * @author gl36
  * @date 12/01/2026
@@ -103,7 +105,15 @@ public class InstanceOf extends AbstractExpr {
         compiler.addLabel(startLoop);
 
         // on compare l'adresse de la vtable de l'objet avec celle de la classe cible si égale alors c'est une instance
-        compiler.addInstruction(new CMP(temp, target));
+        GPRegister tempReg = compiler.getRegisterManager().allocateRegister();
+
+        compiler.addInstruction(new LEA(new RegisterOffset(right_Offset, Register.GB), GPRegister.R0));
+
+        compiler.addInstruction(new CMP(GPRegister.R0, target));
+        compiler.getRegisterManager().freeRegister(tempReg);
+
+
+    
         compiler.addInstruction(new BEQ(isInstance));
 
         // on remonte dans la hiérarchie des classes, la classe mère est à l'offset 0 de la vtable
