@@ -23,6 +23,10 @@ public class Return extends AbstractInst {
         this.expr = expr;
     }
 
+    public AbstractExpr getExpression() {
+        return expr;
+    }
+
     @Override
     public void verifyInst(DecacCompiler compiler, EnvironmentExp localEnv,
             ClassDefinition currentClass, Type returnType) throws ContextualError {
