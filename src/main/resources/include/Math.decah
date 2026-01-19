@@ -1,6 +1,6 @@
 // Grenoble INP - Ensimag projet GL -*- mode: java -*-
 // Library for class Math of Deca, coded in Deca
-// Author : gl36
+// Author : Hugo et Placide (gl36)
 
 class Math {
 
@@ -11,7 +11,7 @@ class Math {
         float b = 0.04166666;
         float c = -0.001388889;
         float d = 0.000024801;
-        
+        // Méthode de Horner
         return 1.0 + f_2 * (a + f_2 * (b + f_2 * (c + f_2 * d)));
     }
 
@@ -22,21 +22,21 @@ class Math {
         float b = 0.008333333;
         float c = -0.000198413;
         float d = 0.000002756;
-
+        // Méthode de Horner
         return f * (1.0 + f_2 * (a + f_2 * (b + f_2 * (c + f_2 * d))));
     }
     
-    // calcule atan(f) pour f dans [0, tan(pi/8)] au degré 15
+    // calcule atan(f) pour f dans [0, tan(π/8)] au degré 15
     float _atan_horner(float f) {
         float f2 = f * f;
-        float A1 = -0.3333333333; // -1/3
-        float A2 =  0.2000000000; //  1/5
-        float A3 = -0.1428571429; // -1/7
-        float A4 =  0.1111111111; //  1/9
-        float A5 = -0.0909090909; // -1/11
-        float A6 =  0.0769230769; //  1/13
-        float A7 = -0.0666666667; // -1/15
-
+        float A1 = -0.3333333333;
+        float A2 =  0.2000000000;
+        float A3 = -0.1428571429;
+        float A4 =  0.1111111111;
+        float A5 = -0.0909090909;
+        float A6 =  0.0769230769;
+        float A7 = -0.0666666667;
+        // Méthode de Horner
         return f * (1.0 + f2 * (A1 + f2 * (A2 + f2 * (A3 + f2 * (A4 + f2 * (A5 + f2 * (A6 + f2 * A7)))))));
     }
 
@@ -70,6 +70,8 @@ class Math {
         float PI_INV = 0.63661977236;
         float k_float;
         
+        // Ajouter 0.5 ou -0.5 en fonction du signe permet au moment du cast d'obtenir 
+        // la valeur arrondie et non la troncature de la valeur
         if (f < 0.0) {
             k_float = (f * PI_INV) - 0.5; 
         }
@@ -84,16 +86,15 @@ class Math {
         int i;
 
         if (f < 0.0) {
-            return 0.0 / (f - f); // NaN
+            return 0.0 / (f - f); 
         }
 
         if (f == 0.0) {
             return 0.0;
         }
 
-        y = 1.0;
-
-        i = 0;
+        y = 1.0; 
+        i = 0; 
         while (i < 15) {
             y = 0.5 * (y + f / y);
             i = i + 1;
@@ -106,18 +107,24 @@ class Math {
         float r;
         int k;
         int quadrant;
-
-        if (f > -0.0007 && f < 0.0007){
-            return f;
-        }
         
+        // On ramène le float f à l'intrvalle [-π/4, π/4]
         r = _reduced_angle(f);
         k = _get_k(f);
         
+        // On récupère le quadrant dans lequel f se trouve, il y a quatres quadrants, 
+        // donc s'il est négatif, on ajoute quatre ce qui nous donne le bon quadrant positif 
         quadrant = k % 4;
         if (quadrant < 0) {
             quadrant = quadrant + 4;
         }
+
+        // Disjonction de cas selon le quadrant pour s'assurer qu'on ne calcule pas un sin 
+        // ou un cos d'un float ne se trouvant pas dans [-π/4, π/4]
+        // cas 1: sin(r)
+        // cas 2: cos(r)  (car sin(π/2 + r) = cos(r))
+        // cas 3: -sin(r) (car sin(π + r) = -sin(r))
+        // cas 4: -cos(r) (car sin(3π/2 + r) = -cos(r))
 
         if (quadrant == 0) {
             return _sin_horner(r);
@@ -131,6 +138,7 @@ class Math {
     }
 
     float cos(float f) {
+        // Même principe que pour le calcul de sin
         float r;
         int k;
         int quadrant;
@@ -171,8 +179,8 @@ class Math {
         if (f < 0.0) {
             return -asin(-f);
         }
-
-        x = _sqrt(1.0 - f * f);
+        // On utilise la formule : asin(f) = atan(f / sqrt(1 - f²))
+        float x = _sqrt(1.0 - f * f);
         return atan(f / x);
     }
 
@@ -188,16 +196,16 @@ class Math {
         if (f < 0.0007){
             return f;
         }
-
+        // Très grand f : atan(f) = π/2 - atan(1/f)
         if (f > 2.41421356) {
             return PI_HALF - _atan_horner(1.0 / f);
         }
-
+        // Zone intermédiaire autour de 1
         if (f > 0.41421) {
             x = (f - 1.0) / (f + 1.0);
             return PI_QUART + _atan_horner(x);
         }
-
+        
         return _atan_horner(f);
     }
 
@@ -233,4 +241,8 @@ class Math {
     }
 }
 
+<<<<<<< HEAD
 // End of Deca Math library
+=======
+// End of Deca Math library
+>>>>>>> 210903bd52d7ccc0f72ba35e9c7df463ade2f33d
