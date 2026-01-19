@@ -1,8 +1,8 @@
 \section{Limitations de l'extension}
 \noindent
-Les extensions mathématiques sont soumises à des contraintes de précision liées aux séries de Taylor utilisées en interne et à la précision limitée sur 32 bits :
+L'extension mathématique est soumise à des contraintes de précision liées aux séries de Taylor utilisées en interne et à la précision limitée sur 32 bits :
 
-\begin{itemize}[label=\textbullet]
-    \item \textbf{Extension TRIGO :} Les fonctions trigonométriques garantissent une précision de moins d'un ulp pour des valeurs d'entrée standards. Les erreurs s'accumulent pour des valeurs tendant vers l'infini.
-    \item \textbf{Domaine de définition :} Un appel à \texttt{asin} avec un paramètre hors de $[-1, 1]$ retournera \texttt{NaN}.
+\begin{itemize}[label=$\circ$]
+    \item Les fonctions trigonométriques garantissent une précision de moins d'un ulp pour des valeurs d'entrée standards. Les erreurs s'accumulent pour des valeurs tendant vers l'infini.
+    \item Un appel à \texttt{asin} avec un paramètre hors de son domainde de définition ($[-1, 1]$) retournera \texttt{NaN}.
 \end{itemize}
