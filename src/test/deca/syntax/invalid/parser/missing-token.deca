@@ -1,0 +1,14 @@
+// Description:
+//    Tests d'instruction lexicalement correct. Une instruction print doit 
+//    comporter une parenthèse fermante
+//
+// Resultats:
+//    Erreur de syntaxe.
+//    Ligne 13 : missing ')' at ';'
+//
+// Historique:
+//    cree le 19/01/2026
+
+{
+    print(3 ;
+}
