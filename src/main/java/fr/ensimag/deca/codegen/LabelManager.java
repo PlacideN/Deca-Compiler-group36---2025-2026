@@ -12,6 +12,7 @@ public class LabelManager {
     private int ifCount = 0;
     private int boolOpCount = 0;
     private int whileCount = 0;
+    private int instanceOfCount = 0;
 
     private Label currentMethodEndLabel;
 
@@ -33,6 +34,22 @@ public class LabelManager {
 
     public int getNextWhileLabel() {
         return whileCount++;
+    }
+
+    public int getNextInstanceOfLabel() {
+        return instanceOfCount++;
+    }
+
+    public Label instanceOfLoop(int n) {
+        return new Label("instanceof_loop_" + n);
+    }
+
+    public Label instanceOfTrue(int n) {
+        return new Label("instanceof_true_" + n);
+    }
+
+    public Label instanceOfEnd(int n) {
+        return new Label("instanceof_end_" + n);
     }
 
     public Label ifEndLabel(int ifNumber) {

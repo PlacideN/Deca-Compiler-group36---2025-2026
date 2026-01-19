@@ -1,6 +1,7 @@
 package fr.ensimag.deca.tree;
 
 import fr.ensimag.deca.DecacCompiler;
+import fr.ensimag.deca.codegen.LabelManager;
 import fr.ensimag.deca.context.ClassDefinition;
 import fr.ensimag.deca.context.ContextualError;
 import fr.ensimag.deca.context.EnvironmentExp;
@@ -12,6 +13,7 @@ import org.apache.commons.lang.Validate;
 
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
 import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
@@ -76,15 +78,12 @@ public class InstanceOf extends AbstractExpr {
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
         //affiche en ass ima :  A instance of B avec A une expr
-
-        // adresse en mémoire de la table des méthodes de B
-        int right_Offset = typeName.getClassDefinition().getVTableOffset();
-
-        //Label creation that depends on the column and line of the InstanceOf to have unique labels
-        String suffix = "_" + this.getLocation().getLine() + "_" + this.getLocation().getPositionInLine();
-        Label startLoop = new Label("instanceof_loop_" + suffix);
-        Label isInstance = new Label("instanceof_true_" + suffix);
-        Label endLabel = new Label("end_instanceof" + suffix);
+        LabelManager lm = compiler.getLabelManager();
+        int id = lm.getNextInstanceOfLabel();
+        
+        Label startLoop = lm.instanceOfLoop(id);
+        Label isInstance = lm.instanceOfTrue(id);
+        Label endLabel = lm.instanceOfEnd(id);
 
         // mets dans R2 l'objet à gauche du instanceof (new A() instanceof B ou juste A instance of B ...)
         expr.codeGenExpr(compiler, target); 
@@ -95,11 +94,16 @@ public class InstanceOf extends AbstractExpr {
         // on met vtable dans target(avant target contenait l'adresse de l'objet)
         compiler.addInstruction(new LOAD(new RegisterOffset(0, target), target));
 
+        // get the memory address
+        GPRegister temp = Register.R0;
+        RegisterOffset offset = new RegisterOffset(typeName.getClassDefinition().getVTableOffset(), Register.GB);
+        compiler.addInstruction(new LEA(offset, temp));
+
 
         compiler.addLabel(startLoop);
 
         // on compare l'adresse de la vtable de l'objet avec celle de la classe cible si égale alors c'est une instance
-        compiler.addInstruction(new CMP(right_Offset, target));
+        compiler.addInstruction(new CMP(temp, target));
         compiler.addInstruction(new BEQ(isInstance));
 
         // on remonte dans la hiérarchie des classes, la classe mère est à l'offset 0 de la vtable
