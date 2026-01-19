@@ -1,52 +1,88 @@
-\section{Gestion des Messages d'Erreur}
-Le compilateur \texttt{decac} effectue une analyse rigoureuse pour retourner des messages explicites à l'utilisateur.
+\section{Gestion des messages d'erreur}
+\subsection{Formatage des erreurs de compilation}
+\noindent
+Toutes les erreurs détectées avant la génération de code (lexicographie, syntaxe et vérification contextuelle) suivent le formatage requis pour l'évaluation automatique :
 
-\subsection{Erreurs de Compilation}
-\begin{description}
-    \item[Lexicographie/Syntaxe :] Détectées durant la phase de Parsing. Elles indiquent une structure de code invalide ou un caractère inattendu.
-    \item[Syntaxe Contextuelle :] Détectées durant la Passe 2 et 3. 
-    \begin{itemize}
-        \item \textit{Type mismatch} : Affectation d'une valeur incompatible à une variable.
-        \item \textit{Undeclared identifier} : Utilisation d'une variable ou d'une méthode non définie.
-    \end{itemize}
-\end{description}
+\begin{command}
+<nom_de_fichier.deca>:<ligne>:<colonne>: <description_de_l_erreur>
+\end{command}
 
-\subsection{Erreurs d'Exécution (Runtime)}
-Gérées par le code assembleur, elles provoquent l'arrêt du simulateur \texttt{ima} :
+\subsection{Erreurs de lexicographie (Lexer)}
+\noindent
+L'analyseur lexical se charge de reconnaître les jetons (\texttt{tokens}). Les erreurs surviennent lorsqu'une séquence ne correspond à aucune règle définie. Ces erreurs sont capturées par le \texttt{DecacErrorListener} ou de rattrapées avant dans le \texttt{DecaLexer} lui-même (pour \texttt{INVALID\_IDENT} et \texttt{UNTERMINATED\_COMMENT}) pour fournir des messages plus clairs:
+
+
+\begin{itemize}[label=$\circ$]
+    \item \texttt{INVALID\_IDENT} : Levé par un identificateur qui ne respecte pas les règles lexicographiques (ex : commence par un chiffre).
+    \item \texttt{UNTERMINATED\_COMMENT} : Levé lorsqu'un commentaire multi-ligne (\texttt{/*}) est ouvert mais jamais refermé avant la fin du fichier.
+    \item \texttt{token recognition error} : Levé lors de l'utilisation de caractères n'appartenant pas au langage Deca (ex : \texttt{\#}, \texttt{@}) ou d'une chaîne de caractères mal formée (ex : guillemet manquant).
+\end{itemize}
+
+\subsection{Erreurs de syntaxe hors-contexte (Parser)}
+\noindent
+L'analyseur syntaxique vérifie si l'ordre des jetons respecte la grammaire du langage. Sous chaque explication d'erreur est fourni un exemple de fichier test qui lève l'erreur. Ces erreurs sont capturées par le \texttt{DecacErrorListener} :
+
+\begin{itemize}[label=$\circ$]
+    \item \texttt{mismatched input} : Un jeton a été trouvé là où un autre était attendu (ex : condition de \texttt{if} vide).
+    \newline {\footnotesize Exemple de fichier test : \texttt{.../syntax/invalid/parser/empty-if.deca}}
+    
+    \item \texttt{no viable alternative} : Structure de code incomplète ou ambiguë (ex : point-virgule manquant).
+    \newline {\footnotesize Exemple de fichier test : \texttt{.../syntax/invalid/parser/missing-semi.deca}}
+    
+    \item \texttt{missing <token>} : Absence d'un symbole obligatoire (ex : parenthèse fermante oubliée).
+    \newline {\footnotesize Exemple de fichier test : \texttt{.../syntax/invalid/parser/missing-token.deca}}
+    
+    \item \texttt{extraneous input} : Symbole invalide pour la règle en cours (ex : opérateur doublé).
+    \newline {\footnotesize Exemple de fichier test : \texttt{.../syntax/invalid/parser/duplicate-op.deca}}
+\end{itemize}
+
+
+\subsection{Erreurs de syntaxe contextuelle}
+\noindent
+Ces erreurs lors de la décoration de l'AST après qu'il soit construit. Elles concernent la cohérence des types, des variables et des déclarations.
+
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{|l|X|}
 \hline
-\rowcolor{gray!20} \textbf{Erreur} & \textbf{Configuration déclenchante} \\
+\rowcolor{gray!10} Catégorie & Messages d'erreur et causes possibles \\
 \hline
-\texttt{Stack Overflow} & Appels récursifs trop profonds ou trop de variables locales. \\
+Identificateurs & \texttt{Identifier <name> not found} : variable ou méthode non définie. \newline \texttt{Type <name> is already defined} : double déclaration d'un type. \\
 \hline
-\texttt{Heap Overflow} & Mémoire saturée lors de l'instanciation d'un objet via \texttt{new}. \\
+Classes & \texttt{Superclass <name> of class <C> is not defined} : héritage d'une classe inexistante. \newline \texttt{New can only be used with class types} : instanciation sur un type primitif. \\
 \hline
-\texttt{Null Dereference} & Accès à un champ ou une méthode d'un objet valant \texttt{null}. \\
+Méthodes/Champs & \texttt{Field name collides with an inherited method} : conflit lors de l'héritage. \newline \texttt{Visibility error for protected field} : accès illégal à un champ protégé. \\
 \hline
-\texttt{Division by zero} & Division entière ou flottante par zéro. \\
+Types/Opérations & \texttt{Operand of UnaryMinus must be of numeric type} : \texttt{-} appliqué sur un booléen. \newline \texttt{Condition must be a boolean. Found: <type>} : type invalide dans un \texttt{if} ou \texttt{while}. \newline \texttt{Cannot cast from <T1> to <T2>} : cast illégal entre types incompatibles. \\
+\hline
+Arguments & \texttt{Expected <n> args, got <m>} : signature de méthode non respectée. \\
 \hline
 \end{tabularx}
 \end{table}
 
+\subsection{Erreurs d'exécution (Runtime)}
+\noindent
+Même si le programme est valide contextuellement, il peut encore échouer lors de l'exécution sur la machine virtuelle IMA (règles sémantiques). Ces erreurs sont gérées par notre \texttt{RuntimeErrorManager}. Chaque erreur d'exécution est liée à un label spécifique en assembleur. Lorsqu'une condition d'erreur est détectée (avec l'instruction \texttt{BOV} par exemple), le programme passe à l'instruction du label ce qui affiche le message et stoppe l'exécution (\texttt{ERROR}).
 
-\section{Gestion des Erreurs}
-
-Le compilateur détecte et signale deux types d'erreurs :
-
-\begin{enumerate}
-    \item \textbf{Erreurs de compilation (Contextuelles et Syntaxiques) :}
-    Affichées lors de l'exécution de \texttt{decac}. Elles indiquent le numéro de ligne et la nature du problème (ex: \textit{Type mismatch}, \textit{Undeclared identifier}).
-    
-    \item \textbf{Erreurs à l'exécution (Runtime) :}
-    Gérées par le code assembleur généré. Le programme s'arrête proprement avec un message d'erreur explicite :
-    \begin{itemize}[label=\textbullet]
-        \item \texttt{Error: Stack Overflow} (Débordement de pile).
-        \item \texttt{Error: Heap Overflow} (Tas plein lors d'un \texttt{new}).
-        \item \texttt{Error: Null Dereference} (Tentative d'accès à un objet null).
-        \item \texttt{Error: Division by zero}.
-        \item \texttt{Error: Overflow} (Débordement arithmétique sur flottants).
-    \end{itemize}
-\end{enumerate}
-
+\begin{table}[H]
+\centering
+\begin{tabularx}{\textwidth}{|l|X|}
+\hline
+\rowcolor{gray!10} Message d'erreur & Cause(s) possible(s) de l'erreur \\
+\hline
+\texttt{Division by zero} & Tentative de division par un entier ou flottant nul. \\
+\hline
+\texttt{Stack overflow} & Débordement de la pile (appels récursifs trop profonds ou registres). \\
+\hline
+\texttt{Input/Output error} & Erreur lors de la lecture d'un entier ou d'un flottant \\
+\hline
+\texttt{Overflow arith.} & Débordement lors d'une opération sur les nombres flottants. \\
+\hline
+\texttt{Null dereference} & Accès à un champ ou une méthode sur un objet non instancié. \\
+\hline
+\texttt{Heap overflow} & Mémoire globale saturée lors d'une allocation par \texttt{new}. \\
+\hline
+\texttt{Impossible cast} & Échec d'un transtypage dynamique entre deux classes incompatibles. \\
+\hline
+\end{tabularx}
+\end{table}
