@@ -40,15 +40,24 @@ public class Program extends AbstractProgram {
 
     @Override
     public void verifyProgram(DecacCompiler compiler) throws ContextualError {
+        LOG.info("verify Program: start");
+
+        LOG.debug("verify Program: Passe 1 (Verify class hierarchy)");
         this.classes.verifyListClass(compiler);
+        LOG.debug("verify Program: Passe 2 (Verify fields and method signatures)");
         this.classes.verifyListClassMembers(compiler);
+        LOG.debug("verify Program: Passe 3 (Verify method bodies and main instructions)");
         this.classes.verifyListClassBody(compiler);
         this.main.verifyMain(compiler);
+
+        LOG.info("verify Program: end");
     }
 
     @Override
     public void codeGenProgram(DecacCompiler compiler) {
+        LOG.info("codeGen Program: start");
 
+        LOG.debug("codeGen Program: generating VTables");
         compiler.addComment("--------------------------------------------------");
         compiler.addComment("       Construction des tables des methodes       ");
         compiler.addComment("--------------------------------------------------");
@@ -62,13 +71,14 @@ public class Program extends AbstractProgram {
         IMAProgram head = compiler.getProgram();
         compiler.setProgram(body);
         
-        
+        LOG.debug("codeGen Program: generating main instructions");
         compiler.addComment("--------------------------------------------------");
         compiler.addComment("            Code du programme principal           ");
         compiler.addComment("--------------------------------------------------");
         main.codeGenMain(compiler);
         compiler.addInstruction(new HALT());
         
+        LOG.debug("codeGen Program: generating preamble (TSTO/ADDSP)");
         IMAProgram preamble = new IMAProgram();
         compiler.setProgram(preamble);
         
@@ -93,11 +103,13 @@ public class Program extends AbstractProgram {
         full.append(body);
     
         compiler.setProgram(full);
+
+        LOG.debug("codeGen Program: generating field initialization and methods");
         classes.codeGenListInit(compiler);
         classes.codeGenListMethods(compiler);
         compiler.getVTableManager().codeGenObjectEquals(compiler);
         compiler.getRuntimeErrorManager().generateErrorHandlers(); // generate error assembly code
-
+        LOG.info("codeGen Program: end");
     }
 
     @Override
