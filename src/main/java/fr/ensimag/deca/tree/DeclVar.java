@@ -69,7 +69,9 @@ public class DeclVar extends AbstractDeclVar {
     @Override
     public void codeGenDeclVar(DecacCompiler compiler) {
         compiler.addComment("Declaration of variable " + varName.getName().getName());
-        DAddr address = this.varName.getVariableDefinition().getOperand();
+        int offset = compiler.getStackManager().allocate();
+        DAddr address = new RegisterOffset(offset, Register.GB);
+        this.varName.getExpDefinition().setOperand(address);
         this.initialization.codeGenInit(compiler, address);
     }
 
