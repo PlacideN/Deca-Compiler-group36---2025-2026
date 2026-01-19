@@ -13,6 +13,8 @@ import fr.ensimag.deca.context.FieldDefinition;
 import fr.ensimag.deca.context.ExpDefinition;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.deca.tools.SymbolTable.Symbol;
+import fr.ensimag.ima.pseudocode.ImmediateFloat;
+import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
@@ -121,11 +123,18 @@ public class DeclField extends AbstractDeclField {
     @Override
     protected void codeGenDefaultInit(DecacCompiler compiler) {
         FieldDefinition fieldDef = fieldName.getFieldDefinition();
+        Type fieldType = fieldDef.getType();
         String className = fieldDef.getContainingClass().getType().getName().getName();
         String name = fieldName.getName().getName();
 
         compiler.addComment("Initialisation de " + className + "." + name);
-        compiler.addInstruction(new LOAD(0, Register.R0));
+        if (fieldType.isFloat()) {
+            compiler.addInstruction(new LOAD(new ImmediateFloat(0.0f), Register.R0));
+        } else if (fieldType.isClassOrNull()) {
+            compiler.addInstruction(new LOAD(new NullOperand(), Register.R0));
+        } else {
+            compiler.addInstruction(new LOAD(0, Register.R0));
+        }
         compiler.addInstruction(new STORE(Register.R0, fieldDef.getOperand()));        
     }
 
