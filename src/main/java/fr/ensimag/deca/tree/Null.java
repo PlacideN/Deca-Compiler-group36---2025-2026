@@ -10,6 +10,8 @@ import fr.ensimag.deca.tools.IndentPrintStream;
 import java.io.PrintStream;
 
 import fr.ensimag.ima.pseudocode.GPRegister;
+import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.instructions.LOAD;
 
 public class Null extends AbstractExpr {
     @Override
@@ -38,7 +40,7 @@ public class Null extends AbstractExpr {
 
     @Override
     protected void codeGenExpr(DecacCompiler compiler, GPRegister target) {
-        throw new UnsupportedOperationException("Not implemented yet.");
+        compiler.addInstruction(new LOAD(new NullOperand(), target));
     }
     
 }
