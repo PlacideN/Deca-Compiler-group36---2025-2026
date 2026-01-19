@@ -124,8 +124,10 @@ public class DeclClass extends AbstractDeclClass {
             ClassDefinition superClassDef = (ClassDefinition) compiler.environmentType.defOfType(superClassName.getName());
             
             classDef.setNumberOfFields(superClassDef.getNumberOfFields());
+            classDef.setNumberOfMethods(superClassDef.getNumberOfMethods());
         } else {
             classDef.setNumberOfFields(0);
+            classDef.setNumberOfMethods(0);
         }
 
         fields.verifyListFieldMembers(compiler, classDef);

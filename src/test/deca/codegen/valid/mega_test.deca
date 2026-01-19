@@ -1,0 +1,100 @@
+// Description:
+//    Stress test complet : Triple héritage, Shadowing de champs, 
+//    Polymorphisme complexe, Casts en cascade et Arithmétique.
+//
+// Resultats:
+//    --- Test Champs ---
+//    X (GrandParent) = 10
+//    Y (Parent) = 20.5
+//    Z (Enfant) = 30
+//    --- Test Methodes ---
+//    Identite : Je suis l'Enfant
+//    Calcul : 60.5
+//    --- Test InstanceOf & Cast ---
+//    Check 1: OK
+//    Check 2: OK
+//    Casting GrandParent vers Enfant : OK
+//    --- Test Null ---
+//    Null est bien null
+//
+// Historique:
+//    Cree le 19/01/2026
+
+class GrandParent {
+    int x = 10;
+    
+    void identify() {
+        println("Je suis le GrandParent");
+    }
+
+    GrandParent getMe() {
+        return this;
+    }
+}
+
+class Parent extends GrandParent {
+    float y = 20.5;
+
+    // Redéfinition
+    void identify() {
+        println("Je suis le Parent");
+    }
+}
+
+class Enfant extends Parent {
+    int z = 30;
+
+    // Redéfinition + Covariance (retourne un Enfant au lieu de GrandParent)
+    Enfant getMe() {
+        return this;
+    }
+
+    void identify() {
+        println("Je suis l'Enfant");
+    }
+
+    float total() {
+        return this.x + this.y + this.z;
+    }
+}
+
+{
+    GrandParent gp = new Enfant(); // Upcast implicite
+    Enfant e;
+    Parent p;
+
+    println("--- Test Champs ---");
+    // On doit caster pour accéder aux champs spécifiques car le type statique est GrandParent
+    print("X (GrandParent) = "); println(gp.x);
+    print("Y (Parent) = "); println(((Parent)(gp)).y);
+    print("Z (Enfant) = "); println(((Enfant)(gp)).z);
+
+    println("--- Test Methodes ---");
+    print("Identite : ");
+    gp.identify(); // Doit afficher "Enfant" (Liaison dynamique)
+
+    e = ((Enfant)(gp)).getMe();
+    print("Calcul : ");
+    println(e.total()); // 10 + 20.5 + 30 = 60.5
+
+    println("--- Test InstanceOf & Cast ---");
+    if (gp instanceof Enfant) {
+        println("Check 1: OK");
+    }
+
+    p = (Parent)(gp);
+    if (p instanceof Parent && !(p instanceof GrandParent == false)) {
+        println("Check 2: OK");
+    }
+
+    if (gp instanceof Enfant) {
+        e = (Enfant)(gp);
+        println("Casting GrandParent vers Enfant : OK");
+    }
+
+    println("--- Test Null ---");
+    e = null;
+    if (e == null) {
+        println("Null est bien null");
+    }
+}
