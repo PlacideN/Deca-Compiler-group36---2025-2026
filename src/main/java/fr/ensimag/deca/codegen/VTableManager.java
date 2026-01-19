@@ -7,8 +7,10 @@ import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
-import fr.ensimag.ima.pseudocode.instructions.RTS;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
+import fr.ensimag.ima.pseudocode.instructions.RTS;
+import fr.ensimag.ima.pseudocode.instructions.CMP;
+import fr.ensimag.ima.pseudocode.instructions.SEQ;
 
 
 import java.util.HashMap;
@@ -65,21 +67,6 @@ public class VTableManager {
     }
 
     /**
-     * Generate the code for the init method of the Object class.
-     */
-
-    public void codeGenObjectInit(DecacCompiler compiler) {
-    compiler.addComment("--------------------------------------------------");
-    compiler.addComment("                Classe Object                     ");
-    compiler.addComment("--------------------------------------------------");
-    
-    compiler.addComment("---------- Code de la methode init dans la classe Object");    
-    compiler.addLabel(compiler.getLabelManager().getInitLabel(compiler.environmentType.OBJECT.getName().getName()));
-    compiler.addInstruction(new RTS()); 
-}
-
-
-    /**
      * Generate the code for the equals method of the Object class.
      */
     public void codeGenObjectEquals(DecacCompiler compiler) {
@@ -90,8 +77,8 @@ public class VTableManager {
         compiler.addLabel(compiler.getLabelManager().getObjectEqualsLabel());
         
         compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R0));
-        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.CMP(new RegisterOffset(-3, Register.LB), Register.R0));
-        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.SEQ(Register.R0)); // put result in R0
-        compiler.addInstruction(new fr.ensimag.ima.pseudocode.instructions.RTS());
+        compiler.addInstruction(new CMP(new RegisterOffset(-3, Register.LB), Register.R0));
+        compiler.addInstruction(new SEQ(Register.R0)); // put result in R0
+        compiler.addInstruction(new RTS());
     }
 }

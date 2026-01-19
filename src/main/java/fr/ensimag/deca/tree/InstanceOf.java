@@ -19,13 +19,10 @@ import fr.ensimag.ima.pseudocode.instructions.BNE;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.BRA;
 
-import fr.ensimag.ima.pseudocode.NullOperand;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.RegisterOffset;
 import fr.ensimag.ima.pseudocode.instructions.LEA;
-import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.Label;
-import fr.ensimag.ima.pseudocode.Register;
 
 /**
  * @author gl36
@@ -105,12 +102,7 @@ public class InstanceOf extends AbstractExpr {
         compiler.addLabel(startLoop);
 
         // on compare l'adresse de la vtable de l'objet avec celle de la classe cible si égale alors c'est une instance
-        GPRegister tempReg = compiler.getRegisterManager().allocateRegister();
-
-        compiler.addInstruction(new LEA(new RegisterOffset(right_Offset, Register.GB), tempReg));
-
-        compiler.addInstruction(new CMP(tempReg, target));
-        compiler.getRegisterManager().freeRegister(tempReg);
+        compiler.addInstruction(new CMP(temp, target));
 
 
     
