@@ -13,6 +13,7 @@ public class LabelManager {
     private int boolOpCount = 0;
     private int whileCount = 0;
     private int instanceOfCount = 0;
+    private int castCount = 0;
 
     private Label currentMethodEndLabel;
 
@@ -38,6 +39,18 @@ public class LabelManager {
 
     public int getNextInstanceOfLabel() {
         return instanceOfCount++;
+    }
+
+    public int getNextCastLabel() {
+        return castCount++;
+    }
+
+    public Label castLoop(int n) {
+        return new Label("cast_loop_" + n);
+    }
+
+    public Label castEnd(int n) {
+        return new Label("cast_end_" + n);
     }
 
     public Label instanceOfLoop(int n) {

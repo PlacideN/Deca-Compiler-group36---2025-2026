@@ -29,7 +29,8 @@ public class RuntimeErrorManager {
         OVERFLOW("Error: Overflow during arithmetic operation"),
         NO_RETURN("Error: No return statement in function with non-void return type"),
         NULL_DEREFERENCE("Error: Null pointer dereference"),   
-        HEAP_OVERFLOW("Error: Heap overflow");
+        HEAP_OVERFLOW("Error: Heap overflow"),
+        IMPOSSIBLE_CAST("Error: Impossible cast");
 
         private final String message;
 
