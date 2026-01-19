@@ -13,6 +13,7 @@ import fr.ensimag.deca.context.Signature;
 import fr.ensimag.deca.tools.IndentPrintStream;
 import fr.ensimag.ima.pseudocode.GPRegister;
 import fr.ensimag.ima.pseudocode.NullOperand;
+import fr.ensimag.ima.pseudocode.Register;
 import fr.ensimag.ima.pseudocode.instructions.ADDSP;
 import fr.ensimag.ima.pseudocode.instructions.CMP;
 import fr.ensimag.ima.pseudocode.instructions.BEQ;
@@ -117,7 +118,8 @@ public class MethodCall extends AbstractExpr {
 
         // puis on appelle la méthode (située à l'offset methodOffset dans la VTable)
         int methodIndex = methodName.getMethodDefinition().getIndex();
-        compiler.addInstruction(new BSR(new RegisterOffset(methodIndex + 1, target)));
+        compiler.addInstruction(new LOAD(new RegisterOffset(methodIndex + 1, target), Register.R0));
+        compiler.addInstruction(new BSR(Register.R0));
 
         // On nettoie la pile après l'appel
         compiler.addInstruction(new SUBSP(n));
