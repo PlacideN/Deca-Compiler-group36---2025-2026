@@ -16,13 +16,35 @@
     Math m = new Math();
     float pi = 3.1415926535;
 
-    println(m.sin(50000));
-    println(m.cos(100000));
-    println(m.atan(0.005));
-    println(m.asin(0.2548));
-    println(m.ulp(12.424));
+    // Tests de sinus
+    println(m.sin(-50000));
     println(m.sin(pi/2));
-    println(m.cos(100*pi/2));
+    println(m.sin(-0.03654));
+    println(m.sin(300 * pi /2));
+
+    // Tests de cosinus
+    println(m.cos(100000));
+    println(m.cos(-0.69842));
     println(m.cos(101*pi/2));
+    println(m.cos(-163.2154));
+
+
+    // Tests de arctangente
+    println(m.atan(0.005));
+    println(m.atan(15890.25));
+    println(m.atan(-548.2));
+    println(m.atan(0.0));
+
+    // Tests de arcsinus
+    println(m.asin(0.2548));
+    println(m.asin(-26));
+    println(m.asin(0.0009852));
+    println(m.asin(-0.57));
+
+    // Tests de ulp
+    println(m.ulp(12.424));
+    println(m.ulp(-5888992));
+    println(m.ulp(-0.00069));
+    println(m.ulp(2641.549));
 
 }
