@@ -171,7 +171,16 @@ class Math {
     }
 
     float asin(float f) {
-        float x; 
+        float x;
+        float res_atan;
+        float div;
+        float f_abs;
+        float sign;
+
+
+        float f_sq; 
+        float under_root;
+
 
         // Lorsque c'est hors domaine, on va renvoyer une erreur
         //  puis renvoyer 0.0 car on ne peut pas créer de Nan en Deca
@@ -180,18 +189,37 @@ class Math {
             return 0.0;
         }
 
-        if (f < 0.0) {
-            return -asin(-f);
+        // Cas particuliers aux bornes pour éviter la division par zéro
+        if (f == 1.0) {
+            return 1.570796; // PI/2
         }
-        // On utilise la formule : asin(f) = atan(f / sqrt(1 - f²))
-        x = _sqrt(1.0 - f * f);
-        return atan(f / x);
+        if (f == -1.0) {
+            return -1.570796; // -PI/2
+        }
+
+        if (f < 0.0) {
+            f_abs = -f;
+            sign = -1.0;
+        }
+        else {
+            f_abs = f;
+            sign = 1.0;
+        }
+
+
+        f_sq = f_abs * f_abs;       // Étape A : Carré
+        under_root = 1.0 - f_sq;    // Étape B : Soustraction
+        x = _sqrt(under_root);      // Étape C : Appel de fonction (argument propre)
+        
+        div = f_abs / x;            // Étape D : Division
+        res_atan = atan(div);            // Étape E : Appel atan
+        
+        return sign * res_atan;
     }
 
     float atan(float f) {
-        float PI_HALF = 1.5707963267;
-        float PI_QUART = 0.7853981633;
-        float x; 
+        float x;
+        float res;
 
         if (f < 0.0) {
             return -atan(-f);
@@ -200,14 +228,18 @@ class Math {
         if (f < 0.0007){
             return f;
         }
+
         // Très grand f : atan(f) = π/2 - atan(1/f)
         if (f > 2.41421356) {
-            return PI_HALF - _atan_horner(1.0 / f);
+            res = _atan_horner(1.0 / f);
+            return 1.570796 - res; //1.57.. correspond à pi/2
         }
+
         // Zone intermédiaire autour de 1
         if (f > 0.41421) {
             x = (f - 1.0) / (f + 1.0);
-            return PI_QUART + _atan_horner(x);
+            res = _atan_horner(1.0 / f);
+            return 0.785398 + res; //0.78... correspond à pi/4
         }
         
         return _atan_horner(f);
