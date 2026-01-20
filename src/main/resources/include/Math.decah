@@ -198,23 +198,12 @@ class Math {
         }
 
         if (f < 0.0) {
-            f_abs = -f;
-            sign = -1.0;
-        }
-        else {
-            f_abs = f;
-            sign = 1.0;
+            return -asin(-f);
         }
 
-
-        f_sq = f_abs * f_abs;       // Étape A : Carré
-        under_root = 1.0 - f_sq;    // Étape B : Soustraction
-        x = _sqrt(under_root);      // Étape C : Appel de fonction (argument propre)
-        
-        div = f_abs / x;            // Étape D : Division
-        res_atan = atan(div);            // Étape E : Appel atan
-        
-        return sign * res_atan;
+        // On utilise la formule : asin(f) = atan(f / sqrt(1 - f²))
+        x = _sqrt(1.0 - f * f);
+        return atan(f / x);
     }
 
     float atan(float f) {
