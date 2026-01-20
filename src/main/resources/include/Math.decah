@@ -1,3 +1,4 @@
+
 // Grenoble INP - Ensimag projet GL -*- mode: java -*-
 // Library for class Math of Deca, coded in Deca
 // Author : Hugo et Placide (gl36)
@@ -86,7 +87,7 @@ class Math {
         int i;
 
         if (f < 0.0) {
-            return 0.0 / (f - f); 
+            return 0.0 / (f - f); //stoppe tout lorsqu'on a une valeur négative
         }
 
         if (f == 0.0) {
@@ -172,12 +173,11 @@ class Math {
     float asin(float f) {
         float x; 
 
-        // return 0.0 / (f - f), cela permet de lever
-        // une exception de division par 0 puisque ça renvoie un Nan
-        // Si on avait mis 0.0/0.0 ça ne marcherait par
-        // car ça ne serait jamais permis
+        // Lorsque c'est hors domaine, on va renvoyer une erreur
+        //  puis renvoyer 0.0 car on ne peut pas créer de Nan en Deca
         if (f > 1.0 || f < -1.0) {
-            return 0.0 / (f - f);
+            println("Erreur de domaine : votre float doit être dans [-1, 1]");
+            return 0.0;
         }
 
         if (f < 0.0) {
