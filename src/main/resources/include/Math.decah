@@ -221,14 +221,14 @@ class Math {
         // Très grand f : atan(f) = π/2 - atan(1/f)
         if (f > 2.41421356) {
             res = _atan_horner(1.0 / f);
-            return 1.570796 - res; //1.57.. correspond à pi/2
+            return 1.570796 - res; //1.57.. correspond à π/2
         }
 
         // Zone intermédiaire autour de 1
         if (f > 0.41421) {
             x = (f - 1.0) / (f + 1.0);
-            res = _atan_horner(1.0 / f);
-            return 0.785398 + res; //0.78... correspond à pi/4
+            res = _atan_horner(x);
+            return 0.785398 + res; //0.78... correspond à π/4
         }
         
         return _atan_horner(f);
