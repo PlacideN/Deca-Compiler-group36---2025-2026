@@ -1,0 +1,15 @@
+#include "Panneau.deca"
+#include "CalculateurGeometrique.deca"
+
+class SystemePilotage {
+    CalculateurGeometrique cerveau = new CalculateurGeometrique();
+
+    void ajusterAutomatiquement(PanneauSolaire p, float declinaison, float heure) {
+        float efficacite = cerveau.determinerEfficacite(p.getLatitude(), declinaison, heure);
+        
+        p.setOrientationActuelle(efficacite * 90.0); // Simulation d'angle
+        
+        println("Système : Ajustement effectué.");
+        println("Niveau d'ensoleillement capté : ", efficacite * 100, "%");
+    }
+}

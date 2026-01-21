@@ -1,0 +1,20 @@
+class PanneauSolaire {
+    float latitude;
+    float orientationActuelle;
+
+    void setLatitude(float latitude){
+        this.latitude = latitude;
+    }
+
+    float getLatitude(){
+        return latitude;
+    }
+
+    void setOrientationActuelle(float orientationActuelle){
+        this.orientationActuelle = orientationActuelle;
+    }
+
+    float getOrientationActuelle(){
+        return orientationActuelle;
+    }
+}

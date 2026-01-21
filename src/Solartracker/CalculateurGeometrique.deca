@@ -1,0 +1,11 @@
+#include "Math.decah"
+
+class CalculateurGeometrique {
+    Math m = new Math();
+
+    // Calcule le facteur d'efficacité selon la position du soleil
+    float determinerEfficacite(float lat, float decli, float heure) {
+        // Formule : sin(d)sin(L) + cos(d)cos(L)cos(h)
+        return (m.sin(decli) * m.sin(lat)) + (m.cos(decli) * m.cos(lat) * m.cos(heure));
+    }
+}

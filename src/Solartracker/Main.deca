@@ -1,0 +1,20 @@
+#include "SystemePilotage.deca"
+
+{
+    // Initialisation du matériel
+    PanneauSolaire p = new PanneauSolaire();
+    SystemePilotage pilote = new SystemePilotage();
+
+
+    p.setLatitude(0.788); // 45 degrés
+    
+    println("--- OptiSun : Lancement du suivi automatique ---");
+    
+    // Simulation : Midi Solaire (heure=0.0) en été (declinaison=0.4)
+    pilote.ajusterAutomatiquement(p, 0.4, 0.0);
+    
+    print("Nouvelle orientation du panneau : ");
+    println(p.getOrientationActuelle());
+    
+    println("--- Système en veille ---");
+}
