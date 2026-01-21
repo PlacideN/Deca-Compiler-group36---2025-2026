@@ -47,4 +47,6 @@
     println(m.ulp(-0.00069));
     println(m.ulp(2641.549));
 
+    println(m.asin(m.sin(0.5)));
+
 }
