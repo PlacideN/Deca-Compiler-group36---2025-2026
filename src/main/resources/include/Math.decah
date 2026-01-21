@@ -191,10 +191,10 @@ class Math {
 
         // Cas particuliers aux bornes pour éviter la division par zéro
         if (f == 1.0) {
-            return 1.570796; // PI/2
+            return 1.570796; // π/2
         }
         if (f == -1.0) {
-            return -1.570796; // -PI/2
+            return -1.570796; // -π/2
         }
 
         if (f < 0.0) {
