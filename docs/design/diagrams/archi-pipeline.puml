@@ -1,0 +1,28 @@
+@startuml archi-pipeline
+skinparam style strictuml
+skinparam shadowing false
+
+participant "DecacMain" as Main
+participant "DecacCompiler" as Compiler
+
+box "(ANTLR)" #F8F9FA
+  participant "DecaLexer" as Lexer
+  participant "DecaParser" as Parser
+end box
+
+participant "Program" as AST
+
+Main -> Compiler : compile .deca file
+activate Compiler
+
+Compiler -> Lexer : tokenize
+Compiler -> Parser : parse
+Parser -> AST : build AST
+
+Compiler -> AST : contextual verification (+ decorate AST)
+
+Compiler -> AST : code generation
+
+Compiler -> Main : write .ass file
+deactivate Compiler
+@enduml

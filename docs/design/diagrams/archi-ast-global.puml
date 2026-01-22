@@ -1,0 +1,44 @@
+@startuml archi-ast-global
+skinparam style strictuml
+skinparam shadowing false
+hide empty members
+
+abstract class Tree {
+    + decompile(s: IndentPrintStream)
+    + iter(f: TreeFunction)
+}
+
+abstract class AbstractProgram extends Tree {
+    + {abstract} verifyProgram(compiler)
+    + {abstract} codeGenProgram(compiler)
+}
+abstract class AbstractMain extends Tree {
+    + {abstract} verifyMain(compiler)
+    + {abstract} codeGenMain(compiler)
+}
+together {
+    abstract class TreeList<TreeType extends Tree> extends Tree {
+        - list : List<TreeType>
+        + getList() : List<TreeType>
+    }
+
+    class Program extends AbstractProgram {
+        - classes : ListDeclClass
+        - main : AbstractMain
+    }
+}
+
+class ListDeclClass extends TreeList {
+    + verifyListClass(compiler)
+    + codeGenListVTable(compiler)
+}
+
+class Main extends AbstractMain {
+    - declVariables : ListDeclVar
+    - insts : ListInst
+}
+
+Program *-- ListDeclClass : "classes"
+Program *-- AbstractMain : "main"
+
+@enduml

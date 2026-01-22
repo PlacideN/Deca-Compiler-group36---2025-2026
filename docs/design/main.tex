@@ -1,0 +1,30 @@
+\documentclass[12pt,a4paper]{article}
+
+\input{../common/preamble.tex}
+\usepackage[table]{xcolor} 
+
+\title{
+    \vspace{2cm}
+    \textbf{\Huge Documentation de conception}\\
+}
+\author{
+    \textbf{Équipe GL36} \\
+    Ensimag - Projet Génie Logiciel
+}
+\date{\today}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\begin{center}
+Ce manuel décrit la conception et l'architecture du compilateur \texttt{decac}, en mettant l'accent sur les choix de conception (classes et dépendances) ainsi que la description des algorithmes et structures de données utilisés. Il vise à faciliter la maintenance et permettre une amélioration future du compilateur.
+\end{center}
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+
+\input{sections/archi.tex}
+
+\end{document}

@@ -1,0 +1,84 @@
+@startuml archi-class-context
+skinparam style strictuml
+skinparam shadowing false
+hide empty members
+
+package "tree" {
+    class DeclClass
+    class DeclMethod
+    class DeclField
+    class DeclParam
+
+    DeclClass -[hidden]down- DeclMethod
+    DeclMethod -[hidden]down- DeclField
+    DeclField -[hidden]down- DeclParam
+}
+
+package "context" {
+    abstract class Definition {
+        - type : Type
+        + getType() : Type
+    }
+
+    class TypeDefinition extends Definition
+
+    class ClassDefinition extends TypeDefinition {
+        - numberOfFields : int
+        - numberOfMethods : int
+        + getMembers() : EnvironmentExp
+        + getSuperClass() : ClassDefinition
+        + isClass() : boolean
+    }
+
+    class EnvironmentExp {
+        - parentEnvironment : EnvironmentExp
+        - environnement: Map<Symbol, ExpDefinition>
+        + get(Symbol) : ExpDefinition
+        + declare(Symbol, ExpDefinition)
+    }
+
+    abstract class ExpDefinition extends Definition {
+        - operand : DAddr
+    }
+
+    class MethodDefinition extends ExpDefinition {
+        - index : int
+        - signature : Signature
+        - className : Symbol
+        + isMethod() : boolean
+    }
+
+    class FieldDefinition extends ExpDefinition {
+        - index : int
+        - visibility : Visibility
+        - containingClass : ClassDefinition
+        + isField() : boolean
+    }
+    
+    enum Visibility {
+        PUBLIC
+        PROTECTED
+    }
+
+    class ParamDefinition extends ExpDefinition {
+        + isParam() : boolean
+    }
+    
+    class Signature {
+        - args : List<Type>
+        + add(Type)
+        + equals(Object) : boolean
+    }
+}
+
+DeclClass ..> ClassDefinition
+DeclMethod ..> MethodDefinition
+DeclField ..> FieldDefinition
+DeclParam ..> ParamDefinition
+
+ClassDefinition *-right- EnvironmentExp : "manages members"
+EnvironmentExp "1" o-- "*" ExpDefinition : "stores"
+
+MethodDefinition *-- Signature
+FieldDefinition *-- Visibility
+@enduml

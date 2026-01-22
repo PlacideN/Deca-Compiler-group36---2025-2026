@@ -1,0 +1,51 @@
+@startuml archi-ast-context-full
+skinparam style strictuml
+skinparam shadowing false
+hide empty members
+
+package "context" {
+    abstract class Type {
+        - name : Symbol
+    }
+    class IntType extends Type
+    class FloatType extends Type
+    class BooleanType extends Type
+    class StringType extends Type
+
+    class EnvironmentType {
+        + INT : IntType
+        + FLOAT : FloatType
+        + BOOLEAN : BooleanType
+        + typeArithOp(t1, t2) : Type
+    }
+}
+
+' --- The Tree Side (Consumers) ---
+package "tree" {
+    abstract class AbstractExpr {
+        - type : Type
+        - enum Priority { ASSIGN, OR, AND, EQ, CMP, SUM, PRODUCT, UNARY, ATOMIC }
+        + setType(t : Type)
+        + verifyRValue(...) : Type
+        + abstract verifyExpr(...) : Type
+    }
+
+    class IntLiteral extends AbstractExpr 
+    class FloatLiteral extends AbstractExpr
+    class BooleanLiteral extends AbstractExpr
+
+    class Identifier extends AbstractExpr {
+        - name : Symbol
+        - definition : Definition
+        + getDefinition() : Definition
+        + verifyType(...) : Type
+        + verifyMethodIdent(...) : MethodDefinition
+        + verifyFieldIdent(...) : FieldDefinition
+    }
+}
+
+AbstractExpr o-- Type
+IntLiteral ..> EnvironmentType : "gets INT from"
+Identifier ..> EnvironmentType : "assign primitive types from"
+
+@enduml

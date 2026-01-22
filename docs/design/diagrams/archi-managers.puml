@@ -1,0 +1,50 @@
+@startuml archi-managers-codegen
+skinparam style strictuml
+skinparam shadowing false
+hide empty members
+
+class DecacCompiler {
+    - program : IMAProgram
+    + getRegisterManager() : RegisterManager
+    + getStackManager() : StackManager
+    + getVTableManager() : VTableManager
+    + getLabelManager() : LabelManager
+    + setProgram(IMAProgram)
+    + addInstruction(Instruction)
+}
+
+package "tree" {
+    class Program {
+        + codeGenProgram(compiler : DecacCompiler)
+    }
+    abstract class AbstractExpr {
+        + codeGenExpr(compiler : DecacCompiler)
+    }
+}
+
+package "codegen" {
+    class RegisterManager
+    class StackManager
+    class VTableManager
+    class LabelManager
+    class RuntimeErrorManager
+}
+
+class IMAProgram {
+    + append(other : IMAProgram)
+    + addInstruction(i : Instruction)
+}
+
+' Relations
+DecacCompiler o-- RegisterManager
+DecacCompiler o-- StackManager
+DecacCompiler o-- VTableManager
+DecacCompiler o-- LabelManager
+DecacCompiler o-- RuntimeErrorManager
+DecacCompiler o-- IMAProgram : "result"
+
+Program ..> IMAProgram : "generates instances \n (head, body, preamble)"
+Program <.. DecacCompiler : "calls"
+AbstractExpr ..> DecacCompiler : "uses managers during \n code generation \n (reg allocation, \n label generation, etc.)"
+
+@enduml
