@@ -1,0 +1,57 @@
+\section{Infrastructure de test}
+\noindent
+L'automatisation est au cœur de notre stratégie de validation, pour assurer une intégration continue efficace et reproductible. Nous avons mis en place, à l'aide de la configuration Maven fournie (légèrement modifiée), la gestion d'une suite de scripts shell automatiques.
+
+\subsection{Intégration sous Maven}
+\noindent Le fichier \texttt{pom.xml} centralise la configuration de notre environnement de test. Nous utilisons principalement deux plugins pour piloter la validation : 
+\begin{itemize} [label=$\circ$]
+    \item Maven Surefire Plugin : Gère l'exécution des tests unitaires JUnit 
+    \item Exec Maven Plugin : Permet de lancer tous nos scripts shell durant la phase \texttt{test}
+    \item JaCoCo Maven Plugin : Intégré pour mesurer la couverture de code lors de l'exécution des tests
+\end{itemize}
+
+\paragraph*{Commandes utiles} \mbox{} \\ 
+\noindent
+Pour lancer les tests unitaires Java uniquement il suffit de faire: 
+\begin{command} 
+mvn surefire:test
+\end{command} 
+\noindent
+Pour lancer un script spécifique il suffit d'exécuter, en s'assurant de l'avoir rendu exécutable (\texttt{chmod +x}):
+\begin{command}
+./src/test/script/<nom_du_script>.sh
+\end{command}
+\noindent
+Pour lancer la suite complète de tests (unitaires + scripts shell) il suffit d'exécuter :
+\begin{command}
+mvn test
+\end{command}
+\noindent \textit{NB: \texttt{mvn test -Dskip.provided.tests=true} permet de se concentrer uniquement sur nos tests en ignorant les scripts fournis initialement (utilisé lors du développement du sans objet).}
+
+\subsection{Détail des scripts d'automatisation} \noindent 
+Chaque script situé dans \texttt{src/test/script/} couvre une étape spécifique du processus de compilation.
+
+\subsubsection{Analyse lexicale (\texttt{test-lex.sh})} Ce script valide la première étape de compilation. Pour les fichiers valides, il s'assure de l'absence de message d'erreur. Pour les fichiers invalides (identificateurs mal formés, etc.), il vérifie que le \texttt{lexer} lève bien une erreur. 
+\noindent \textit{NB: Ce script ne doit être utilisé qu'après avoir manuellement validé que les tokens reconnus sont corrects avec le launcher \texttt{test\_lex}.}
+
+\subsubsection{Validation de la syntaxe et indempotence (\texttt{test-synt.sh})} 
+\noindent Ce script implémente un test de cohérence avancé basé sur le théorème de décompilation. 
+\begin{enumerate} 
+    \item Il compile un fichier source vers un premier arbre (\texttt{AST\_ORIGINAL}). 
+    \item Il décompile cet arbre en code source Deca via l'option \texttt{-p} de \texttt{decac}. \item Il re-compile ce code généré pour produire un second arbre (\texttt{AST\_DECOMPILED}). 
+\end{enumerate} 
+Le script utilise \texttt{sed} pour ignorer les informations de positionnement \texttt{[LIGNE, COLONNE]} et compare les deux structures via \texttt{diff}. Si les structures d'arbres sont identiques, le test est considéré comme réussi.
+
+\subsubsection{Analyse Contextuelle et Vérification des Entêtes (\texttt{test-context.sh})}
+\noindent Ce script automatise la vérification sémantique (Étape B). Pour les tests invalides, il extrait avec \texttt{grep} et \texttt{sed} l'erreur attendue (ligne et message) directement depuis l'entête du fichier \texttt{.deca}. Il compare ensuite ces attentes avec la sortie réelle du compilateur (\texttt{decac -v}), garantissant que l'erreur levée est exactement celle prévue. 
+
+\noindent
+\textit{NB: Il est donc impératif de respecter le format des en-têtes} \ref{} \textit{dans chaque fichier de test, auquel cas les tests ne passseront pas correctement.}
+
+\subsection{Validation des Options du Compilateur (\texttt{test-decac.sh})} 
+\noindent Ce script teste la conformité de l'interface en ligne de commande (CLI). Il vérifie notamment chaque option, notamment : 
+\begin{itemize} [label=$\circ$]
+    \item Gestion des registres (\texttt{-r}) : Validation du comportement pour les limites acceptées (4-16) et rejet des valeurs invalides. 
+    \item Suppression des vérifications (\texttt{-n}) : Le script vérifie par un \texttt{grep} sur le fichier \texttt{.ass} que les instructions de branchement vers \texttt{ERROR} (division par zéro, stack overflow) ont bien été retirées, puis confirme l'absence de plantage par une exécution réelle dans \texttt{ima}. 
+\end{itemize}
+

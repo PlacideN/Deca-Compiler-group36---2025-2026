@@ -1,0 +1,109 @@
+\section{Stratégie de validation}
+\noindent
+La validation du compilateur Deca est effectuée à plusieurs niveaux. Nous distinguons la validation interne des structures de données (tests unitaires) de la validation du comportement global du compilateur vis-à-vis du langage Deca (tests fonctionnels).
+
+\subsection{Types de tests par étape}
+\noindent
+La quantité et la nature des tests varient selon l'étape de compilation visée.
+
+\subsubsection{Phase Lexicographique et Syntaxique (Étape A)} 
+\noindent L'objectif est de vérifier la robustesse de nos règles syntaxiques (Lexer/Parser). Étant donné que la majorité des règles lexicales était fournie, les tests fonctionnels ont été principalement destinés à augmenter la couverture avec des cas valides (mots-clés Deca, accents et symboles, etc.) ainsi qu'à cibler les aspects délicats via des tests invalides (identificateurs mal formés, commentaires non terminés, etc.). Le launcher \texttt{test\_lex} a été utilisé systématiquement pour déboguer le lexer et identifier précisément les tokens reconnus.
+
+\noindent Pour la validation du parser, deux approches ont été privilégiées. D'une part, les tests nécessitant une vérification de la structure de l'arbre abstrait produit (priorité des opérateurs, dépassement de capacité des entiers ou des flottants) ont été validés manuellement en inspectant l'arbre généré au moyen du launcher \texttt{test\_synt}. D'autre part, le reste des tests a été validé à l'aide d'un script automatique s'appuyant sur le théorème de la décompilation : pour chaque fichier source, nous vérifions que le code décompilé compile à nouveau sans erreur vers un arbre abstrait identique.
+
+
+
+\subsubsection{Phase Contextuelle (Étape B)} 
+Pour cette étape, nous avons mis en place deux stratégies complémentaires :
+\begin{itemize}[label=$\circ$]
+    \item \textbf{Tests unitaires (JUnit \& Mockito)} : Afin de cibler précisément chaque règle contextuelle, nous avons développé une suite de tests unitaires. Pour chaque classe \texttt{<Nom\_de\_la\_classe>} du package \texttt{tree} soumise aux tests, il existe une classe associée \texttt{Test<Nom\_de\_la\_classe>} regroupant les vérifications sémantiques (positives ou négatives). Dans une optique de développement piloté par les tests (TDD), cette approche permet d'implémenter les méthodes de vérification de manière isolée. Le comportement des dépendances est simulé à l'aide de \texttt{Mockito}, permettant de créer des « mocks » et de définir leurs comportements attendus sans nécessiter l'implémentation complète des classes liées.
+    Notre stratégie reposait fortement sur les tests unitaires ceux-ci sont parfois assez avancés. La classe de test \texttt{TestPlusAdvanced} initalement fournie a par exemple été refactorisée dans une classe \texttt{TestOpArith} qui passe la suite de tests pour les 4 opérateurs arithmétiques binaires. 
+    \item \textbf{Tests fonctionnels} : Une suite de fichiers \texttt{.deca}, classés par catégories (classes, expressions, contrôle), a été constituée a posteriori. Elle permet d'améliorer la couverture globale et de s'assurer que la chaîne de vérification contextuelle fonctionne correctement dans son ensemble, au-delà de l'unité des nœuds.
+\end{itemize}
+
+\paragraph*{Détails des tests unitaires avancés} 
+\noindent
+La validation contextuelle repose sur des tests unitaires avancés visant à garantir la robustesse sans duplication de code.  La classe \texttt{TestOpArith} illustre cette volonté d'efficacité : initialement limitée à l'opérateur \texttt{Plus}, elle a été refactorisée pour valider simultanément les quatre opérateurs arithmétiques binaires (\texttt{Plus}, \texttt{Minus}, \texttt{Multiply}, \texttt{Divide}). En utilisant des \texttt{@ParameterizedTest} \cite{junit6-parameterized} et une \texttt{@MethodSource}, nous passons les constructeurs des nœuds via l'interface \texttt{BiFunction} \cite{java8-bifunction}. Chaque itération reçoit un objet \texttt{Arguments} \cite{junit5-arguments} contenant la référence du constructeur (ex: \texttt{Plus::new}), assurant une validation uniforme entre les opérateurs tout en minimisant la redondance de code.
+
+\noindent
+D'autres tests nécessitent de simuler des interactions fines avec les structures internes du compilateur :
+
+\begin{itemize}[label=$\circ$]
+    \item Dans la classe \texttt{TestInitialization}, nous avons été confrontés à la nécessité de tester la méthode \texttt{verifyRValue}. L'utilisation d'un simple \textit{mock} pour l'expression à vérifier entraînait des erreurs de type \texttt{NullPointerException}. Nous avons donc implémenté les tests avec des \textbf{Spies} \cite{browserstack-spy-vs-mock}. Cela nous a permis de conserver le comportement réel du nœud tout en redéfinissant sélectivement certains retours via \texttt{doReturn(...).when(...)} \cite{medium-mockito-stubbing}.
+    \item Dans la classe \texttt{DeclVar}, l'objet \texttt{VariableDefinition} est instancié à l'intérieur de la méthode \texttt{verifyDeclVar}, il est impossible d'y accéder directement pour vérifier si le type ou le symbole enregistré est correct. Nous avons résolu cette problématique en utilisant un \textbf{\texttt{ArgumentCaptor}} \cite{browserstack-argumentcaptor}. Cet outil nous permet d'intercepter l'objet au moment où il est passé à la méthode \texttt{env.declare()} et d'en inspecter les attributs a posteriori. Enfin, pour tester la robustesse face aux erreurs de double déclaration, nous avons utilisé \texttt{doThrow(...).when(...)} \cite{javaguides-dothrow} sur des méthodes \texttt{void}, simulant ainsi une remontée d'exception depuis les couches inférieures de l'environnement vers le nœud de déclaration.
+\end{itemize}
+
+\subsubsection{Génération de Code (Étape C)} 
+\noindent
+La validation repose sur des tests fonctionnels exécutés par la machine cible. Le compilateur produit un fichier \texttt{.ass} qui est ensuite interprété par \texttt{ima}. Trois issues sont possibles : 
+\begin{enumerate}
+    \item La machine s'arrête brutalement (erreur dans le code généré, instruction mal utilisée, conflit mémoire).
+    \item La machine lève une erreur à l'exécution gérée par le \texttt{RuntimeErrorManager} (comportement attendu pour les tests d'invalidité dynamique comme la division par zéro).
+    \item Le programme s'exécute correctement et produit le résultat attendu.
+\end{enumerate}
+
+\subsection{Organisation des tests}
+\noindent
+Chaque test fonctionnel contient un en-tête fournissant une description, le résultat attendu, ainsi que sa date de création. 
+
+\paragraph*{Exemple d'en-tête d'un test contextuel}
+\begin{verbatim}
+// Description:
+//    Test de déclaration de méthode invalide : paramètres de même nom.
+//    Le paramètre 'a' est déclaré plusieurs fois.
+//
+// Resultats:
+//    Erreur contextuelle
+//    Ligne 13 : Parameter a is already defined
+//
+// Historique:
+//    cree le 18/01/2026
+\end{verbatim}
+
+\paragraph*{Exemple d'en-tête d'un test de génération de code}
+\begin{verbatim}
+// Description:
+//    Test de débordement du tas.
+//    On utilise un objet avec beaucoup de champs pour épuiser le tas
+//    rapidement avant que la pile ne déborde par récursion.
+//
+// Resultats:
+//    Error: Heap overflow
+//
+// Historique:
+//    cree le 19/01/2026
+\end{verbatim}
+ 
+
+
+\noindent
+\textit{NB: À noter que les scripts de test automatique pour la génération de code et l'analyse contextuelle s'appuient sur ces en-têtes pour effectuer les vérifications et comparer les résultats obtenus aux résultats attendus. Il est donc impératif d'en respecter le format. }
+
+\subsubsection{Organisation des fichiers Deca (\texttt{src/test/deca/})}
+\noindent
+Ce répertoire reflète l'architecture du compilateur. Chaque sous-répertoire contient les dossiers \texttt{/valid}, \texttt{/invalid} et \texttt{/provided} (ainsi que \texttt{/perf}, \texttt{/extension} ou \texttt{/interactive} selon le besoin). En complément de ce squelette, chaque dossier est organisé thématiquement pour faciliter la navigation dans la base de tests. Les fichiers sont nommés de manière explicite pour indiquer la fonctionnalité testée.
+
+\begin{itemize}[label=$\circ$]
+    \item \textbf{codegen/ :} Tests pour l'étape C.
+    \begin{itemize}[label=$\circ$]
+        \item \texttt{valid/} : Tests structurés par thématiques (\texttt{arithmetic/}, \texttt{boolean/}, \texttt{class/}, etc.) vérifiant la correction de l'exécution.
+        \item \texttt{invalid/} : Focus sur les erreurs à l'exécution (\texttt{null-dereference}, \texttt{stack-overflow}).
+        \item \texttt{interactive/} : Tests nécessitant des entrées utilisateur
+    \end{itemize}
+    \item \textbf{context/ :} Tests pour l'étape B. Séparés en \texttt{valid/} pour les succès de typage et \texttt{invalid/} pour les erreurs sémantiques attendues (ex: \texttt{assign/float-to-int.deca}).
+    \item \textbf{syntax/ :} Tests pour l'étape A (Lexer, Parser, et gestion des directives \texttt{include}).
+\end{itemize}
+
+\subsubsection{Organisation des tests Java (\texttt{src/test/java/})}
+Les tests unitaires sont regroupés par package technique :
+\begin{itemize}[label=$\circ$]
+    \item \texttt{fr.ensimag.deca.context} : Tests de bas niveau sur la table des symboles et les environnements (\texttt{TestEnvironmentExp.java}).
+    \item \texttt{fr.ensimag.deca.tree} : Tests des nœuds de l'arbre abstrait (\texttt{TestAssign.java}, \texttt{TestWhile.java}, etc.). Chaque fichier JUnit correspond à une classe spécifique de l'AST.
+\end{itemize}
+
+\subsection{Objectifs et atteintes}
+\noindent
+L'objectif principal de notre stratégie de validation est d'assurer une couverture maximale des fonctionnalités du compilateur Deca, tout en garantissant la robustesse et la fiabilité du code généré. Il n'y a pas grand intérêt à tester seulement la couverture, car un code qui parcourt une bonne partie des lignes peut très bien ne pas détecter des erreurs critiques. La stratégie était plutot de faire des tests tres ciblés, en réfléchissant aux cas limites et aux scénarios d'erreurs probables et en écrivant des tests pour ceux-ci. 
+
+\noindent
+Les résultats obtenus sont plutôt satisfaisant mis à part la partie géneration de code du langage essentiel (la gestion des méthodes et leur appel) qui n'a pas été suffisamment testée et comporte des bugs souvent inconnus.
