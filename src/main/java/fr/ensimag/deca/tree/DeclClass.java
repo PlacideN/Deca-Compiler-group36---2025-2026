@@ -17,7 +17,7 @@ import fr.ensimag.ima.pseudocode.instructions.LEA;
 import fr.ensimag.ima.pseudocode.LabelOperand;
 import fr.ensimag.ima.pseudocode.instructions.LOAD;
 import fr.ensimag.ima.pseudocode.instructions.STORE;
-import fr.ensimag.ima.pseudocode.instructions.SUBSP;
+import fr.ensimag.ima.pseudocode.instructions.POP;
 import fr.ensimag.ima.pseudocode.instructions.TSTO;
 import fr.ensimag.ima.pseudocode.instructions.BOV;
 import fr.ensimag.ima.pseudocode.instructions.BSR;
@@ -228,17 +228,17 @@ public class DeclClass extends AbstractDeclClass {
         compiler.getRegisterManager().resetMaxTempStackUsage();
 
         compiler.addInstruction(new LOAD(new RegisterOffset(-2, Register.LB), Register.R1));
-        fields.codeGenListDefaultInits(compiler); // initialize fields to default values
-
+        
         // init fields from superclass
         ClassDefinition superClassDef = className.getClassDefinition().getSuperClass();
         if (superClassDef != null && !superClassDef.getType().isObjectClass()) {
             compiler.addInstruction(new PUSH(Register.R1));
             Label superInitLabel = compiler.getLabelManager().getInitLabel(superClassDef.getType().getName().getName());
             compiler.addInstruction(new BSR(superInitLabel));
-            compiler.addInstruction(new SUBSP(1));
+            compiler.addInstruction(new POP(Register.R1));
         }
-
+        
+        fields.codeGenListDefaultInits(compiler); // initialize fields to default values
         fields.codeGenListExplicitInits(compiler);
         compiler.addInstruction(new RTS());
 
